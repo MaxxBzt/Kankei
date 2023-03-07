@@ -5,7 +5,7 @@ void main() => runApp(MaterialApp(
     builder: (context, child) {
       return Directionality(textDirection: TextDirection.ltr, child: child!);
     },
-    title: 'GNav',
+    title: 'Kankei',
     theme: ThemeData(
       primaryColor: Colors.grey[800],
     ),
@@ -26,15 +26,19 @@ class _ExampleState extends State<Example> {
       style: optionStyle,
     ),
     Text(
-      'Likes',
+      'Planning',
       style: optionStyle,
     ),
     Text(
-      'Search',
+      'Chat',
       style: optionStyle,
     ),
     Text(
-      'Profile',
+      'Ideas',
+      style: optionStyle,
+    ),
+    Text(
+      'Us',
       style: optionStyle,
     ),
   ];
@@ -43,10 +47,6 @@ class _ExampleState extends State<Example> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 20,
-        title: const Text('Kankei'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -62,39 +62,45 @@ class _ExampleState extends State<Example> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
             child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
+              haptic: true,
+              rippleColor: Color(0xFFEAE7FA),
+              hoverColor: Color(0xFFEAE7FA),
               gap: 8,
-              activeColor: Colors.black,
               iconSize: 24,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
-              tabs: [
+              tabBackgroundColor: Color(0xFFEAE7FA),
+
+              tabs: const [
                 GButton(
                   icon: Icons.home,
-                  text: 'Home',
+                    text: 'Home',
                 ),
                 GButton(
-                  icon: Icons.favorite,
-                  text: 'Likes',
+                  icon: Icons.calendar_month,
+                  text: 'Planning',
                 ),
                 GButton(
-                  icon: Icons.search,
-                  text: 'Search',
+                  icon: Icons.question_answer,
+                  text: 'Chat',
                 ),
                 GButton(
-                  icon: Icons.person,
-                  text: 'Profile',
+                  icon: Icons.psychology_alt,
+                  text: 'Ideas',
                 ),
                 GButton(
-                  icon: Icons.account_circle,
-                  text: 'Profile',
+                  icon: Icons.people,
+                  text: 'Us',
                 ),
               ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
             ),
           ),
         ),
