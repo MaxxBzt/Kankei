@@ -69,7 +69,7 @@ class _ExampleState extends State<Example> {
               hoverColor: Color(0xFFEAE7FA),
               gap: 8,
               iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               duration: Duration(milliseconds: 400),
               tabBackgroundColor: Color(0xFFEAE7FA),
 
