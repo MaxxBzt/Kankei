@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePage extends StatefulWidget {
+class InspirationPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _InspirationPageState createState() => _InspirationPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _InspirationPageState extends State<InspirationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Text('This is the home page'),
+        child: Text('This is the inspiration page'),
       ),
     );
   }
