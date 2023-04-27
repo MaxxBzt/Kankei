@@ -32,8 +32,15 @@ dependencies:
     sdk: flutter
 
 
+
+
+
   google_nav_bar: ^5.0.6
   google_fonts: ^4.0.3
+  http: ^0.13.5
+  chat_gpt_sdk: ^2.1.2
+
+
 
 
 
@@ -63,6 +70,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - lib/assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

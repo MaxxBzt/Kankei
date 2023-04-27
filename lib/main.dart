@@ -40,7 +40,7 @@ class _MainpageState extends State<MainPage> {
     HomePage(),
     PlanningPage(),
     ChatPage(),
-    InspirationPage(),
+    DateIdeas(),
     UsPage(),
   ];
 
@@ -52,7 +52,7 @@ class _MainpageState extends State<MainPage> {
       appBar: AppBar(
         leading: Icon(Icons.favorite, color: Colors.black),
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFFEAE7FA),
         title: Text(
           'Kankei',
           style: GoogleFonts.pacifico(
