@@ -40,10 +40,8 @@ dependencies:
   http: ^0.13.5
   chat_gpt_sdk: ^2.1.2
   flutter_native_splash: ^2.2.19
-
-
-
-
+  introduction_screen: ^3.1.8
+  smooth_page_indicator: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -56,7 +54,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#eae7fa"
-  image: lib/assets/images/logo_lightmode.png
+  image: assets/splash_images/logo_lightmode.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -76,7 +74,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - lib/assets/images/
+    - assets/
+    - assets/splash_images/
+    - assets/on_boarding_images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

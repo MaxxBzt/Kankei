@@ -3,10 +3,12 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'homepage.dart';
+import 'onboarding.dart';
 import 'planning.dart';
 import 'chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
+
 
 
 void main() => runApp(MyApp());
@@ -19,10 +21,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      home: OnBoardingPage(),
     );
   }
 }
+
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
