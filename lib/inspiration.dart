@@ -15,7 +15,7 @@ class _DateIdeasState extends State<DateIdeas> {
     {
       'title': 'Watch a movie',
       'emoji': '🎬',
-      'image': 'assets/ideas_images/watch_movie.png',
+      'image': 'assets/images/ideas_images/watch_movie.png',
       'description':
           'Enjoy a cozy movie night together at home or at a theater.'
     },

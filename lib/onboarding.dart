@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'main.dart';
 /* TOOLS */
-const Color first_purple = Color(0xFFEAE7FA);
-const Color second_purple = Color(0xFFC7C0ED);
-const Color third_purple = Color(0xFFD6BAE6);
-const Color fourth_purple = Color(0xFFC29CD6);
+const Color on_boarding_dot_swipe_color = Color(0xFFD6BAE6);
+const Color on_boarding_first_page_color = Color(0xFFC4B5DC);
+const Color on_boarding_second_page_color = Color(0xFFb087bf);
+const Color on_boarding_third_page_color = Color(0xFFb18dd7);
+const Color on_boarding_fourth_page_color = Color(0xFFae69c4);
 
 class OnBoardingPage extends StatefulWidget{
   const OnBoardingPage({Key? key}): super(key: key);
@@ -22,6 +23,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   bool AreWeOnLastPage = false;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Stack(
         children: 
@@ -37,75 +39,378 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               },
               children:
               [
-                Container(
-                  color: first_purple,
-                  child: Center(child: Text('Page 1')),
+                // FIRST PAGE
+                Container
+                (
+                  padding: const EdgeInsets.all(30),
+                // Add a background color to the container
+                  color: Colors.white,
+                  // Add a child column widget to the container
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children:
+                    [
+                      Image(image: AssetImage('assets/images/on_boarding_images/first_page.jpeg')),
+                      Column(
+                        children: [
+                          Text(
+                            'Connect With Your Loved Ones',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              "Manage one special relationship easily with the app through "
+                                  "communications games, topics, chat zone & fun activities to play, and more.",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      Container(
+                        width: 200.0,
+                        height: 55.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(55.0),
+                          color: on_boarding_dot_swipe_color,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Add your button press logic here
+                            _controller.nextPage(
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                          child: Text(
+                            'Next',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                            overlayColor: MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(vertical: 12.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+
+                  )
                 ),
-                Container(
-                  color: second_purple,
-                  child: Center(child: Text('Page 2')),
+                // SECOND PAGE
+                Container
+                  (
+                    padding: const EdgeInsets.all(30),
+                    // Add a background color to the container
+                    color: Colors.white,
+                    // Add a child column widget to the container
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:
+                      [
+                        Image(image: AssetImage('assets/images/on_boarding_images/second_page.jpeg')),
+                        Column(
+                          children: [
+                            Text(
+                              'Get To Know Each Other Better',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(
+                                'With our fun and interactive features, '
+                                    'you can ask thought-provoking questions, '
+                                    'share interesting facts, and discover new things '
+                                    'about the people you care about.',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+
+                        Container(
+                          width: 200.0,
+                          height: 55.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(55.0),
+                            color: on_boarding_second_page_color,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeIn,
+                              );
+                            },
+                            child: Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                              overlayColor: MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(vertical: 12.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+
+                    )
                 ),
-                Container(
-                  color: third_purple,
-                  child: Center(child: Text('Page 3')),
+                // THIRD PAGE
+                Container
+                  (
+                    padding: const EdgeInsets.all(30),
+                    // Add a background color to the container
+                    color: Colors.white,
+                    // Add a child column widget to the container
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:
+                      [
+                        Image(image: AssetImage('assets/images/on_boarding_images/third_page.jpeg')),
+                        Column(
+                          children: [
+                            Text(
+                              'Keep Track Of Your Most Important Dates',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(
+                                'Set reminders so that you never forget. You will never forget any significant dates of your relationships. '
+                                    'Goodbye forgotten birthdays, anniversary, special events.'  ,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+
+                        Container(
+                          width: 200.0,
+                          height: 55.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(55.0),
+                            color: on_boarding_third_page_color,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _controller.nextPage(
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.easeIn,
+                              );
+                            },
+                            child: Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                              overlayColor: MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(vertical: 12.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+
+                    )
                 ),
-                Container(
-                  color: fourth_purple,
-                  child: Center(child: Text('Page 4')),
+                // FOURTH PAGE
+                Container
+                  (
+                    padding: const EdgeInsets.all(30),
+                    // Add a background color to the container
+                    color: Colors.white,
+                    // Add a child column widget to the container
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children:
+                      [
+                        Image(image: AssetImage('assets/images/on_boarding_images/fourth_page.jpeg')),
+                        Column(
+                          children: [
+                            Text(
+                              'Deepen Your Relationships',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(
+                                'Text and chat about sensitive subjects and get your partner'
+                                    'or friend opinions about it. Get real with them'
+                                    'by communicating on subjects you would never'
+                                    'think of.',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+
+                        Container(
+                          width: 200.0,
+                          height: 55.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(55.0),
+                            color: on_boarding_fourth_page_color,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context){
+                                    return MainPage();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Get Started',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                              overlayColor: MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(vertical: 12.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                 ),
-              ] ,
+              ],
           ),
-          /* Count is about the count of how many we have, and
-          controller is to keep track of what page we are on*/
+                /* Count is about the count of how many we have, and
+                  controller is to keep track of what page we are on*/
+
           Container(
-            alignment: Alignment(0,0.8),
+            alignment: Alignment(0,0.9),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Skip
-                GestureDetector(
-                  onTap: (){
-                    // 0 is first page, we jump to last page
-                    _controller.jumpToPage(3);
-                  },
-                  child: Text('Skip'),
-                ),
 
                 SmoothPageIndicator(
                     controller: _controller,
                     count: 4,
-                    effect: ExpandingDotsEffect(
-                      activeDotColor: Colors.deepPurple,
+                    effect: ScrollingDotsEffect(
+                      activeDotColor: on_boarding_dot_swipe_color,
                       dotColor: Colors.deepPurple.shade100,
-                      dotHeight: 30,
-                      dotWidth: 20,
+                      dotHeight: 15,
+                      dotWidth: 15,
                     )),
-
-                // Next or Finish button: Done shown only if we are on last page
-                AreWeOnLastPage
-                    ? GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context){
-                                  return MainPage();
-                                },
-                              ),
-                          );
-                        },
-                        child: Text('Finish'),
-                      )
-                      // If not on Last page
-                    : GestureDetector(
-                        onTap: (){
-                          _controller.nextPage(
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.easeIn,
-                          );
-                        },
-                        child: Text('Next'),
-                    ),
               ],
             ),
           ),

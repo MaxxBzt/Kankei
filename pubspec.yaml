@@ -30,11 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-
-
-
   google_nav_bar: ^5.0.6
   google_fonts: ^4.0.3
   http: ^0.13.5
@@ -52,9 +47,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
 flutter_native_splash:
   color: "#eae7fa"
-  image: assets/splash_images/logo_lightmode.png
+  image: assets/images/splash_images/logo_lightmode.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -75,8 +71,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/splash_images/
-    - assets/on_boarding_images/
+    - assets/images/splash_images/
+    - assets/images/ideas_images/
+    - assets/images/on_boarding_images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
