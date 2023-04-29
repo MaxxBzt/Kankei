@@ -71,6 +71,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/
     - assets/images/splash_images/
     - assets/images/ideas_images/
     - assets/images/on_boarding_images/

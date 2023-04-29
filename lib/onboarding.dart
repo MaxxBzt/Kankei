@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'choose_page.dart';
 import 'main.dart';
 /* TOOLS */
 const Color on_boarding_dot_swipe_color = Color(0xFFD6BAE6);
@@ -357,7 +358,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context){
-                                    return MainPage();
+                                    return ChoosePage();
                                   },
                                 ),
                               );
