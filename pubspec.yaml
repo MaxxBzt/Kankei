@@ -33,10 +33,15 @@ dependencies:
   google_nav_bar: ^5.0.6
   google_fonts: ^4.0.3
   http: ^0.13.5
-  chat_gpt_sdk: ^2.1.2
   flutter_native_splash: ^2.2.19
   introduction_screen: ^3.1.8
   smooth_page_indicator: ^1.1.0
+  animations: ^2.0.0
+  cached_network_image: ^3.1.0
+  flutter_staggered_grid_view: ^0.4.0
+  url_launcher: ^6.0.12
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
