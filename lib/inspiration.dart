@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
+import 'package:kankei/us.dart';
 import 'date_details.dart';
 
 import 'package:animations/animations.dart';
@@ -43,7 +44,7 @@ class _DateIdeasState extends State<DateIdeas> {
     Activity_class(
       title: 'Cook together',
       emoji: '🍳',
-      image: 'assets/images/cook_together.jpg',
+      image: 'assets/images/ideas_images/cooking.png',
       description:
           'Prepare a delicious meal together and have fun in the kitchen.',
       widget: Recipe(),
@@ -161,7 +162,7 @@ class _DateIdeasState extends State<DateIdeas> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                       borderSide: BorderSide(
-                        color: Colors.grey,
+                        color: Colors.purple,
                         width: 2.0,
                       ),
                     ),
@@ -173,8 +174,11 @@ class _DateIdeasState extends State<DateIdeas> {
                       ),
                     ),
                   ),
-                  onChanged: (value) {
-                    // Handle search functionality here
+                  onEditingComplete: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UsPage()),
+                    );
                   },
                 ),
               )),
