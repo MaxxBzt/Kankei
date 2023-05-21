@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'app_colors.dart';
 import 'choose_page.dart';
-import 'main.dart';
+
 /* TOOLS */
-const Color on_boarding_dot_swipe_color = Color(0xFFD6BAE6);
-const Color on_boarding_first_page_color = Color(0xFFC4B5DC);
-const Color on_boarding_second_page_color = Color(0xFFb087bf);
-const Color on_boarding_third_page_color = Color(0xFFb18dd7);
-const Color on_boarding_fourth_page_color = Color(0xFFae69c4);
 
 class OnBoardingPage extends StatefulWidget{
   const OnBoardingPage({Key? key}): super(key: key);
@@ -87,7 +83,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         height: 55.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(55.0),
-                          color: on_boarding_dot_swipe_color,
+                          color: AppColors.on_boarding_dot_swipe_color,
                         ),
                         child: ElevatedButton(
                           onPressed: () {
@@ -176,7 +172,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           height: 55.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(55.0),
-                            color: on_boarding_second_page_color,
+                            color: AppColors.on_boarding_second_page_color,
                           ),
                           child: ElevatedButton(
                             onPressed: () {
@@ -262,7 +258,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           height: 55.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(55.0),
-                            color: on_boarding_third_page_color,
+                            color: AppColors.on_boarding_third_page_color,
                           ),
                           child: ElevatedButton(
                             onPressed: () {
@@ -350,7 +346,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           height: 55.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(55.0),
-                            color: on_boarding_fourth_page_color,
+                            color: AppColors.on_boarding_fourth_page_color,
                           ),
                           child: ElevatedButton(
                             onPressed: () {
@@ -407,7 +403,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     controller: _controller,
                     count: 4,
                     effect: ScrollingDotsEffect(
-                      activeDotColor: on_boarding_dot_swipe_color,
+                      activeDotColor: AppColors.on_boarding_dot_swipe_color,
                       dotColor: Colors.deepPurple.shade100,
                       dotHeight: 15,
                       dotWidth: 15,
