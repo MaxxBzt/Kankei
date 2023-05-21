@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'homepage.dart';
 import 'onboarding.dart';
@@ -40,7 +41,7 @@ class _MainpageState extends State<MainPage> {
   static final List<Widget> _widgetOptions = <Widget>
   [
     HomePage(),
-    PlanningPage(),
+    CalendarScreen(),
     ChatPage(),
     DateIdeas(),
     UsPage(),

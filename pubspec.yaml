@@ -40,6 +40,9 @@ dependencies:
   cached_network_image: ^3.1.0
   flutter_staggered_grid_view: ^0.4.0
   url_launcher: ^6.0.12
+  table_calendar: ^3.0.9
+  intl: ^0.18.1
+  intl_utils: ^2.8.2
 
 
 
