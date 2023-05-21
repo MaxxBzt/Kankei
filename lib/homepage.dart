@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'countdown.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,8 +16,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Text('This is the home page'),
+        child: Countdown(),
       ),
     );
   }
 }
+
+
+
+
