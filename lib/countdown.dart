@@ -63,7 +63,7 @@ class _CountdownState extends State<Countdown> {
                       Text(
                         _remainingTime.inDays.toString(),
                         style: TextStyle(
-                          fontSize: 48,
+                          fontSize: 30,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -82,7 +82,7 @@ class _CountdownState extends State<Countdown> {
                       Text(
                         (_remainingTime.inHours % 24).toString(),
                         style: TextStyle(
-                          fontSize: 48,
+                          fontSize: 30,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -101,7 +101,7 @@ class _CountdownState extends State<Countdown> {
                       Text(
                         (_remainingTime.inMinutes % 60).toString(),
                         style: TextStyle(
-                          fontSize: 48,
+                          fontSize: 30,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -115,23 +115,26 @@ class _CountdownState extends State<Countdown> {
                       ),
                     ],
                   ),
+                  Column(
+                    children: [
+                      Text(
+                        (_remainingTime.inSeconds % 60).toString(),
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'seconds',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              ),
-              SizedBox(height: 16),
-              Text(
-                (_remainingTime.inSeconds % 60).toString(),
-                style: TextStyle(
-                  fontSize: 48,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'seconds',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
               ),
             ],
           ),
@@ -140,3 +143,7 @@ class _CountdownState extends State<Countdown> {
     );
   }
 }
+
+
+
+
