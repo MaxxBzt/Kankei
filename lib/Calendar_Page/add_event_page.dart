@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../main.dart';
 
@@ -32,16 +33,25 @@ class _AddEventPageState extends State<AddEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      Column(
+      appBar: AppBar(
+        leading: Icon(Icons.favorite, color: Colors.black),
+        elevation: 0,
+        backgroundColor: const Color(0xFFEAE7FA),
+        title: Text(
+          'Kankei',
+          style: GoogleFonts.pacifico(
+            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+          ),
+        ),
+      ),
+      body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 120.0, bottom: 40.0), // Adjust the left padding as needed
+            padding: EdgeInsets.only(top: 120.0, bottom: 40.0),
+            // Adjust the left padding as needed
             child: Align(
               alignment: Alignment.center,
-              child:
-              Container
-                (
+              child: Container(
                 child: Text('Add New Event',
                   textAlign: TextAlign.center,
                   style: TextStyle (
