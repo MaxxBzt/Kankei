@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'Calendar_Page/add_event_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
-import 'planning.dart';
+import 'Calendar_Page/calendar_page.dart';
 import 'chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
@@ -45,6 +46,7 @@ class _MainpageState extends State<MainPage> {
     ChatPage(),
     DateIdeas(),
     UsPage(),
+    AddEventPage(),
   ];
 
 

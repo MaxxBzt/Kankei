@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+import '../app_colors.dart';
+import 'add_event_page.dart';
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -22,12 +23,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _focusedDay = DateTime.now();
     _selectedDay = DateTime.now();
   }
-
-  // _initializeDateFormatting function is called in the initState method.
-  // this will allow the calendar to match the user's phone language
-  // ui.window.locale.toString() : retrieve the user's phone locale,
-  // initializeDateFormatting sets the correct language for the calendar.
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +46,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // Add your button onPressed logic here
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddEventPage()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
