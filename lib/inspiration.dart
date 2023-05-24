@@ -144,6 +144,17 @@ class _DateIdeasState extends State<DateIdeas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Icon(Icons.favorite, color: Colors.black),
+        elevation: 0,
+        backgroundColor: const Color(0xFFEAE7FA),
+        title: Text(
+          'Kankei',
+          style: GoogleFonts.pacifico(
+            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Padding(

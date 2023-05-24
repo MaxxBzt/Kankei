@@ -11,6 +11,8 @@ import 'Calendar_Page/calendar_page.dart';
 import 'chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
+import 'ideas.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -44,9 +46,9 @@ class _MainpageState extends State<MainPage> {
     HomePage(),
     CalendarScreen(),
     ChatPage(),
-    DateIdeas(),
+    Ideas(),
     UsPage(),
-    AddEventPage(),
+
   ];
 
 
