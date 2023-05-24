@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'countdown.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,11 +17,35 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Countdown(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            ColorizeAnimatedTextKit(
+              repeatForever: true,
+              text: ["Kankei"],
+              textStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, fontFamily: "Cursive"),
+              colors: [
+                Colors.purple.shade100,
+                Colors.pinkAccent,
+                Colors.blue,
+                Colors.yellow,
+                Colors.purple.shade100,
+
+              ],
+              textAlign: TextAlign.center,
+              isRepeatingAnimation: false,
+            ),
+            Countdown(),
+
+
+          ],
+        ),
       ),
     );
   }
 }
+
 
 
 
