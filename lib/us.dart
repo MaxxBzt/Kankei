@@ -1,8 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UsPage extends StatefulWidget {
   @override
   _UsPageState createState() => _UsPageState();
+}
+
+void signUserOut(){
+  FirebaseAuth.instance.signOut();
 }
 
 class _UsPageState extends State<UsPage> {
@@ -98,7 +103,7 @@ class _UsPageState extends State<UsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // add your action here
+                    signUserOut();
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
