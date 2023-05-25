@@ -6,11 +6,9 @@ import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
 import 'chat.dart';
-import 'inspiration.dart';
 import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future main() async {
@@ -18,6 +16,10 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
 
   runApp(MyApp());
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kankei/Authentication/LoginOrRegister.dart';
 
-import 'package:kankei/Authentication/login_widget.dart';
 
 import '../main.dart';
 
@@ -19,7 +19,7 @@ class AuthPage extends StatelessWidget{
             return MainPage();
           }
           else{
-            return LoginPage();
+            return LoginOrRegister();
           }
         },
       ),

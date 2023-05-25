@@ -1,149 +1,179 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../onboarding.dart';
+import '../app_colors.dart';
+import '../components/my_button.dart';
+import '../components/my_textfield.dart';
+
 
 class SignUpPage extends StatefulWidget {
+  final Function()? onPressed;
+  const SignUpPage({Key? key,required this.onPressed});
+
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  void signUserUp() async {
+    // show loading circle
+    showDialog(
+      context: context,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // display messages
+    void displayMessages(String message) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message),
+              ));
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      // pop the loading circle
+      Navigator.pop(context);
+      // show error to user
+      displayMessages("Passwords do not match !");
+      return;
+    }
+
+    //try create user
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+
+    } on FirebaseAuthException catch (error) {
+      Navigator.pop(context);
+      displayMessages(error.message!);
+    }
+    if(context.mounted) {
+      Navigator.pop(context);
+      print("REGISTERED");
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Container(
-              child: Center(
-                child: Text(" L O G O"),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // logo
+              const Icon(
+                Icons.favorite,
+                size: 50,
               ),
-            ),
-          ),
-          SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OnBoardingPage()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          color: Colors.white,
-                          child: Text("E M A I L",
-                              style: TextStyle(color: Colors.black)),
-                        )),
-                  )
-                ],
+
+              const SizedBox(height: 40),
+
+              // Ready to deepen your relationships ?
+              Text(
+                'Ready to deepen your relationships ?',
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ),
-          SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OnBoardingPage()));
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          color: Colors.white,
-                          child: Text("P A S S W O R D",
-                              style: TextStyle(color: Colors.black)),
-                        )),
-                  )
-                ],
+
+              const SizedBox(height: 25),
+
+              // email textfield
+              MyTextField(
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,
               ),
-            ),
+
+              const SizedBox(height: 10),
+
+              // password textfield
+              MyTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              // confirm password textfield
+              MyTextField(
+                controller: confirmPasswordController,
+                hintText: ' Confirm Password',
+                obscureText: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              const SizedBox(height: 20),
+
+              // sign in button
+              MyButton(
+                onTap: (
+                    ) {signUserUp();},
+                buttonText: 'Register',
+              ),
+
+              const SizedBox(height: 50),
+
+              const SizedBox(height: 120),
+
+              // not a member? register now
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  width: 350.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(55.0),
+                    color: AppColors.on_boarding_first_page_color,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: (widget.onPressed),
+                    child: Text(
+                      'Already have an account?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ])
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-            child: Text("O R", style: TextStyle(color: Colors.grey[700])),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        color: Colors.grey[400],
-                        child: Text("G O O G L E",
-                            style: TextStyle(color: Colors.white)),
-                      )),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        color: Colors.grey[600],
-                        child: Text("A P P L E",
-                            style: TextStyle(color: Colors.white)),
-                      )),
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        color: Colors.blue[600],
-                        child: Text("F A C E B O O K",
-                            style: TextStyle(color: Colors.white)),
-                      )),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Text(" T U T E E"),
-                )
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

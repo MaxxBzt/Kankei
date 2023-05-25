@@ -1,17 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:kankei/Authentication/signup.dart';
 import '../app_colors.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
-import '../components/square_tile.dart';
 
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  final Function()? onPressed;
+  LoginPage({super.key, required this.onPressed});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -116,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // Ready to deepen your relationships ?
               Text(
-                'Ready to deepen your relationships ?',
+                'Welcome back to Kankei',
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontSize: 20,
@@ -163,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
               // sign in button
               MyButton(
                 onTap: signUserIn,
+                buttonText: 'Sign In',
               ),
 
               const SizedBox(height: 50),
@@ -181,16 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: AppColors.on_boarding_first_page_color,
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context){
-                          return SignUpPage();
-                        },
-                      ),
-                    );
-                  },
+                  onPressed: (widget.onPressed),
                   child: Text(
                     'Register Now',
                     textAlign: TextAlign.center,
