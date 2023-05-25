@@ -103,7 +103,7 @@ class _UsPageState extends State<UsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    signUserOut();
+                    // Here function to break up (unlink 2 accounts)
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -117,9 +117,28 @@ class _UsPageState extends State<UsPage> {
                     ),
                   ),
                 )),
+            SizedBox(height: 16),
+            Divider(),
+            SizedBox(height: 150),
+            GestureDetector(
+              onTap: () {
+                signUserOut(); // Call the logout method from your logout class
+                },
+              child: Center(
+                child: Text(
+                  'Logout',
+
+                  style: TextStyle(
+                    color: Colors.red, // Set the text color to red
+                    fontSize: 22, // Increase the font size// Add an underline to the text
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+
     );
   }
 }
