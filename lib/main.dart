@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'homepage.dart';
@@ -10,7 +11,12 @@ import 'us.dart';
 import 'ideas.dart';
 
 
-void main() => runApp(MyApp());
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   MaterialColor main_theme_color = MaterialColor(0xFFb087bf, <int, Color>{

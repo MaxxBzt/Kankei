@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "387979069312",
+    "project_id": "kankeiapp",
+    "storage_bucket": "kankeiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387979069312:android:fd9f2f4a491b56c45ae365",
+        "android_client_info": {
+          "package_name": "com.example.kankei"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387979069312-uqbp6g620eouqprf3gfghk6ugfmgcp46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVp9qh5Nv-FJXCfFWNmeY8XUFEBr2tblU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387979069312-uqbp6g620eouqprf3gfghk6ugfmgcp46.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
