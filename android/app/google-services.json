@@ -29,6 +29,13 @@
             {
               "client_id": "387979069312-uqbp6g620eouqprf3gfghk6ugfmgcp46.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "387979069312-a7t77v5uvfheg07nodsm98c8aupnburb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kankei"
+              }
             }
           ]
         }
