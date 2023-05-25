@@ -9,11 +9,13 @@ import 'chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
 import 'ideas.dart';
+import 'package:flutter/services.dart';
 
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
 
   runApp(MyApp());
 }
