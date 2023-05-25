@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:intl/date_symbol_data_local.dart';
-
-import 'Calendar_Page/add_event_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';

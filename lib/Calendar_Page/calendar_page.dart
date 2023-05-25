@@ -1,20 +1,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../app_colors.dart';
-import 'add_event_page.dart';
+import '../Calendar_Page/add_event_page.dart';
+
 
 class CalendarScreen extends StatefulWidget {
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
+
 class _CalendarScreenState extends State<CalendarScreen> {
   late CalendarFormat _calendarFormat;
   late DateTime _focusedDay;
   late DateTime _selectedDay;
+
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold
-    (
+      (
       body:
       Column(
         children: [
@@ -122,22 +123,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
               onPageChanged: (focusedDay) {
                 _focusedDay = focusedDay;
               },
-              calendarBuilders: CalendarBuilders(
-                dowBuilder: (context, day) {
-                  if (day.weekday == DateTime.sunday) {
-                    final text = DateFormat.E().format(day);
-
-                    return Center(
-                      child: Text(
-                        text,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-                },
-              ),
             ),
-          )
+          ),
 
         ],
       ),
