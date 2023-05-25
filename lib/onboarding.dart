@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kankei/Authentication/login_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
 import 'choose_page.dart';
 
@@ -355,7 +356,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context){
-                                    return LoginPage();
+                                    return AuthPage();
                                   },
                                 ),
                               );
