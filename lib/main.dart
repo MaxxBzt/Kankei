@@ -17,12 +17,26 @@ import 'ideas.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  MaterialColor main_theme_color = MaterialColor(0xFFb087bf, <int, Color>{
+    50: Color(0xFFb087bf),
+    100: Color(0xFFb087bf),
+    200: Color(0xFFb087bf),
+    300: Color(0xFFb087bf),
+    400: Color(0xFFb087bf),
+    500: Color(0xFFb087bf),
+    600: Color(0xFFb087bf),
+    700: Color(0xFFb087bf),
+    800: Color(0xFFb087bf),
+    900: Color(0xFFb087bf),
+  },
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kankei',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: main_theme_color,
       ),
       home: OnBoardingPage(),
     );
