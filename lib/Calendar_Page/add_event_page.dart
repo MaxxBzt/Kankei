@@ -1,21 +1,27 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Calendar_Page/event_model.dart';
 
 
 
 // Stateful : means the widget can have mutable state.
 class AddEventPage extends StatefulWidget {
+
+  // Add a onDeleteCategory property to the AddEventPage widget
+  late final void Function(String)? onDeleteCategory;
+  AddEventPage({Key? key, this.onDeleteCategory}) : super(key: key);
+
+
   @override
   _AddEventPageState createState() => _AddEventPageState();
 }
 class _AddEventPageState extends State<AddEventPage> {
 
-
-  // We define our variables to store the different input
   String name_of_event = '';
   /* date_selected initialized with the current date and time so that when user
   chooses, he is proposed the current date first
@@ -35,19 +41,20 @@ class _AddEventPageState extends State<AddEventPage> {
   // Save the categories to shared preferences
   Future<void> _saveCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> categoryList = categories.keys.toList();
-    await prefs.setStringList('categories', categoryList);
+    // Convert the categories map to a JSON string
+    String categoriesString = jsonEncode(categories.map((key, value) => MapEntry(key, value.value)));
+    await prefs.setString('categories', categoriesString);
   }
 
   // Retrieve the categories from shared preferences
   Future<void> _retrieveCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? categoryList = prefs.getStringList('categories');
-    if (categoryList != null) {
+    String? categoriesString = prefs.getString('categories');
+    if (categoriesString != null) {
       setState(() {
-        categories = Map.fromIterable(categoryList,
-            key: (categoryName) => categoryName,
-            value: (categoryName) => Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0));
+        // Decode the JSON string and convert it back to a map
+        Map<String, dynamic> categoriesMap = jsonDecode(categoriesString);
+        categories = categoriesMap.map((key, value) => MapEntry(key, Color(value)));
       });
     }
   }
@@ -60,7 +67,6 @@ class _AddEventPageState extends State<AddEventPage> {
       initialDate: date_selected,
       firstDate: DateTime(2023),
       lastDate: DateTime(2024),
-      // We call a builder
     );
 
     // Here we declared a variable telling us the date currently selected by the user
@@ -70,6 +76,7 @@ class _AddEventPageState extends State<AddEventPage> {
       });
     }
   }
+
   void _addCategory(BuildContext context) {
     showDialog(
       context: context,
@@ -105,13 +112,17 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 
-  // This function is used to delete a category from the categories map.
+// Call the onDeleteCategory callback when a category is deleted
   void _deleteCategory(String categoryName) {
     setState(() {
       categories.remove(categoryName);
       _saveCategories(); // Save categories to shared preferences
+      if (widget.onDeleteCategory != null) {
+        widget.onDeleteCategory!(categoryName);
+      }
     });
   }
+
 
 
   @override
@@ -215,7 +226,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   ),
                   SizedBox(height: 16.0),
                   Container(
-                    height: 100,
+                    height: 110,
                     child: TextField(
                       onChanged: (value) {
                         setState(() {
@@ -290,17 +301,22 @@ class _AddEventPageState extends State<AddEventPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                // Inside the AddEventPage widget
                 onPressed: () {
-                  // Code to handle adding the event
-                  print('Event added');
-                  print('Name: $name_of_event');
-                  print('Date: $date_selected');
-                  print('Description: $description_event');
-                  print('Selected Category: $selectedCategory');
-                  categories.forEach((categoryName, categoryColor) {
-                    print('  $categoryName - Color: $categoryColor');
-                  });
+                  DateTime date = DateTime(date_selected.year, date_selected.month, date_selected.day);
+                  Color? categoryColor = categories[selectedCategory];
+                  Event event = Event(
+                    name: name_of_event,
+                    description: description_event,
+                    category: selectedCategory,
+                    date_of_event: date,
+                    color_category: categoryColor,
+                  );
+                  Navigator.of(context).pop(event);
+
                 },
+
+
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

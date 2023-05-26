@@ -66,7 +66,10 @@ class _MainpageState extends State<MainPage> {
   static final List<Widget> _widgetOptions = <Widget>
   [
     HomePage(),
-    CalendarScreen(),
+    CalendarScreen(
+      key: UniqueKey(),
+      color_category: Colors.red,
+    ),
     ChatPage(),
     Ideas(),
     UsPage(),
