@@ -225,30 +225,36 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ),
           Wrap(
-            spacing: 8.0, // Adjust the spacing between events as needed
-            runSpacing: 8.0, // Adjust the spacing between lines as needed
+            spacing: 8.0,
+            runSpacing: 8.0,
             children: selectedEvents.map(
                   (event) => Container(
-                padding: EdgeInsets.all(8.0), // Adjust the padding as needed
+                padding: EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(event.name, style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(event.description),
-                    Container(
-                      color: event.color_category, // Set the background color here
-                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adjust the padding as needed
-                      child: Text('${event.category}', style: TextStyle(color: Colors.white)),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () => _deleteEvent(event)
+                    Row(
+                      children: [
+                        Container(
+                          color: event.color_category,
+                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          child: Text('${event.category}', style: TextStyle(color: Colors.white)),
+                        ),
+                        IconButton(
+                            iconSize: 18.0, // Adjust the size of the icon here
+                            icon: Icon(Icons.clear),
+                            onPressed: () => _deleteEvent(event)
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ).toList(),
           ),
+
         ],
       ),
     );
