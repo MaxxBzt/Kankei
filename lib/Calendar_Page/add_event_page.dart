@@ -98,7 +98,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   if (newCategory.isNotEmpty) {
                     categories[newCategory] =
                         Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(1.0);
+                            .withOpacity(0.6);
                     selectedCategory = newCategory;
                     _saveCategories(); // Save categories to shared preferences
                   }
