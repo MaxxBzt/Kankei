@@ -11,6 +11,25 @@ import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
+
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'Calendar_Page/add_event_page.dart';
+import 'homepage.dart';
+import 'onboarding.dart';
+import 'Calendar_Page/calendar_page.dart';
+import 'chat.dart';
+import 'inspiration.dart';
+import 'us.dart';
+import 'ideas.dart';
+import 'package:kankei/Inspirations/show.dart';
+import 'package:kankei/Inspirations/recipes.dart';
+import 'date_details.dart';
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -43,6 +62,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kankei',
+      routes: {
+        '/home': (context) => HomePage(),
+        '/DateIdeas': (context) => DateIdeas(),
+        '/chat': (context) => ChatPage(),
+        '/show': (context) => PopularMoviesAndShows(),
+        '/Recipe': (context) => Recipe(),
+        '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
+        '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
+      },
       theme: ThemeData(
         primarySwatch: main_theme_color,
       ),

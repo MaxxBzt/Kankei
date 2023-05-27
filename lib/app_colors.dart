@@ -10,6 +10,7 @@ class AppColors {
   static const Color Dates = Color(0xFFa894fc);
   static const Color Quiz = Color(0xFFc8bcfc);
   static const Color Gifts = Color(0xFFe0dcfc);
+  static const Color Ideas= Color(0xFFf0d4ec);
 
 }
 

@@ -27,117 +27,119 @@ class Activity_class {
   });
 }
 
+final List<Activity_class> activities = [
+  Activity_class(
+    title: 'Watch a movie',
+    emoji: '🎬',
+    image: 'assets/images/ideas_images/watch_movie.png',
+    description: 'Enjoy a cozy movie night together at home or at a theater.',
+    widget: PopularMoviesAndShows(), // set the widget for this activity
+  ),
+  Activity_class(
+    title: 'Cook together',
+    emoji: '🍳',
+    image: 'assets/images/ideas_images/cooking.png',
+    description:
+    'Prepare a delicious meal together and have fun in the kitchen.',
+    widget: Recipe(),
+  ),
+  Activity_class(
+    title: 'Go for a hike',
+    emoji: '🥾',
+    image: 'assets/images/ideas_images/go_hiking.jpg',
+    description:
+    'Explore nature together and enjoy some fresh air on a hiking trail.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Visit an art gallery',
+    emoji: '🎨',
+    image: 'assets/images/ideas_images/artGallery.jpeg',
+    description:
+    'Discover and appreciate art together at a local gallery or museum.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Go to the beach',
+    emoji: '🏖️',
+    image: 'assets/images/ideas_images/beach.jpg',
+    description:
+    'Spend a relaxing day together at the beach and enjoy the sun and sand.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Go to a restaurant',
+    emoji: '🧑‍🍳',
+    image: 'assets/images/ideas_images/restaurant.jpg',
+    description:
+    'Enjoy a romantic dinner together at a restaurant or cafe of your choice.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Have a picnic',
+    emoji: '🧺',
+    image: 'assets/images/ideas_images/picnic.jpg',
+    description:
+    'Pack a basket with your favorite foods and enjoy a meal outdoors.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Stargazing',
+    emoji: '🌠',
+    image: 'assets/images/ideas_images/stargazing.jpg',
+    description:
+    'Find a quiet spot away from city lights and marvel at the night sky.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Play board games',
+    emoji: '🎲',
+    image: 'assets/images/ideas_images/boardGames.jpg',
+    description:
+    'Enjoy a fun and relaxing night in with your favorite board games.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Go dancing',
+    emoji: '💃',
+    image: 'assets/images/ideas_images/dancing.jpg',
+    description:
+    'Hit the dance floor and dance the night away at a club or a dance class.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Visit a fair',
+    emoji: '🎪',
+    image: 'assets/images/ideas_images/fair.jpg',
+    description:
+    'Explore a local festival or fair and enjoy the food, games, and attractions.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Go for a bike ride',
+    emoji: '🚴',
+    image: 'assets/images/ideas_images/BikeRide.jpg',
+    description:
+    'Take a leisurely bike ride together and explore your surroundings.',
+    widget: PopularMoviesAndShows(),
+  ),
+  Activity_class(
+    title: 'Go to a concert',
+    emoji: '🎤',
+    image: 'assets/images/ideas_images/Concert.jpg',
+    description:
+    'Enjoy a night of live music together at a concert or music festival.',
+    widget: PopularMoviesAndShows(),
+  ),
+];
+
 class DateIdeas extends StatefulWidget {
   @override
   _DateIdeasState createState() => _DateIdeasState();
 }
 
 class _DateIdeasState extends State<DateIdeas> {
-  final List<Activity_class> activities = [
-    Activity_class(
-      title: 'Watch a movie',
-      emoji: '🎬',
-      image: 'assets/images/ideas_images/watch_movie.png',
-      description: 'Enjoy a cozy movie night together at home or at a theater.',
-      widget: PopularMoviesAndShows(), // set the widget for this activity
-    ),
-    Activity_class(
-      title: 'Cook together',
-      emoji: '🍳',
-      image: 'assets/images/ideas_images/cooking.png',
-      description:
-          'Prepare a delicious meal together and have fun in the kitchen.',
-      widget: Recipe(),
-    ),
-    Activity_class(
-      title: 'Go for a hike',
-      emoji: '🥾',
-      image: 'assets/images/ideas_images/go_hiking.jpg',
-      description:
-          'Explore nature together and enjoy some fresh air on a hiking trail.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Visit an art gallery',
-      emoji: '🎨',
-      image: 'assets/images/ideas_images/artGallery.jpeg',
-      description:
-          'Discover and appreciate art together at a local gallery or museum.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Go to the beach',
-      emoji: '🏖️',
-      image: 'assets/images/ideas_images/beach.jpg',
-      description:
-          'Spend a relaxing day together at the beach and enjoy the sun and sand.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Go to a restaurant',
-      emoji: '🧑‍🍳',
-      image: 'assets/images/ideas_images/restaurant.jpg',
-      description:
-          'Enjoy a romantic dinner together at a restaurant or cafe of your choice.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Have a picnic',
-      emoji: '🧺',
-      image: 'assets/images/ideas_images/picnic.jpg',
-      description:
-          'Pack a basket with your favorite foods and enjoy a meal outdoors.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Stargazing',
-      emoji: '🌠',
-      image: 'assets/images/ideas_images/stargazing.jpg',
-      description:
-          'Find a quiet spot away from city lights and marvel at the night sky.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Play board games',
-      emoji: '🎲',
-      image: 'assets/images/ideas_images/boardGames.jpg',
-      description:
-          'Enjoy a fun and relaxing night in with your favorite board games.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Go dancing',
-      emoji: '💃',
-      image: 'assets/images/ideas_images/dancing.jpg',
-      description:
-          'Hit the dance floor and dance the night away at a club or a dance class.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Visit a fair',
-      emoji: '🎪',
-      image: 'assets/images/ideas_images/fair.jpg',
-      description:
-          'Explore a local festival or fair and enjoy the food, games, and attractions.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Go for a bike ride',
-      emoji: '🚴',
-      image: 'assets/images/ideas_images/BikeRide.jpg',
-      description:
-          'Take a leisurely bike ride together and explore your surroundings.',
-      widget: PopularMoviesAndShows(),
-    ),
-    Activity_class(
-      title: 'Go to a concert',
-      emoji: '🎤',
-      image: 'assets/images/ideas_images/Concert.jpg',
-      description:
-          'Enjoy a night of live music together at a concert or music festival.',
-      widget: PopularMoviesAndShows(),
-    ),
-  ];
+
 
   // Add other activities with their images and descriptions here
 
