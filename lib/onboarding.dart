@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kankei/Authentication/login_widget.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'Authentication/auth_page.dart';
@@ -20,6 +23,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   bool AreWeOnLastPage = false;
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       body: Stack(
@@ -41,13 +51,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 (
                   padding: const EdgeInsets.all(30),
                 // Add a background color to the container
-                  color: Colors.white,
+                  color: is_dark ? AppColors.dark_boarding_page_background : Colors.white,
                   // Add a child column widget to the container
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children:
                     [
-                      Image(image: AssetImage('assets/images/on_boarding_images/first_page.jpeg')),
+                      Image(image: AssetImage('assets/images/on_boarding_images/first_page.png')),
                       Column(
                         children: [
                           Text(
@@ -57,7 +67,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
-                                color: Colors.black,
+                                color: is_dark ? Colors.white : Colors.black,
                               ),
                             ),
                           ),
@@ -70,7 +80,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.black,
+                                  color: is_dark ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),
@@ -100,7 +110,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               textStyle: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: is_dark ? Colors.white : Colors.white,
                               ),
                             ),
                           ),
@@ -128,13 +138,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   (
                     padding: const EdgeInsets.all(30),
                     // Add a background color to the container
-                    color: Colors.white,
+                    color: is_dark ? AppColors.dark_boarding_page_background : Colors.white,
                     // Add a child column widget to the container
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children:
                       [
-                        Image(image: AssetImage('assets/images/on_boarding_images/second_page.jpeg')),
+                        Image(image: AssetImage('assets/images/on_boarding_images/second_page.png')),
                         Column(
                           children: [
                             Text(
@@ -144,7 +154,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
-                                  color: Colors.black,
+                                  color: is_dark ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),
@@ -159,7 +169,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    color: is_dark ? Colors.white : Colors.black,
                                   ),
                                 ),
                               ),
@@ -188,7 +198,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),
@@ -216,13 +226,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   (
                     padding: const EdgeInsets.all(30),
                     // Add a background color to the container
-                    color: Colors.white,
+                    color: is_dark ? AppColors.dark_boarding_page_background : Colors.white,
                     // Add a child column widget to the container
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children:
                       [
-                        Image(image: AssetImage('assets/images/on_boarding_images/third_page.jpeg')),
+                        Image(image: AssetImage('assets/images/on_boarding_images/third_page.png')),
                         Column(
                           children: [
                             Text(
@@ -232,7 +242,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
-                                  color: Colors.black,
+                                  color: is_dark ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),
@@ -245,7 +255,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    color: is_dark ? Colors.white : Colors.black,
                                   ),
                                 ),
                               ),
@@ -274,7 +284,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),
@@ -302,13 +312,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   (
                     padding: const EdgeInsets.all(30),
                     // Add a background color to the container
-                    color: Colors.white,
+                    color: is_dark ? AppColors.dark_boarding_page_background : Colors.white,
                     // Add a child column widget to the container
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children:
                       [
-                        Image(image: AssetImage('assets/images/on_boarding_images/fourth_page.jpeg')),
+                        Image(image: AssetImage('assets/images/on_boarding_images/fourth_page.png')),
                         Column(
                           children: [
                             Text(
@@ -318,7 +328,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
-                                  color: Colors.black,
+                                  color: is_dark ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),
@@ -333,7 +343,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    color: is_dark ? Colors.white : Colors.black,
                                   ),
                                 ),
                               ),
@@ -366,7 +376,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),

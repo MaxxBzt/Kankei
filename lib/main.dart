@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../theme/theme_system.dart';
+import 'package:provider/provider.dart';
+import 'Authentication/auth_page.dart';
+import 'app_colors.dart';
+import 'choose_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
@@ -10,6 +15,25 @@ import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
+
+
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'Calendar_Page/add_event_page.dart';
+import 'homepage.dart';
+import 'onboarding.dart';
+import 'Calendar_Page/calendar_page.dart';
+import 'chat.dart';
+import 'inspiration.dart';
+import 'us.dart';
+import 'ideas.dart';
+import 'package:kankei/Inspirations/show.dart';
+import 'package:kankei/Inspirations/recipes.dart';
+import 'date_details.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,32 +49,42 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MaterialColor main_theme_color = MaterialColor(0xFFb087bf, <int, Color>{
-    50: Color(0xFFb087bf),
-    100: Color(0xFFb087bf),
-    200: Color(0xFFb087bf),
-    300: Color(0xFFb087bf),
-    400: Color(0xFFb087bf),
-    500: Color(0xFFb087bf),
-    600: Color(0xFFb087bf),
-    700: Color(0xFFb087bf),
-    800: Color(0xFFb087bf),
-    900: Color(0xFFb087bf),
-  },
-  );
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kankei',
-      theme: ThemeData(
-        primarySwatch: main_theme_color,
-      ),
-      home: OnBoardingPage(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (context) => Theme_Provider(),
+    builder: (context,_)
+  {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    ThemeMode themeMode;
+    if (theme_provider.useSystemTheme) {
+      themeMode = ThemeMode.system;
+    } else if (theme_provider.is_DarkMode) {
+      themeMode = ThemeMode.dark;
+    } else {
+      themeMode = ThemeMode.light;
+    }
+      return MaterialApp(
+        title: 'Kankei',
+        // Use the system's preferred theme if useSystemTheme is true,
+        // otherwise use the selected theme
+        themeMode: themeMode,
+        theme: MyThemes.light_theme,
+        darkTheme: MyThemes.dark_theme,
+        routes: {
+          '/home': (context) => HomePage(),
+          '/DateIdeas': (context) => DateIdeas(),
+          '/chat': (context) => ChatPage(),
+          '/show': (context) => PopularMoviesAndShows(),
+          '/Recipe': (context) => Recipe(),
+          '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
+          '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
+        },
+        home: OnBoardingPage(),
+      );
+    },
+  );
 }
-
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -79,16 +113,24 @@ class _MainpageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
       appBar: AppBar(
-        leading: Icon(Icons.favorite, color: Colors.black),
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
         elevation: 0,
-        backgroundColor: const Color(0xFFEAE7FA),
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
         title: Text(
           'Kankei',
           style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
           ),
         ),
       ),
@@ -97,11 +139,12 @@ class _MainpageState extends State<MainPage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: is_dark ? AppColors.dark_bottom_bar_header : AppColors.light_bottom_bar_header,
           boxShadow: [
             BoxShadow(
               blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
+              color: is_dark ? Colors.white.withOpacity(.1) :
+              Colors.black.withOpacity(.1),
             )
           ],
         ),
@@ -116,7 +159,7 @@ class _MainpageState extends State<MainPage> {
               iconSize: 24,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Color(0xFFEAE7FA),
+              tabBackgroundColor: is_dark ? AppColors.dark_icon_background : AppColors.light_icon_background,
 
               tabs: const [
                 GButton(

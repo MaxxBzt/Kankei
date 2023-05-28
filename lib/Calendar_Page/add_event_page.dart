@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Calendar_Page/event_model.dart';
+import '../theme/theme_system.dart';
 
 
 
@@ -98,7 +100,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   if (newCategory.isNotEmpty) {
                     categories[newCategory] =
                         Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(1.0);
+                            .withOpacity(0.6);
                     selectedCategory = newCategory;
                     _saveCategories(); // Save categories to shared preferences
                   }
@@ -127,6 +129,14 @@ class _AddEventPageState extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     Widget buildCategoryItem(String categoryName, Color categoryColor) {
       bool isSelected = categoryName == selectedCategory; // Check if the category is selected
 
@@ -170,13 +180,13 @@ class _AddEventPageState extends State<AddEventPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.favorite, color: Colors.black),
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
         elevation: 0,
-        backgroundColor: const Color(0xFFEAE7FA),
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
         title: Text(
           'Kankei',
           style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
           ),
         ),
       ),
@@ -273,9 +283,11 @@ class _AddEventPageState extends State<AddEventPage> {
                   ),
                   ElevatedButton(
                     onPressed: () => _addCategory(context),
-                    child: Text('Add Category'),
+                    child: Text('Add Category',
+                    style: TextStyle(color: is_dark ? Colors.white : Colors.white)),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(AppColors.planning_add_event_color.withOpacity(0.8) ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          is_dark ? AppColors.dark_appbar_header.withOpacity(0.8) : AppColors.planning_add_event_color.withOpacity(0.8) ),
                     ),
                   ),
                   SizedBox(height: 16.0),
@@ -296,7 +308,7 @@ class _AddEventPageState extends State<AddEventPage> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: AppColors.planning_add_event_color,
+                  foregroundColor: Colors.white, backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

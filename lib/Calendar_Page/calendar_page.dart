@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../app_colors.dart';
 import '../Calendar_Page/add_event_page.dart';
 import '../Calendar_Page/event_model.dart';
+import '../theme/theme_system.dart';
 
 class CalendarScreen extends StatefulWidget {
   final String name_of_event;
@@ -34,9 +36,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List<Event> selectedEvents = [];
   Map<String, Color> categories = {};
 
+
+  // This function manages the adding of new events to the calendar
   void addEvent(Event event) {
 
-    // Convert event.date to local time
+    // Convert event.date to local time because it's in UTC when coming to the calendar widget
     event = event.copyWith(date: event.date_of_event.toLocal());
 
     // We create a new DateTime with only the date and not the time as the times varies and
@@ -54,6 +58,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     events[eventDate]!.add(event);
   }
 
+
+  // Function to delete an event from calendar
   void _deleteEvent(Event event) {
     setState(() {
       DateTime eventDate = DateTime(event.date_of_event.year, event.date_of_event.month, event.date_of_event.day);
@@ -67,7 +73,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late DateTime _selectedDay;
 
 
-
+  // Function that manages the deletion of events when a category is deleted
   void deleteEventsByCategory(String category) {
     setState(() {
       events.removeWhere((date, events) {
@@ -76,8 +82,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
       });
     });
   }
-
-
 
 
   @override
@@ -89,8 +93,48 @@ class _CalendarScreenState extends State<CalendarScreen> {
     selectedEvents = events[_selectedDay] ?? [];
   }
 
+  // This function manages the popup window happening when we click to display an event
+  void _openDialog(Event event) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(event.name),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(event.description),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Call a function to delete the event
+                _deleteEvent(event);
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Delete Event',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold
       (
       body:
@@ -106,7 +150,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: AppColors.planning_add_event_color,
+                    foregroundColor: Colors.white, backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -137,11 +181,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(width: 5.0), // Adjust the width as needed
+                      SizedBox(width: 5.0),
                       Image.asset(
                         'assets/images/add_plus.png',
-                        width: 35, // Adjust the width as needed
-                        height: 45, // Adjust the height as needed
+                        width: 35,
+                        height: 45,
                       ),
                     ],
                   ),
@@ -153,8 +197,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             margin: EdgeInsets.all(13.0),
             decoration: BoxDecoration(
               border: Border.all(
-                color: AppColors.planning_add_event_color,
-                width: 0.5, // defines the thickness of the border
+                color: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
+                width: is_dark ? 2 : 0.5, // defines the thickness of the border
               ),
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -168,21 +212,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       shape: BoxShape.circle,
                     ),
                     todayDecoration: BoxDecoration(
-                      color: Colors.black,
+                      color: is_dark ? Colors.white : Colors.black,
                       shape: BoxShape.circle,
                     ),
                     todayTextStyle: TextStyle(
                       fontSize: 18.0,
-                      color: Colors.white,
+                      color: is_dark ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                     selectedDecoration: BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
                     ),
+                    weekendTextStyle: TextStyle(color: is_dark ? Colors.grey : Colors.grey[600]),
+
                   ),
                   headerStyle: HeaderStyle(
-                    titleTextStyle: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,
+                    titleTextStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, fontSize: 22, fontWeight: FontWeight.bold,
                     ),
                     formatButtonVisible: false,
                   ),
@@ -211,7 +257,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       DateTime selectedDate = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
 
                       _focusedDay = focusedDay;
-                      //selectedEvents = events[selectedDate] ?? [];
                       selectedEvents = events[selectedDate]?.map((event) =>
                           event.copyWith(category: event.category, color_category: event.color_category)).toList() ?? [];
 
@@ -228,33 +273,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
             spacing: 8.0,
             runSpacing: 8.0,
             children: selectedEvents.map(
-                  (event) => Container(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(event.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(event.description),
-                    Row(
-                      children: [
-                        Container(
-                          color: event.color_category,
-                          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                          child: Text('${event.category}', style: TextStyle(color: Colors.white)),
-                        ),
-                        IconButton(
-                            iconSize: 18.0, // Adjust the size of the icon here
-                            icon: Icon(Icons.clear),
-                            onPressed: () => _deleteEvent(event)
-                        ),
-                      ],
+                  (event) => GestureDetector(
+                onTap: () => _openDialog(event),
+
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1.0,
                     ),
-                  ],
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ListTile(
+                    tileColor: Colors.transparent,
+                    title: Text(event.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                    trailing: Container(
+                      color: event.color_category,
+                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      child: Text('${event.category}', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
                 ),
               ),
             ).toList(),
-          ),
-
+          )
         ],
       ),
     );

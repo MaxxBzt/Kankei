@@ -2,25 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:kankei/Inspirations/show.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 
+import 'app_colors.dart';
 import 'inspiration.dart';
 
 class DateDetails extends StatelessWidget {
   final Activity_class activity;
 
   DateDetails({required this.activity});
-
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold(
       appBar: AppBar(
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
+        elevation: 0,
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
         title: Text(
           activity.title,
           style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
           ),
         ),
-        backgroundColor: const Color(0xFFEAE7FA),
       ),
       body: SingleChildScrollView(
         child: Column(
