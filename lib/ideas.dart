@@ -32,9 +32,9 @@ class _IdeasState extends State<Ideas> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TypewriterAnimatedTextKit(
-                text: ['Fun and Romantic Ideas'],
-                textStyle: TextStyle(
+              child : Text(
+                'Fun and Romantic Ideas',
+                style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cursive',
@@ -47,12 +47,8 @@ class _IdeasState extends State<Ideas> {
                     ),
                   ],
                 ),
-                textAlign: TextAlign.center,
-                //textAlign: AlignmentDirectional.topStart,
-                speed: Duration(milliseconds: 50),
-                repeatForever: false,
-                totalRepeatCount: 1,
               ),
+
             ),
             GestureDetector(
               onTap: () {
@@ -188,21 +184,32 @@ class _IdeasState extends State<Ideas> {
                                 itemExtent: 300,
                                 itemBuilder: (BuildContext context, int index) {
                                   List<String> imagePaths = [
-                                    'assets/images/ideas_images/watch_movie_ideas.png',
+                                    'assets/images/ideas_images/general_knowledge.png',
                                     'assets/images/ideas_images/cooking_ideas.png',
                                     'assets/images/ideas_images/restaurant_ideas.png',
                                   ];
+
+                                  List<String> routes = [
+                                    '/Quiz_General_Knowledge',
+
+
+                                  ];
                                   return Padding(
                                     padding: EdgeInsets.only(right: 8),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.asset(
-                                          imagePaths[index],
-                                          fit: BoxFit.cover,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(context, routes[index]);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.asset(
+                                            imagePaths[index],
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                     ),
