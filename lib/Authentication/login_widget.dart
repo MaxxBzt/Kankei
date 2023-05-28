@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+
   // sign user in method
   void signUserIn() async {
     // show loading circle
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return const AlertDialog(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Color(0xFF726daf),
           title: Center(
             child: Text(
               'Incorrect Email',
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return const AlertDialog(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: Color(0xFF726daf),
           title: Center(
             child: Text(
               'Incorrect Password',
@@ -95,8 +96,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -111,11 +113,10 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 40),
 
-              // Ready to deepen your relationships ?
               Text(
                 'Welcome back to Kankei',
                 style: TextStyle(
-                  color: Colors.grey[700],
+                  color: is_dark ? Colors.white : Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -149,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(
                       'Forgot Password?',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(color: is_dark ? Colors.white : Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -176,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(55.0),
-                  color: AppColors.on_boarding_first_page_color,
+                  color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
                 ),
                 child: ElevatedButton(
                   onPressed: (widget.onPressed),

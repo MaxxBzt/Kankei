@@ -14,6 +14,9 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextField(
@@ -26,7 +29,7 @@ class MyTextField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey.shade400),
             ),
-            fillColor: Colors.grey.shade200,
+            fillColor: is_dark ? Colors.grey.shade900 : Colors.grey.shade200,
             filled: true,
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey[500])),

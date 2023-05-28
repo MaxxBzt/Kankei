@@ -95,9 +95,7 @@ class _UsPageState extends State<UsPage> {
                 ),
               ),
             ),
-            SizedBox(height: 32),
             Divider(),
-            SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 // handle change password press
@@ -114,9 +112,7 @@ class _UsPageState extends State<UsPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
             Divider(),
-            SizedBox(height: 16),
             Container(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -134,10 +130,8 @@ class _UsPageState extends State<UsPage> {
                       fontSize: 20.0,
                     ),
                   ),
-                )),
-            SizedBox(height: 16),
-            Divider(),
-            SizedBox(height: 150),
+                ),
+            ),
             GestureDetector(
               onTap: () {
                 signUserOut(); // Call the logout method from your logout class
@@ -145,7 +139,6 @@ class _UsPageState extends State<UsPage> {
               child: Center(
                 child: Text(
                   'Logout',
-
                   style: TextStyle(
                     color: Colors.red, // Set the text color to red
                     fontSize: 22, // Increase the font size// Add an underline to the text

@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
+import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
           '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
           '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
         },
-        home: OnBoardingPage(),
+        home: AuthPage(),
       );
     },
   );

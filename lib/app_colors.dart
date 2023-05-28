@@ -20,6 +20,11 @@ class AppColors {
   static const Color light_bottom_bar_header = Color(0xFFFFFFFF);
   static const Color light_icon_background = Color(0xFFEAE7FA);
 
+  // LIGHT - LOGIN
+  static const Color light_sign_in = Color(0xFFb087bf);
+  static const Color light_register_now = Color(0xFFb18dd7);
+  static const Color light_login_field = Color(0xFFb18dd7);
+
   // DARK MODE COLORS
   static const Color dark_background = Color(0xFF121212);
   static const Color dark_appbar_header = Color(0xFF726daf);
@@ -31,6 +36,11 @@ class AppColors {
 
   // DARK - BOARDING PAGE
   static const Color dark_boarding_page_background = Color(0xFF524e85);
+
+  // DARK - LOGIN PAGE
+  static const Color dark_sign_in = Color(0xFF726daf);
+  static const Color dark_register_now = Color(0xFF726daf);
+  static const Color dark_login_field = Color(0xFF2b2b2b);
 
 }
 

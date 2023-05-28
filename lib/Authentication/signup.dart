@@ -65,8 +65,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -84,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Text(
                 'Ready to deepen your relationships ?',
                 style: TextStyle(
-                  color: Colors.grey[700],
+                  color: is_dark ? Colors.white : Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -139,7 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 50.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(55.0),
-                    color: AppColors.on_boarding_first_page_color,
+                    color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
                   ),
                   child: ElevatedButton(
                     onPressed: (widget.onPressed),
