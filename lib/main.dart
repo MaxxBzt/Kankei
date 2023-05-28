@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
+import 'app_colors.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
@@ -104,16 +105,18 @@ class _MainpageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
       appBar: AppBar(
-        leading: Icon(Icons.favorite, color: Colors.black),
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
         elevation: 0,
-        backgroundColor: const Color(0xFFEAE7FA),
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
         title: Text(
           'Kankei',
           style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
           ),
         ),
       ),
@@ -122,11 +125,12 @@ class _MainpageState extends State<MainPage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: is_dark ? AppColors.dark_bottom_bar_header : AppColors.light_bottom_bar_header,
           boxShadow: [
             BoxShadow(
               blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
+              color: is_dark ? Colors.white.withOpacity(.1) :
+              Colors.black.withOpacity(.1),
             )
           ],
         ),
@@ -141,7 +145,7 @@ class _MainpageState extends State<MainPage> {
               iconSize: 24,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
               duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Color(0xFFEAE7FA),
+              tabBackgroundColor: is_dark ? AppColors.dark_icon_background : AppColors.light_icon_background,
 
               tabs: const [
                 GButton(

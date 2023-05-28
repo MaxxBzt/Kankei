@@ -12,7 +12,6 @@ class Theme_Provider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   // Here we define the base theme of the app
   ThemeMode theme_mode = ThemeMode.light;
   bool get is_DarkMode => theme_mode == ThemeMode.dark;
@@ -28,26 +27,15 @@ class MyThemes {
 
   static final dark_theme = ThemeData(
       scaffoldBackgroundColor: AppColors.dark_background,
-      // Set the
+      primaryColor: AppColors.dark_primary_color,
       colorScheme: ColorScheme.dark(),
+
   );
-/*
-  MaterialColor main_theme_color = MaterialColor(0xFFb087bf, <int, Color>{
-    50: Color(0xFFb087bf),
-    100: Color(0xFFb087bf),
-    200: Color(0xFFb087bf),
-    300: Color(0xFFb087bf),
-    400: Color(0xFFb087bf),
-    500: Color(0xFFb087bf),
-    600: Color(0xFFb087bf),
-    700: Color(0xFFb087bf),
-    800: Color(0xFFb087bf),
-    900: Color(0xFFb087bf),
-    },
-  );*/
+
 
   static final light_theme = ThemeData(
       scaffoldBackgroundColor: Colors.white,
+    primaryColor: AppColors.light_primary_color,
       colorScheme: ColorScheme.light(),
   );
 }

@@ -13,9 +13,21 @@ class AppColors {
   static const Color Ideas= Color(0xFFf0d4ec);
 
   // LIGHT MODE COLORS
+  static const Color light_primary_color = Color(0xFFb087bf);
+  static const Color light_appbar_header = Color(0xFFEAE7FA);
+
+  // LIGHT - BOTTOM BAR
+  static const Color light_bottom_bar_header = Color(0xFFFFFFFF);
+  static const Color light_icon_background = Color(0xFFEAE7FA);
 
   // DARK MODE COLORS
   static const Color dark_background = Color(0xFF121212);
+  static const Color dark_appbar_header = Color(0xFF726daf);
+  static const Color dark_primary_color = Color(0xFFb087bf);
+
+  // DARK - BOTTOM BAR
+  static const Color dark_bottom_bar_header = Color(0xFF000000);
+  static const Color dark_icon_background = Color(0xFF726daf);
 
 }
 
