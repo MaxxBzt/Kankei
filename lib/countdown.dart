@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class Countdown extends StatefulWidget {
   @override
   _CountdownState createState() => _CountdownState();
@@ -33,6 +35,9 @@ class _CountdownState extends State<Countdown> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,7 +45,7 @@ class _CountdownState extends State<Countdown> {
           width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           decoration: BoxDecoration(
-            color: Colors.purple.withOpacity(0.2),
+            color: is_dark ? AppColors.dark_appbar_header : Colors.purple.withOpacity(0.2),
             borderRadius: BorderRadius.circular(20),
           ),
           padding: EdgeInsets.all(16),
@@ -50,6 +55,7 @@ class _CountdownState extends State<Countdown> {
               Text(
                 'Valentine\'s Day',
                 style: TextStyle(
+                  color: is_dark ? Colors.white : Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -64,7 +70,7 @@ class _CountdownState extends State<Countdown> {
                         _remainingTime.inDays.toString(),
                         style: TextStyle(
                           fontSize: 30,
-                          color: Colors.black,
+                          color: is_dark ? Colors.white : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -72,7 +78,7 @@ class _CountdownState extends State<Countdown> {
                         'days',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          color: is_dark ? Colors.purple.shade100 : Colors.black,
                         ),
                       ),
                     ],
@@ -83,7 +89,7 @@ class _CountdownState extends State<Countdown> {
                         (_remainingTime.inHours % 24).toString(),
                         style: TextStyle(
                           fontSize: 30,
-                          color: Colors.black,
+                          color: is_dark ? Colors.white : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -91,7 +97,7 @@ class _CountdownState extends State<Countdown> {
                         'hours',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          color: is_dark ? Colors.purple.shade100 : Colors.black,
                         ),
                       ),
                     ],
@@ -102,7 +108,7 @@ class _CountdownState extends State<Countdown> {
                         (_remainingTime.inMinutes % 60).toString(),
                         style: TextStyle(
                           fontSize: 30,
-                          color: Colors.black,
+                          color: is_dark ? Colors.white : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -110,7 +116,7 @@ class _CountdownState extends State<Countdown> {
                         'minutes',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          color: is_dark ? Colors.purple.shade100 : Colors.black,
                         ),
                       ),
                     ],
@@ -121,7 +127,7 @@ class _CountdownState extends State<Countdown> {
                         (_remainingTime.inSeconds % 60).toString(),
                         style: TextStyle(
                           fontSize: 30,
-                          color: Colors.black,
+                          color: is_dark ? Colors.white : Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -129,7 +135,7 @@ class _CountdownState extends State<Countdown> {
                         'seconds',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          color: is_dark ? Colors.purple.shade100 : Colors.black,
                         ),
                       ),
                     ],

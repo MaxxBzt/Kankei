@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 import 'countdown.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -14,6 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
     return Scaffold(
       body: Center(
         child: Column(
@@ -25,12 +28,11 @@ class _HomePageState extends State<HomePage> {
               text: ["Kankei"],
               textStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, fontFamily: "Cursive"),
               colors: [
-                Colors.purple.shade100,
+                is_dark ? AppColors.dark_appbar_header : Colors.purple.shade100,
                 Colors.pinkAccent,
                 Colors.blue,
                 Colors.yellow,
                 Colors.purple.shade100,
-
               ],
               textAlign: TextAlign.center,
               isRepeatingAnimation: false,
