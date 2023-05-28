@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kankei/Authentication/auth_page.dart';
+import 'package:kankei/onboarding.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 
@@ -157,7 +159,8 @@ class _UsPageState extends State<UsPage> {
             SizedBox(height: 10.0),
             GestureDetector(
               onTap: () {
-                signUserOut(); // Call the logout method from your logout class
+                signUserOut();
+                Navigator.pop(context);// Call the logout method from your logout class
                 },
               child: Center(
                 child: Row(
