@@ -46,6 +46,7 @@ dependencies:
   intl_utils: ^2.8.2
   shared_preferences: ^2.1.1
   cloud_firestore: ^4.7.1
+  provider: ^6.0.5
 
 
 

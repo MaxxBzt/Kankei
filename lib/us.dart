@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../theme/change_theme_button.dart';
+import '../theme/use_system_theme.dart';
+
 class UsPage extends StatefulWidget {
   @override
   _UsPageState createState() => _UsPageState();
@@ -17,7 +20,7 @@ class _UsPageState extends State<UsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF4F4F4),
+      //backgroundColor: Color(0xFFF4F4F4),
       body: Container(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -60,7 +63,22 @@ class _UsPageState extends State<UsPage> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Switch Theme Mode'),
+                ChangeThemeButton(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Use Your Phone's Theme"),
+                UseSystemThemeToggle(),
+              ],
+            ),
+
+            SizedBox(height: 5),
             TextButton(
               onPressed: () {
                 // handle turn off notifications press

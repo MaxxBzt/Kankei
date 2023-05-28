@@ -43,7 +43,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 (
                   padding: const EdgeInsets.all(30),
                 // Add a background color to the container
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.background,
                   // Add a child column widget to the container
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../theme/theme_system.dart';
+import 'package:provider/provider.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
@@ -44,41 +46,36 @@ Future main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MaterialColor main_theme_color = MaterialColor(0xFFb087bf, <int, Color>{
-    50: Color(0xFFb087bf),
-    100: Color(0xFFb087bf),
-    200: Color(0xFFb087bf),
-    300: Color(0xFFb087bf),
-    400: Color(0xFFb087bf),
-    500: Color(0xFFb087bf),
-    600: Color(0xFFb087bf),
-    700: Color(0xFFb087bf),
-    800: Color(0xFFb087bf),
-    900: Color(0xFFb087bf),
-  },
-  );
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kankei',
-      routes: {
-        '/home': (context) => HomePage(),
-        '/DateIdeas': (context) => DateIdeas(),
-        '/chat': (context) => ChatPage(),
-        '/show': (context) => PopularMoviesAndShows(),
-        '/Recipe': (context) => Recipe(),
-        '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
-        '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
-      },
-      theme: ThemeData(
-        primarySwatch: main_theme_color,
-      ),
-      home: OnBoardingPage(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (context) => Theme_Provider(),
+    builder: (context,_)
+  {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+      return MaterialApp(
+        title: 'Kankei',
+        // Use the system's preferred theme if useSystemTheme is true,
+        // otherwise use the selected theme
+        themeMode: theme_provider.useSystemTheme
+        ? ThemeMode.system
+        : theme_provider.theme_mode,
+        theme: MyThemes.light_theme,
+        darkTheme: MyThemes.dark_theme,
+        routes: {
+          '/home': (context) => HomePage(),
+          '/DateIdeas': (context) => DateIdeas(),
+          '/chat': (context) => ChatPage(),
+          '/show': (context) => PopularMoviesAndShows(),
+          '/Recipe': (context) => Recipe(),
+          '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
+          '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
+        },
+        home: OnBoardingPage(),
+      );
+    },
+  );
 }
-
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -108,7 +105,7 @@ class _MainpageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: Icon(Icons.favorite, color: Colors.black),
         elevation: 0,
