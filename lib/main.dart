@@ -6,6 +6,7 @@ import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
+import 'choose_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
@@ -55,13 +56,19 @@ class MyApp extends StatelessWidget {
     builder: (context,_)
   {
     final theme_provider = Provider.of<Theme_Provider>(context);
+    ThemeMode themeMode;
+    if (theme_provider.useSystemTheme) {
+      themeMode = ThemeMode.system;
+    } else if (theme_provider.is_DarkMode) {
+      themeMode = ThemeMode.dark;
+    } else {
+      themeMode = ThemeMode.light;
+    }
       return MaterialApp(
         title: 'Kankei',
         // Use the system's preferred theme if useSystemTheme is true,
         // otherwise use the selected theme
-        themeMode: theme_provider.useSystemTheme
-        ? ThemeMode.system
-        : theme_provider.theme_mode,
+        themeMode: themeMode,
         theme: MyThemes.light_theme,
         darkTheme: MyThemes.dark_theme,
         routes: {
@@ -106,8 +113,14 @@ class _MainpageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold(
       backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
       appBar: AppBar(

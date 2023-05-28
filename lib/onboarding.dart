@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kankei/Authentication/login_widget.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'Authentication/auth_page.dart';
@@ -22,8 +24,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   bool AreWeOnLastPage = false;
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       body: Stack(

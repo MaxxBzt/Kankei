@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
+import '../theme/theme_system.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -65,8 +67,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       body: SafeArea(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 
+import 'app_colors.dart';
 import 'main.dart';
 /* TOOLS */
-const Color background = Color(0xFFeae7fa);
-const Color lovers_box_color = Color(0xFF8e6ba0);
-const Color friends_box_color = Color(0xFF54b3f5);
-const Color family_box_color = Color(0xFF9e9d9c);
+
 
 class ChoosePage extends StatefulWidget{
   const ChoosePage({Key? key}): super(key: key);
@@ -18,6 +18,13 @@ class ChoosePage extends StatefulWidget{
 class _ChoosePageState extends State<ChoosePage> {
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       body: Stack(
@@ -30,13 +37,20 @@ class _ChoosePageState extends State<ChoosePage> {
                 (
                   padding: const EdgeInsets.all(30),
                   // Add a background color to the container
-                  color: background,
+                  color: is_dark ? AppColors.dark_background: AppColors.light_background_choose_page,
                   // Add a child column widget to the container
                   child: Column(
                     children:
                     [
                       SizedBox(height: 50.0),
-                      Image(image: AssetImage('assets/images/kankei_title.png')),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: is_dark ? Colors.white : AppColors.light_background_choose_page,
+                          borderRadius: BorderRadius.circular(70.0),
+                        ),
+                        child: Image(image: AssetImage('assets/images/kankei_title.png')),
+                      ),
+
                       SizedBox(height: 50.0),
                       Column(
                         children: [
@@ -48,7 +62,7 @@ class _ChoosePageState extends State<ChoosePage> {
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
-                                color: Colors.black,
+                                color: is_dark ? Colors.white : Colors.black ,
                               ),
                             ),
                           ),
@@ -61,7 +75,7 @@ class _ChoosePageState extends State<ChoosePage> {
                         height: 55.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: lovers_box_color,
+                          color: is_dark ? AppColors.dark_lovers_box_color :AppColors.light_lovers_box_color,
                         ),
                         child: TextButton(
                           onPressed: () {
@@ -106,7 +120,7 @@ class _ChoosePageState extends State<ChoosePage> {
                         height: 55.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: friends_box_color,
+                          color: is_dark ? AppColors.dark_friends_box_color : AppColors.light_friends_box_color,
                         ),
                         child: TextButton(
                           onPressed: () {
@@ -151,7 +165,7 @@ class _ChoosePageState extends State<ChoosePage> {
                         height: 55.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: family_box_color,
+                          color: is_dark ? AppColors.dark_family_box_color:AppColors.light_family_box_color,
                         ),
                         child: TextButton(
                           onPressed: () {

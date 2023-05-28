@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../theme/theme_system.dart';
 
 class Recipe extends StatefulWidget {
   const Recipe({Key? key}) : super(key: key);
@@ -67,8 +70,13 @@ class _RecipeState extends State<Recipe> {
   }
 
   Widget _buildNavigationBar() {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
     return Container(
       height: kToolbarHeight,
       color: is_dark ? Colors.black: Colors.white,

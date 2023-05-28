@@ -41,5 +41,14 @@ class AppColors {
   static const Color dark_sign_in = Color(0xFF726daf);
   static const Color dark_register_now = Color(0xFF726daf);
 
+  // CHOOSE PAGE COLORS
+  static const Color light_background_choose_page = Color(0xFFeae7fa);
+  static const Color light_lovers_box_color = Color(0xFF8e6ba0);
+  static const Color dark_lovers_box_color = Color(0xFF664875);
+  static const Color light_friends_box_color = Color(0xFF54b3f5);
+  static const Color dark_friends_box_color = Color(0xFF2b658c);
+  static const Color light_family_box_color = Color(0xFF9e9d9c);
+  static const Color dark_family_box_color = Color(0xFF474745);
+
 }
 

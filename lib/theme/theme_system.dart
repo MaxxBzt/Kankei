@@ -38,6 +38,7 @@ class Theme_Provider extends ChangeNotifier {
 
   void toggleUseSystemTheme() {
     _useSystemTheme = !_useSystemTheme;
+    print('is_Usesystem: $_useSystemTheme');
     notifyListeners();
   }
 
@@ -48,6 +49,7 @@ class Theme_Provider extends ChangeNotifier {
   void toggleTheme(bool is_it_on){
     // If turned on: we put dark theme, if turn off, light screen
     theme_mode = is_it_on? ThemeMode.dark : ThemeMode.light;
+    print('is_DarkMode: $is_DarkMode');
     // Updates our UI
     notifyListeners();
   }

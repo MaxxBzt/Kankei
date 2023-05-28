@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../app_colors.dart';
+import '../theme/theme_system.dart';
 
 class PopularMoviesAndShows extends StatefulWidget {
   @override
@@ -48,8 +50,14 @@ class _PopularMoviesAndShowsState extends State<PopularMoviesAndShows> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return StaggeredGridView.countBuilder(
       shrinkWrap: true,
       primary: false,

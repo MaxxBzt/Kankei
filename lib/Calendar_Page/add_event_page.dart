@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Calendar_Page/event_model.dart';
+import '../theme/theme_system.dart';
 
 
 
@@ -127,8 +129,13 @@ class _AddEventPageState extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     Widget buildCategoryItem(String categoryName, Color categoryColor) {
       bool isSelected = categoryName == selectedCategory; // Check if the category is selected

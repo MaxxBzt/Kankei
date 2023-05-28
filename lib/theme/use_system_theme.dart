@@ -10,9 +10,13 @@ class UseSystemThemeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
     final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return AdaptiveSwitch(
       key: _switchKey,
@@ -20,7 +24,8 @@ class UseSystemThemeToggle extends StatelessWidget {
       onChanged: (value) {
         theme_provider.toggleUseSystemTheme();
       },
-      activeColor: is_dark ? AppColors.dark_appbar_header: AppColors.light_sign_in,
+      activeColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
     );
   }
 }
+

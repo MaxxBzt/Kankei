@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:kankei/Inspirations/show.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 
 import 'app_colors.dart';
 import 'inspiration.dart';
@@ -12,8 +14,14 @@ class DateDetails extends StatelessWidget {
   DateDetails({required this.activity});
   @override
   Widget build(BuildContext context) {
-  final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-  bool is_dark = brightnessValue == Brightness.dark;
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),

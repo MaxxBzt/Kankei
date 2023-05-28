@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 import 'inspiration.dart';
 import 'app_colors.dart';
 import 'dart:io';
@@ -15,8 +17,13 @@ class Ideas extends StatefulWidget {
 class _IdeasState extends State<Ideas> {
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       body: SingleChildScrollView(

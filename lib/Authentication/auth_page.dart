@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kankei/Authentication/LoginOrRegister.dart';
 
 
+import '../choose_page.dart';
 import '../main.dart';
 
 
@@ -16,7 +17,7 @@ class AuthPage extends StatelessWidget{
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if(snapshot.hasData){
-            return MainPage();
+            return ChoosePage();
           }
           else{
             return LoginOrRegister();

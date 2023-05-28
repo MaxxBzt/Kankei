@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kankei/theme/theme_system.dart';
+import 'package:provider/provider.dart';
 
 import '../theme/change_theme_button.dart';
 import '../theme/use_system_theme.dart';
@@ -23,9 +25,13 @@ class _UsPageState extends State<UsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
 
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
-    bool is_dark = brightnessValue == Brightness.dark;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
       //backgroundColor: Color(0xFFF4F4F4),
@@ -56,7 +62,7 @@ class _UsPageState extends State<UsPage> {
                       pushNotifications = value;
                     });
                   },
-                  activeColor: is_dark ? AppColors.dark_appbar_header: AppColors.light_sign_in,
+                  activeColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
                 ),
               ],
             ),
@@ -123,7 +129,7 @@ class _UsPageState extends State<UsPage> {
                 'Change password',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black,
+                  color: is_dark ? Colors.white : Colors.black,
                 ),
               ),
             ),
