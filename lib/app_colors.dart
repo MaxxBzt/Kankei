@@ -29,5 +29,8 @@ class AppColors {
   static const Color dark_bottom_bar_header = Color(0xFF000000);
   static const Color dark_icon_background = Color(0xFF726daf);
 
+  // DARK - BOARDING PAGE
+  static const Color dark_boarding_page_background = Color(0xFF524e85);
+
 }
 
