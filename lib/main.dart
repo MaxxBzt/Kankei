@@ -116,6 +116,7 @@ class _MainpageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
 

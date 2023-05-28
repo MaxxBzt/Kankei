@@ -218,7 +218,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
               child: Text(
                 questions[currentQuestionIndex]['question'],
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cursive',
                 ),
@@ -256,7 +256,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
                             option,
                             style: TextStyle(
                               color: isWrong ? Colors.white : (is_dark ? Colors.white : Colors.black),
-                              fontSize: 32,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Cursive',
                             ),

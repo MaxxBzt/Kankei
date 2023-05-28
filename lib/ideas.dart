@@ -33,9 +33,9 @@ class _IdeasState extends State<Ideas> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child : Text(
-                'Fun and Romantic Ideas',
+                'Fun & Romantic Ideas',
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cursive',
                   color: is_dark ? Colors.white : Colors.black,
@@ -64,14 +64,14 @@ class _IdeasState extends State<Ideas> {
                   color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Dates',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Cursive',
                       ),
@@ -138,7 +138,22 @@ class _IdeasState extends State<Ideas> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
+            SizedBox(height: 10,),
+        GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DateIdeas()));
+        },
+        child: Text(
+          'See more >',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            decoration: TextDecoration.underline,
+            color: is_dark ? AppColors.light_Ideas : Colors.black,
+          ),
+        ),
+      ),
+            SizedBox(height: 25),
             Container(
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 16),
@@ -146,14 +161,14 @@ class _IdeasState extends State<Ideas> {
                 color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Quiz',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Cursive',
                     ),
@@ -233,14 +248,14 @@ class _IdeasState extends State<Ideas> {
                 color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Gifts',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Cursive',
                     ),
