@@ -104,7 +104,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               textStyle: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                color: is_dark ? Colors.white : Colors.black,
+                                color: is_dark ? Colors.white : Colors.white,
                               ),
                             ),
                           ),
@@ -192,7 +192,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: is_dark ? Colors.white : Colors.black,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),
@@ -278,7 +278,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: is_dark ? Colors.white : Colors.black,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),
@@ -370,7 +370,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 textStyle: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
-                                  color: is_dark ? Colors.white : Colors.black,
+                                  color: is_dark ? Colors.white : Colors.white,
                                 ),
                               ),
                             ),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/change_theme_button.dart';
 import '../theme/use_system_theme.dart';
+import 'app_colors.dart';
+import 'components/adaptative_switch.dart';
 
 class UsPage extends StatefulWidget {
   @override
@@ -16,9 +18,15 @@ void signUserOut(){
 class _UsPageState extends State<UsPage> {
   bool pushNotifications = true;
   bool emailNotifications = true;
+  final GlobalKey _switchKey = GlobalKey();
+  final GlobalKey _switchKey2 = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Scaffold(
       //backgroundColor: Color(0xFFF4F4F4),
       body: Container(
@@ -35,34 +43,41 @@ class _UsPageState extends State<UsPage> {
               ),
             ),
             SizedBox(height: 16),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Push notifications'),
-                Switch(
+                AdaptiveSwitch(
+                  key: _switchKey,
                   value: pushNotifications,
                   onChanged: (bool value) {
                     setState(() {
                       pushNotifications = value;
                     });
                   },
+                  activeColor: is_dark ? AppColors.dark_appbar_header: AppColors.light_sign_in,
                 ),
               ],
             ),
+            SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Email notifications'),
-                Switch(
+                AdaptiveSwitch(
+                  key: _switchKey2,
                   value: emailNotifications,
                   onChanged: (bool value) {
                     setState(() {
                       emailNotifications = value;
                     });
                   },
+                  activeColor: is_dark ? AppColors.dark_appbar_header: AppColors.light_sign_in,
                 ),
               ],
             ),
+            SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -70,6 +85,7 @@ class _UsPageState extends State<UsPage> {
                 ChangeThemeButton(),
               ],
             ),
+            SizedBox(height: 8.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -77,7 +93,6 @@ class _UsPageState extends State<UsPage> {
                 UseSystemThemeToggle(),
               ],
             ),
-
             SizedBox(height: 5),
             TextButton(
               onPressed: () {
@@ -120,8 +135,9 @@ class _UsPageState extends State<UsPage> {
                     // Here function to break up (unlink 2 accounts)
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.red.withOpacity(0.5)),
+                    backgroundColor: MaterialStateProperty.all<Color>(is_dark?
+                        AppColors.dark_appbar_header: AppColors.light_sign_in
+                        ),
                   ),
                   child: Text(
                     "Break-up",
@@ -132,6 +148,7 @@ class _UsPageState extends State<UsPage> {
                   ),
                 ),
             ),
+            SizedBox(height: 10.0),
             GestureDetector(
               onTap: () {
                 signUserOut(); // Call the logout method from your logout class
@@ -140,8 +157,9 @@ class _UsPageState extends State<UsPage> {
                 child: Text(
                   'Logout',
                   style: TextStyle(
-                    color: Colors.red, // Set the text color to red
-                    fontSize: 22, // Increase the font size// Add an underline to the text
+                    color: is_dark ? Colors.white: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
                   ),
                 ),
               ),

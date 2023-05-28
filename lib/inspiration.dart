@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
 import 'package:kankei/us.dart';
+import 'app_colors.dart';
 import 'date_details.dart';
 
 import 'package:animations/animations.dart';
@@ -145,15 +146,18 @@ class _DateIdeasState extends State<DateIdeas> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.favorite, color: Colors.black),
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
         elevation: 0,
-        backgroundColor: const Color(0xFFEAE7FA),
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
         title: Text(
           'Kankei',
           style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
           ),
         ),
       ),
@@ -161,10 +165,6 @@ class _DateIdeasState extends State<DateIdeas> {
         children: [
           Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Theme(
-                data: ThemeData(
-                  primaryColor: Colors.purple,
-                ),
                 child: TextField(
                   decoration: const InputDecoration(
                     labelText: 'Get inspiration',
@@ -194,7 +194,7 @@ class _DateIdeasState extends State<DateIdeas> {
                     );
                   },
                 ),
-              )),
+              ),
           Expanded(
             child: GridView.builder(
               itemCount: activities.length,
@@ -215,7 +215,7 @@ class _DateIdeasState extends State<DateIdeas> {
                     );
                   },
                   child: Card(
-                    color: Colors.white,
+                    color: is_dark ? Colors.grey.shade900 : Colors.white,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
                       side: BorderSide(
@@ -228,7 +228,8 @@ class _DateIdeasState extends State<DateIdeas> {
                       children: [
                         Text(
                           activities[index].emoji,
-                          style: TextStyle(fontSize: 40.0),
+                          style: TextStyle(fontSize: 60.0,
+                          color: is_dark ? Colors.purple : Colors.purple),
                         ),
                         Text(activities[index].title),
                       ],

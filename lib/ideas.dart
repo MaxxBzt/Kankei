@@ -15,6 +15,9 @@ class Ideas extends StatefulWidget {
 class _IdeasState extends State<Ideas> {
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -28,11 +31,11 @@ class _IdeasState extends State<Ideas> {
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Cursive',
-                  color: Colors.black,
+                  color: is_dark ? Colors.white : Colors.black,
                   shadows: [
                     Shadow(
                       blurRadius: 10.0,
-                      color: Colors.purple.shade100,
+                      color: is_dark ? AppColors.dark_appbar_header : Colors.purple.shade100,
                       offset: Offset(5.0, 5.0),
                     ),
                   ],
@@ -55,7 +58,7 @@ class _IdeasState extends State<Ideas> {
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.Ideas,
+                  color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 padding: EdgeInsets.all(16),
@@ -137,7 +140,7 @@ class _IdeasState extends State<Ideas> {
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: AppColors.Ideas,
+                color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: EdgeInsets.all(16),
@@ -213,7 +216,7 @@ class _IdeasState extends State<Ideas> {
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: AppColors.Ideas,
+                color: is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: EdgeInsets.all(16),

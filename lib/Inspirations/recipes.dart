@@ -67,16 +67,18 @@ class _RecipeState extends State<Recipe> {
   }
 
   Widget _buildNavigationBar() {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
     return Container(
       height: kToolbarHeight,
-      color: Colors.white,
+      color: is_dark ? Colors.black: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
             icon: Icon(Icons.food_bank),
             color: _categories.indexOf(_selectedCategory) == 0
-                ? Colors.purple
+                ? Colors.purple.shade200
                 : Colors.grey,
             onPressed: () {
               setState(() {
@@ -88,7 +90,7 @@ class _RecipeState extends State<Recipe> {
           IconButton(
             icon: Icon(Icons.local_pizza),
             color: _categories.indexOf(_selectedCategory) == 1
-                ? Colors.purple
+                ? Colors.purple.shade200
                 : Colors.grey,
             onPressed: () {
               setState(() {
@@ -100,7 +102,7 @@ class _RecipeState extends State<Recipe> {
           IconButton(
             icon: Icon(Icons.local_dining),
             color: _categories.indexOf(_selectedCategory) == 2
-                ? Colors.purple
+                ? Colors.purple.shade200
                 : Colors.grey,
             onPressed: () {
               setState(() {
@@ -112,7 +114,7 @@ class _RecipeState extends State<Recipe> {
           IconButton(
             icon: Icon(Icons.restaurant),
             color: _categories.indexOf(_selectedCategory) == 3
-                ? Colors.purple
+                ? Colors.purple.shade200
                 : Colors.grey,
             onPressed: () {
               setState(() {

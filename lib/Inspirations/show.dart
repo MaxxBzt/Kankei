@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app_colors.dart';
+
 class PopularMoviesAndShows extends StatefulWidget {
   @override
   _PopularMoviesAndShowsState createState() => _PopularMoviesAndShowsState();
@@ -46,6 +48,8 @@ class _PopularMoviesAndShowsState extends State<PopularMoviesAndShows> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
     return StaggeredGridView.countBuilder(
       shrinkWrap: true,
       primary: false,
@@ -89,7 +93,7 @@ class _PopularMoviesAndShowsState extends State<PopularMoviesAndShows> {
                     right: 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFFb087bf),
+                        color: is_dark ? AppColors.dark_appbar_header : Color(0xFFb087bf),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(4),
                           topRight: Radius.circular(4),
