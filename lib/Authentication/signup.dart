@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 size: 50,
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
               // Ready to deepen your relationships ?
               Text(
@@ -119,8 +119,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 10),
 
-              const SizedBox(height: 20),
-
               // sign in button
               MyButton(
                 onTap: (
@@ -130,7 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               const SizedBox(height: 50),
 
-              const SizedBox(height: 120),
+              const SizedBox(height: 100),
 
               // not a member? register now
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [

@@ -60,24 +60,6 @@ class _UsPageState extends State<UsPage> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
-            TextButton(
-              onPressed: () {
-                // handle turn off notifications press
-              },
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-              ),
-              child: Text(
-                'Turn off all notifications',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-            SizedBox(height: 32),
             Divider(),
             SizedBox(height: 16),
             TextButton(
@@ -125,15 +107,21 @@ class _UsPageState extends State<UsPage> {
                 signUserOut(); // Call the logout method from your logout class
                 },
               child: Center(
-                child: Text(
-                  'Logout',
-
-                  style: TextStyle(
-                    color: Colors.red, // Set the text color to red
-                    fontSize: 22, // Increase the font size// Add an underline to the text
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.logout, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text(
+                      'Logout',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              )
             ),
           ],
         ),
