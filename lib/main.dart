@@ -15,7 +15,7 @@ import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
-import 'Quiz_General_Knowledge.dart';
+import '../Quiz/quiz_general_knowledge.dart';
 
 
 import 'package:flutter/material.dart';
@@ -55,16 +55,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => ChangeNotifierProvider(
     create: (context) => Theme_Provider(),
     builder: (context,_)
-  {
-    final theme_provider = Provider.of<Theme_Provider>(context);
-    ThemeMode themeMode;
-    if (theme_provider.useSystemTheme) {
-      themeMode = ThemeMode.system;
-    } else if (theme_provider.is_DarkMode) {
-      themeMode = ThemeMode.dark;
-    } else {
-      themeMode = ThemeMode.light;
-    }
+    {
+      final theme_provider = Provider.of<Theme_Provider>(context);
+      ThemeMode themeMode;
+      if (theme_provider.useSystemTheme) {
+        themeMode = ThemeMode.system;
+      } else if (theme_provider.is_DarkMode) {
+        themeMode = ThemeMode.dark;
+      } else {
+        themeMode = ThemeMode.light;
+      }
       return MaterialApp(
         title: 'Kankei',
         // Use the system's preferred theme if useSystemTheme is true,

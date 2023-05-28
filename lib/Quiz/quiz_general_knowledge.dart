@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kankei/ideas.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io' show Platform;
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 
-import 'app_colors.dart';
+import '../app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,8 +14,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
-import 'app_colors.dart';
-import 'countdown.dart';
+import '../app_colors.dart';
+import '../countdown.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class QuizGeneralKnowledge extends StatefulWidget {
@@ -126,53 +128,85 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
   }
 
   void showResult() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Quiz Completed'),
-          content: Text('Your score: $score / ${questions.length}'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, 'result');
-                MaterialPageRoute(builder: (context) => Ideas());
+    if (Platform.isIOS) {
+      // Show CupertinoAlertDialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
 
-              },
-              child: Text('Close'),
+          return CupertinoAlertDialog(
+            title: const Text('Quiz Completed'),
+            content: Text('Your score: $score / ${questions.length}'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.pop(context, 'result');
+                  MaterialPageRoute(builder: (context) => Ideas());
+                },
+              ),
+            ],
+          );
+        },
+        ).then((result) {
+        if (result == 'result') {
+          setState(() {
+            score = 0;
+          });
+          Navigator.pop(context);
+        }
+      });;
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Quiz Completed'),
+            content: Text('Your score: $score / ${questions.length}'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'result');
+                  MaterialPageRoute(builder: (context) => Ideas());
 
-            ),
-          ],
-        );
-      },
-    ).then((result) {
-      if (result == 'result') {
-        setState(() {
-          score = 0;
-        });
-        Navigator.pop(context);
+                },
+                child: Text('Close'),
 
-      }
-    });
+              ),
+            ],
+          );
+        },
+      ).then((result) {
+        if (result == 'result') {
+          setState(() {
+            score = 0;
+          });
+          Navigator.pop(context);
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isAppDarkMode = theme_provider.is_DarkMode;
+
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool isSystemDarkMode = brightnessValue == Brightness.dark;
+
+    bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: Icon(Icons.favorite, color: Colors.black),
+        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
         elevation: 0,
-        backgroundColor: AppColors.light_appbar_header,
-        title: Row(
-          children: [
-            Text(
-              'General Knowledge Quiz',
-              style: GoogleFonts.pacifico(
-                textStyle: TextStyle(color: Colors.black, letterSpacing: .5),
-              ),
-            ),
-          ],
+        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
+        title: Text(
+          'General Knowledge Quiz',
+          style: GoogleFonts.pacifico(
+            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
+          ),
         ),
       ),
       body: Center(
@@ -191,7 +225,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 80),
+            SizedBox(height: 50),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -208,27 +242,44 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
                     bool isWrong = isSelected && !isCorrect;
                     Color buttonColor = isWrong
                         ? Colors.red
-                        : (isSelected ? Colors.green : AppColors.light_Ideas);
+                        : (isSelected ? Colors.green : (is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas));
 
                     return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Adjust the vertical margin as per your preference
-                      child: ElevatedButton(
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Platform.isIOS
+                          ? CupertinoButton(
+                        onPressed: () {
+                          checkAnswer(option);
+                        },
+                        color: buttonColor,
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              color: isWrong ? Colors.white : (is_dark ? Colors.white : Colors.black),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cursive',
+                            ),
+                          ),
+                      )
+                      // For ANDROID
+                          : ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: buttonColor,
-                          minimumSize: Size(200, 50), // Adjust the width of the boxes by changing the Size value
+                          minimumSize: Size(200, 50),
                         ),
                         onPressed: () {
                           checkAnswer(option);
                         },
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                            color: isWrong ? Colors.white : Colors.black,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Cursive',
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              color: isWrong ? Colors.white : (is_dark ? Colors.white : Colors.black),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cursive',
+                            ),
                           ),
-                        ),
                       ),
                     );
                   },

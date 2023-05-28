@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:io' show Platform;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,7 @@ class AddEventPage extends StatefulWidget {
   _AddEventPageState createState() => _AddEventPageState();
 }
 class _AddEventPageState extends State<AddEventPage> {
+
 
   String name_of_event = '';
   /* date_selected initialized with the current date and time so that when user
@@ -63,55 +66,132 @@ class _AddEventPageState extends State<AddEventPage> {
 
 
   // Function to show date picker and update selectedDate
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked_date = await showDatePicker(
-      context: context,
-      initialDate: date_selected,
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2024),
-    );
 
-    // Here we declared a variable telling us the date currently selected by the user
-    if (picked_date != null && picked_date != date_selected) {
-      setState(() {
-        date_selected = picked_date;
-      });
+  Future<void> _selectDate(BuildContext context) async {
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (_) => Container(
+          height: 230,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Column(
+            children: [
+              Container(
+                height: 180,
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: DateTime.now(),
+                  onDateTimeChanged: (val) {
+                    setState(() {
+                      date_selected = val;
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      // Show Material DatePicker
+      final DateTime? picked_date = await showDatePicker(
+        context: context,
+        initialDate: date_selected,
+        firstDate: DateTime(2023),
+        lastDate: DateTime(2024),
+      );
+
+      if (picked_date != null && picked_date != date_selected) {
+        setState(() {
+          date_selected = picked_date;
+        });
+      }
     }
   }
 
-  void _addCategory(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String newCategory = '';
 
-        return AlertDialog(
-          title: Text('Add Category'),
-          content: TextField(
-            onChanged: (value) {
-              newCategory = value;
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Add category'),
-              onPressed: () {
-                setState(() {
-                  if (newCategory.isNotEmpty) {
-                    categories[newCategory] =
-                        Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(0.6);
-                    selectedCategory = newCategory;
-                    _saveCategories(); // Save categories to shared preferences
-                  }
-                });// Close alert box
-                Navigator.of(context).pop();
-              },
+  void _addCategory(BuildContext context) {
+
+    if (Platform.isIOS) {
+      // Show CupertinoAlertDialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String newCategory = '';
+
+          return CupertinoAlertDialog(
+            title: const Text('Add Category'),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: CupertinoTextField(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                onChanged: (value){
+                  newCategory = value;
+                },
+                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
             ),
-          ],
-        );
-      },
-    );
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text('Add category'),
+                onPressed: () {
+                  setState(() {
+                    if (newCategory.isNotEmpty) {
+                      categories[newCategory] =
+                          Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                              .withOpacity(0.6);
+                      selectedCategory = newCategory;
+                      _saveCategories(); // Save categories to shared preferences
+                    }
+                  });// Close alert box
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Show Material AlertDialog
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            String newCategory = '';
+
+            return AlertDialog(
+              title: Text('Add Category'),
+              content: TextField(
+                onChanged: (value) {
+                  newCategory = value;
+                },
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Add category'),
+                  onPressed: () {
+                    setState(() {
+                      if (newCategory.isNotEmpty) {
+                        categories[newCategory] =
+                            Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                                .withOpacity(0.6);
+                        selectedCategory = newCategory;
+                        _saveCategories(); // Save categories to shared preferences
+                      }
+                    });// Close alert box
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          }
+      );
+    }
   }
 
 // Call the onDeleteCategory callback when a category is deleted
@@ -284,7 +364,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   ElevatedButton(
                     onPressed: () => _addCategory(context),
                     child: Text('Add Category',
-                    style: TextStyle(color: is_dark ? Colors.white : Colors.white)),
+                        style: TextStyle(color: is_dark ? Colors.white : Colors.white)),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           is_dark ? AppColors.dark_appbar_header.withOpacity(0.8) : AppColors.planning_add_event_color.withOpacity(0.8) ),
@@ -350,3 +430,5 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 }
+
+

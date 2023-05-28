@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -6,6 +7,7 @@ import '../app_colors.dart';
 import '../Calendar_Page/add_event_page.dart';
 import '../Calendar_Page/event_model.dart';
 import '../theme/theme_system.dart';
+import 'dart:io' show Platform;
 
 class CalendarScreen extends StatefulWidget {
   final String name_of_event;
@@ -95,35 +97,87 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   // This function manages the popup window happening when we click to display an event
   void _openDialog(Event event) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(event.name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(event.description),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Call a function to delete the event
-                _deleteEvent(event);
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Delete Event',
-                style: TextStyle(color: Colors.red),
-              ),
+    if (Platform.isIOS) {
+      // Show CupertinoAlertDialog
+      showDialog(
+        context: context,
+        builder: (context) {
+
+          return CupertinoAlertDialog(
+            title: Text(event.name),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(event.description),
+              ],
             ),
-          ],
-        );
-      },
-    );
+            /*
+            content: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: CupertinoTextField(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                onChanged: (value){
+                  newCategory = value;
+                },
+                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
+            ),*/
+            actions: [
+              CupertinoDialogAction(
+                child: Text(
+                  'Delete Event',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () {
+                  // Call a function to delete the event
+                  _deleteEvent(event);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Show Material AlertDialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(event.name),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(event.description),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // Call a function to delete the event
+                  _deleteEvent(event);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Delete Event',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +344,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     trailing: Container(
                       color: event.color_category,
                       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      child: Text('${event.category}', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                      child: Text('${event.category}', style: TextStyle(color: is_dark ? Colors.white: Colors.black, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:kankei/Authentication/auth_page.dart';
 import 'package:kankei/onboarding.dart';
 import 'package:kankei/theme/theme_system.dart';
@@ -9,6 +10,7 @@ import '../theme/change_theme_button.dart';
 import '../theme/use_system_theme.dart';
 import 'app_colors.dart';
 import 'components/adaptative_switch.dart';
+import 'dart:io' show Platform;
 
 class UsPage extends StatefulWidget {
   @override
@@ -137,48 +139,61 @@ class _UsPageState extends State<UsPage> {
             ),
             Divider(),
             Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Here function to break up (unlink 2 accounts)
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(is_dark?
-                        AppColors.dark_appbar_header: AppColors.light_sign_in
-                        ),
-                  ),
-                  child: Text(
-                    "Break-up",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                    ),
+              width: double.infinity,
+              child: Platform.isIOS
+                  ? CupertinoButton(
+                onPressed: () {
+                  // Here function to break up (unlink 2 accounts)
+                },
+                color: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
+                child: Text(
+                  "Break-up",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
                   ),
                 ),
+              )
+                  : ElevatedButton(
+                onPressed: () {
+                  // Here function to break up (unlink 2 accounts)
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in),
+                ),
+                child: Text(
+                  "Break-up",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 10.0),
             GestureDetector(
-              onTap: () {
-                signUserOut();
-                Navigator.pop(context);// Call the logout method from your logout class
+                onTap: () {
+                  signUserOut();
+                  Navigator.pop(context);// Call the logout method from your logout class
                 },
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.logout, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: is_dark ? Colors.white: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.logout, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: is_dark ? Colors.white: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
+                    ],
+                  ),
+                )
             ),
           ],
         ),
