@@ -26,6 +26,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
   int score = 0;
 
   List<Map<String, dynamic>> questions = [
+
     {
       'question': 'What is the capital of France?',
       'options': ['Paris', 'London', 'Madrid', 'Rome'],
@@ -76,6 +77,12 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
       'options': ['China', 'Italy', 'Mexico', 'Greece'],
       'correctAnswer': 'China',
     },
+    {
+      'question': 'who is depressed',
+      'options': ['All the above', 'Yoke', 'Max', 'Quentin'],
+      'correctAnswer': 'All the above',
+    },
+
 
     // Add more questions here...
   ];
