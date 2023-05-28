@@ -125,6 +125,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    bool is_dark = brightnessValue == Brightness.dark;
+
     return Scaffold
       (
       body:
@@ -140,7 +143,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: AppColors.planning_add_event_color,
+                    foregroundColor: Colors.white, backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -187,8 +190,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
             margin: EdgeInsets.all(13.0),
             decoration: BoxDecoration(
               border: Border.all(
-                color: AppColors.planning_add_event_color,
-                width: 0.5, // defines the thickness of the border
+                color: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
+                width: is_dark ? 2 : 0.5, // defines the thickness of the border
               ),
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -202,21 +205,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       shape: BoxShape.circle,
                     ),
                     todayDecoration: BoxDecoration(
-                      color: Colors.black,
+                      color: is_dark ? Colors.white : Colors.black,
                       shape: BoxShape.circle,
                     ),
                     todayTextStyle: TextStyle(
                       fontSize: 18.0,
-                      color: Colors.white,
+                      color: is_dark ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                     selectedDecoration: BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
                     ),
+                    weekendTextStyle: TextStyle(color: is_dark ? Colors.grey : Colors.grey[600]),
+
                   ),
                   headerStyle: HeaderStyle(
-                    titleTextStyle: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,
+                    titleTextStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, fontSize: 22, fontWeight: FontWeight.bold,
                     ),
                     formatButtonVisible: false,
                   ),

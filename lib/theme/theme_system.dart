@@ -1,6 +1,35 @@
 import 'package:flutter/material.dart';
 import '../../app_colors.dart';
 
+
+final MaterialColor light_primary_color = MaterialColor(0xFFb087bf, <int, Color>{
+  50: Color(0xFFb087bf),
+  100: Color(0xFFb087bf),
+  200: Color(0xFFb087bf),
+  300: Color(0xFFb087bf),
+  400: Color(0xFFb087bf),
+  500: Color(0xFFb087bf),
+  600: Color(0xFFb087bf),
+  700: Color(0xFFb087bf),
+  800: Color(0xFFb087bf),
+  900: Color(0xFFb087bf),
+},
+);
+
+final MaterialColor dark_primary_color = MaterialColor(0xFFb087bf, <int, Color>{
+  50: Color(0xFFb087bf),
+  100: Color(0xFFb087bf),
+  200: Color(0xFFb087bf),
+  300: Color(0xFFb087bf),
+  400: Color(0xFFb087bf),
+  500: Color(0xFFb087bf),
+  600: Color(0xFFb087bf),
+  700: Color(0xFFb087bf),
+  800: Color(0xFFb087bf),
+  900: Color(0xFFb087bf),
+},
+);
+
 class Theme_Provider extends ChangeNotifier {
 
   // Add a property to specify whether the app should use the system's preferred theme
@@ -25,9 +54,10 @@ class Theme_Provider extends ChangeNotifier {
 }
 class MyThemes {
 
+
   static final dark_theme = ThemeData(
       scaffoldBackgroundColor: AppColors.dark_background,
-      primaryColor: AppColors.dark_primary_color,
+      primarySwatch: dark_primary_color,
       colorScheme: ColorScheme.dark(),
 
   );
@@ -35,7 +65,8 @@ class MyThemes {
 
   static final light_theme = ThemeData(
       scaffoldBackgroundColor: Colors.white,
-    primaryColor: AppColors.light_primary_color,
+      primarySwatch: light_primary_color,
       colorScheme: ColorScheme.light(),
+
   );
 }

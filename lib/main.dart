@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
           '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
           '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
         },
-        home: AuthPage(),
+        home: OnBoardingPage(),
       );
     },
   );
