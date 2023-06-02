@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../app_colors.dart';
@@ -6,10 +7,9 @@ import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 import '../theme/theme_system.dart';
 
-
 class SignUpPage extends StatefulWidget {
   final Function()? onPressed;
-  const SignUpPage({Key? key,required this.onPressed});
+  const SignUpPage({Key? key, required this.onPressed});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -48,21 +48,32 @@ class _SignUpPageState extends State<SignUpPage> {
 
     //try create user
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
+      if (userCredential.user != null) {
+        String uid = userCredential.user!.uid; // Add null check and access the uid property
 
+        // Create a new document in the "users" collection with the UID as the document ID
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          // Set any additional user information as fields
+          'email': emailController.text,
+          // Add more fields as needed
+        });
+      }
+
+
+      if (context.mounted) {
+        Navigator.pop(context);
+        print("REGISTERED");
+      }
     } on FirebaseAuthException catch (error) {
       Navigator.pop(context);
       displayMessages(error.message!);
     }
-    if(context.mounted) {
-      Navigator.pop(context);
-      print("REGISTERED");
-    }
-
   }
 
   @override
@@ -70,7 +81,8 @@ class _SignUpPageState extends State<SignUpPage> {
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
 
-    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
@@ -130,8 +142,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
               // sign in button
               MyButton(
-                onTap: (
-                    ) {signUserUp();},
+                onTap: () {
+                  signUserUp();
+                },
                 buttonText: 'Register',
               ),
 
@@ -146,7 +159,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 50.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(55.0),
-                    color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
+                    color: is_dark
+                        ? AppColors.light_register_now
+                        : AppColors.light_register_now,
                   ),
                   child: ElevatedButton(
                     onPressed: (widget.onPressed),

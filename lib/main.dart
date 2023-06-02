@@ -4,7 +4,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
-import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
 import 'choose_page.dart';
 import 'homepage.dart';

@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kankei/Authentication/auth_page.dart';
-import 'package:kankei/onboarding.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 import '../theme/change_theme_button.dart';
 import '../theme/use_system_theme.dart';
+import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
 import 'components/adaptative_switch.dart';
 import 'dart:io' show Platform;
@@ -19,6 +21,27 @@ class UsPage extends StatefulWidget {
 
 void signUserOut(){
   FirebaseAuth.instance.signOut();
+}
+
+void breakUpAccount() async {
+
+  if (currentUserUid != null) {
+    try {
+      // Update the current user's document to remove the "LinkedAccountUID" field
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .update({'LinkedAccountUID': FieldValue.delete()});
+
+      print('Account break-up successful');
+      // Navigate to the LinkAccountPage
+    } catch (error) {
+      print('Error breaking up account: $error');
+    }
+  } else {
+    print('Invalid current user');
+  }
+
 }
 
 class _UsPageState extends State<UsPage> {
@@ -143,7 +166,11 @@ class _UsPageState extends State<UsPage> {
               child: Platform.isIOS
                   ? CupertinoButton(
                 onPressed: () {
-                  // Here function to break up (unlink 2 accounts)
+                    breakUpAccount();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LinkAccountPage()),
+                    );
                 },
                 color: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
                 child: Text(
@@ -156,7 +183,11 @@ class _UsPageState extends State<UsPage> {
               )
                   : ElevatedButton(
                 onPressed: () {
-                  // Here function to break up (unlink 2 accounts)
+                  breakUpAccount();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LinkAccountPage()),
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor:

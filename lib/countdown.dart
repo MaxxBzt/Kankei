@@ -11,7 +11,15 @@ class Countdown extends StatefulWidget {
 }
 
 class _CountdownState extends State<Countdown> {
-  DateTime _targetDate = DateTime(2024, 2, 14, 0, 0, 0); // Valentine's Day
+  List<DateTime> _targetDates = [
+    DateTime(2024, 2, 14, 0, 0, 0), // Valentine's Day
+    DateTime(2023, 7, 30, 0, 0, 0), // International Friendship Day
+  ];
+  List<String> _eventNames = [
+    "Valentine's Day",
+    "Friendship Day",
+  ];
+  int _currentPage = 0;
   late Timer _timer;
   Duration _remainingTime = Duration.zero;
 
@@ -30,7 +38,8 @@ class _CountdownState extends State<Countdown> {
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
-        _remainingTime = _targetDate.difference(DateTime.now());
+        _remainingTime =
+            _targetDates[_currentPage].difference(DateTime.now());
       });
     });
   }
@@ -50,113 +59,126 @@ class _CountdownState extends State<Countdown> {
       children: [
         Container(
           width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          height: MediaQuery.of(context).size.height * .2,
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 32),
           decoration: BoxDecoration(
-            color: is_dark ? AppColors.dark_appbar_header : Colors.purple.withOpacity(0.2),
+            color: is_dark
+                ? AppColors.dark_appbar_header
+                : Colors.purple.withOpacity(0.2),
             borderRadius: BorderRadius.circular(20),
           ),
           padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Valentine\'s Day',
-                style: TextStyle(
-                  color: is_dark ? Colors.white : Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        _remainingTime.inDays.toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'days',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
+          child: PageView.builder(
+            itemCount: _targetDates.length,
+            onPageChanged: (page) {
+              setState(() {
+                _currentPage = page;
+              });
+            },
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  Text(
+                    _eventNames[index],
+                    style: TextStyle(
+                      color: is_dark ? Colors.white : Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Column(
+                  SizedBox(height: MediaQuery.of(context).size.height * .02),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        (_remainingTime.inHours % 24).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Column(
+                        children: [
+                          Text(
+                            _remainingTime.inDays.toString(),
+                            style: TextStyle(
+                              fontSize:
+                              MediaQuery.of(context).size.height * .04,
+                              color: is_dark ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'days',
+                            style: TextStyle(
+                              fontSize:
+                              MediaQuery.of(context).size.height * .02,
+                              color: is_dark ? Colors.purple.shade100 : Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'hours',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
+                      Column(
+                        children: [
+                          Text(
+                            (_remainingTime.inHours % 24).toString(),
+                            style: TextStyle(
+                              fontSize:
+                              MediaQuery.of(context).size.height * .04,
+                              color: is_dark ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'hours',
+                            style: TextStyle(
+                              fontSize:
+                              MediaQuery.of(context).size.height * .02,
+                              color: is_dark ? Colors.purple.shade100 : Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        (_remainingTime.inMinutes % 60).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Column(
+                        children: [
+                          Text(
+                            (_remainingTime.inMinutes % 60).toString(),
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * .04,
+                              color: is_dark ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'minutes',
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * .02,
+                              color: is_dark ? Colors.purple.shade100 : Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'minutes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        (_remainingTime.inSeconds % 60).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'seconds',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
+                      Column(
+                        children: [
+                          Text(
+                            (_remainingTime.inSeconds % 60).toString(),
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * .04,
+                              color: is_dark ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'seconds',
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * .02,
+                              color: is_dark ? Colors.purple.shade100 : Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
         ),
       ],
     );
   }
 }
-
-
-
-

@@ -395,20 +395,58 @@ class _AddEventPageState extends State<AddEventPage> {
                 ),
                 // Inside the AddEventPage widget
                 onPressed: () {
-                  DateTime date = DateTime(date_selected.year, date_selected.month, date_selected.day);
-                  Color? categoryColor = categories[selectedCategory];
-                  Event event = Event(
-                    name: name_of_event,
-                    description: description_event,
-                    category: selectedCategory,
-                    date_of_event: date,
-                    color_category: categoryColor,
-                  );
-                  Navigator.of(context).pop(event);
-
+                  if (name_of_event.isEmpty || selectedCategory.isEmpty) {
+                    if (Platform.isIOS) {
+                      // Show CupertinoAlertDialog
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text('Error'),
+                            content: Text('Please enter a name and select a category for the event.'),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text(
+                                  'OK',
+                                  style: TextStyle(color: Colors.purple),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      // Show Material AlertDialog
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Please enter a name and select a category for the event.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  } else {
+                    DateTime date = DateTime(date_selected.year, date_selected.month, date_selected.day);
+                    Color? categoryColor = categories[selectedCategory];
+                    Event event = Event(
+                      name: name_of_event,
+                      description: description_event,
+                      category: selectedCategory,
+                      date_of_event: date,
+                      color_category: categoryColor,
+                    );
+                    Navigator.of(context).pop(event);
+                  }
                 },
-
-
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -430,5 +468,3 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 }
-
-
