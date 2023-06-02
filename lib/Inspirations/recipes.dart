@@ -77,6 +77,7 @@ class _RecipeState extends State<Recipe> {
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
+
     return Container(
       height: kToolbarHeight,
       color: is_dark ? Colors.black: Colors.white,

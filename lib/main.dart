@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -10,7 +11,7 @@ import 'choose_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
-import 'chat.dart';
+import 'Chat/chat.dart';
 import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,7 @@ import 'Calendar_Page/add_event_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
-import 'chat.dart';
+import 'Chat/chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
 import 'ideas.dart';
@@ -41,6 +42,8 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.getInitialMessage();
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -124,6 +127,7 @@ class _MainpageState extends State<MainPage> {
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
+
 
     return Scaffold(
       backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
