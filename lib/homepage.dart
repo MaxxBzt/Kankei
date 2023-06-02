@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'app_colors.dart';
@@ -47,7 +43,7 @@ class _HomePageState extends State<HomePage> {
               isRepeatingAnimation: false,
             ),
             Countdown(),
-
+            Image(image: AssetImage("assets/images/kankei_title.png"), height: 200, width: 200),
 
           ],
         ),
