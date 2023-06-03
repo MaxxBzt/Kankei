@@ -20,6 +20,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PersonalityResultsPage extends StatelessWidget {
   final int score;
@@ -56,6 +57,13 @@ class PersonalityResultsPage extends StatelessWidget {
         "Your positive energy is palpable, and you inspire others with your infectious happiness."
 
   ];
+
+
+
+
+
+
+
 
   int Paragraph() {
     if (score <= 20) {

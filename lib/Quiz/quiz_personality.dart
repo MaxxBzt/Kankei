@@ -18,6 +18,9 @@ import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import '../countdown.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class QuizPersonality extends StatefulWidget {
   @override
@@ -27,9 +30,12 @@ class QuizPersonality extends StatefulWidget {
 
 
 
+
+
 class _QuizPersonalityState extends State<QuizPersonality> {
   int currentQuestionIndex = 0;
   List<int> selectedOptions = List<int>.filled(10, -1);
+
 
   List<Map<String, dynamic>> questions = [
     {
@@ -125,22 +131,40 @@ class _QuizPersonalityState extends State<QuizPersonality> {
   ];
 
 
-
   void selectOption(int optionIndex) {
     setState(() {
       selectedOptions[currentQuestionIndex] = optionIndex;
     });
   }
 
+
+
   void goToNextQuestion() {
-    setState(() {
-      if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-      } else {
-        // Quiz completed, calculate the score
-        showResult();
-      }
-    });
+    if (selectedOptions[currentQuestionIndex] != -1) {
+      setState(() {
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+        } else {
+          // Quiz completed, calculate the score
+          showResult();
+        }
+      });
+    } else {
+      // Show a message to the user to select an option before proceeding
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Select an option'),
+          content: Text('Please select an option before proceeding.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void showResult() {
@@ -165,16 +189,6 @@ class _QuizPersonalityState extends State<QuizPersonality> {
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -214,7 +228,7 @@ class _QuizPersonalityState extends State<QuizPersonality> {
             SizedBox(height: 80),
             Center(
               child: Text(
-                questions[currentQuestionIndex]['question'],
+                questions.isNotEmpty ? questions[currentQuestionIndex]['question'] : '',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -229,61 +243,71 @@ class _QuizPersonalityState extends State<QuizPersonality> {
               children: [
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: questions[currentQuestionIndex]['options'].length,
+                  itemCount: questions.isNotEmpty ? questions[currentQuestionIndex]['options'].length : 0,
                   itemBuilder: (context, index) {
                     String option =
-                    questions[currentQuestionIndex]['options'][index]
-                    ['option'];
-                    bool isSelected = selectedOptions[currentQuestionIndex] == index;
+                        questions[currentQuestionIndex]['options'][index]['option'];
+                    bool isSelected =
+                        selectedOptions[currentQuestionIndex] == index;
                     Color buttonColor = isSelected
                         ? (isDark
-                        ? AppColors.dark_Ideas
-                        : AppColors.light_Ideas)
-                        : (isDark ? AppColors.dark_Ideas : AppColors.light_Ideas);
+                            ? AppColors.dark_Ideas
+                            : AppColors.light_Ideas)
+                        : (isDark
+                            ? Colors.black
+                            : AppColors.light_Ideas);
+                    Color textColor = isSelected
+                        ? (isDark ? Colors.white : Colors.black)
+                        : (isDark ? Colors.white : Colors.black);
 
-                    return Container(
-                      margin:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Platform.isIOS
-                          ? CupertinoButton(
-                        onPressed: () {
-                          selectOption(index);
-                          goToNextQuestion();
-                        },
-                        color: buttonColor,
-                        child: Text(
-                          option,
-                          style: TextStyle(
-                            color: isDark ? Colors.white : Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gill Sans',
-                          ),
-                        ),
-                      )
-                          : ElevatedButton(
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () => selectOption(index),
                         style: ElevatedButton.styleFrom(
                           primary: buttonColor,
-                          minimumSize: Size(200, 50),
+                          elevation: 5,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 24.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        onPressed: () {
-                          selectOption(index);
-                          goToNextQuestion();
-                        },
                         child: Text(
                           option,
                           style: TextStyle(
-                            color: isDark ? Colors.white : Colors.black,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Gill Sans',
+                            color: textColor,
+                            fontSize: 20,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     );
                   },
                 ),
               ],
+            ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: goToNextQuestion,
+              style: ElevatedButton.styleFrom(
+                primary: isDark
+                    ? AppColors.dark_Ideas
+                    : AppColors.light_Ideas,
+                elevation: 5,
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Next',
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
