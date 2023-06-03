@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import '../app_colors.dart';
-import '../components/my_button.dart';
-import '../components/my_textfield.dart';
 import '../main.dart';
 import '../theme/theme_system.dart';
 
@@ -19,7 +16,7 @@ class _LinkAccountPageState extends State<LinkAccountPage> {
 
   void linkAccount() async {
     String? email = emailController.text.trim();
-    //Global variable
+
     if (currentUserUid != null && email.isNotEmpty) {
       try {
         // Get the user with the provided email address
@@ -35,30 +32,72 @@ class _LinkAccountPageState extends State<LinkAccountPage> {
           // Get the UID of the user to link
           String linkedUserUid = userSnapshot.id;
 
+          // Check if the linked user is already paired with someone
+          if (userSnapshot.data()?.containsKey('LinkedAccountUID') ?? false) {
+            wrongEmailMessage('The user you want to get paired with is already taken');
+            return;
+          }
+
+          // Check if the linked user exists in the database
+          if (!userSnapshot.exists) {
+            wrongEmailMessage('The user you want to pair with does not exist');
+            return;
+          }
+
+          // Check if the linked user is the current user
+          if (linkedUserUid == currentUserUid) {
+            wrongEmailMessage('You cannot pair with yourself');
+            return;
+          }
+
           // Update the current user's document with the linked user's UID
           await FirebaseFirestore.instance
               .collection('users')
               .doc(currentUserUid)
               .update({'LinkedAccountUID': linkedUserUid});
 
+          // Update the linked user's document with the current user's UID
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(linkedUserUid)
+              .update({'LinkedAccountUID': currentUserUid});
+
           // Account linked successfully, perform any additional actions
           // or navigate to a new screen if needed
-          // ...
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MainPage()),
           );
           print('Account linked successfully');
         } else {
-          print('No user found with the provided email address');
+          wrongEmailMessage('No user found with the provided email address');
         }
       } catch (error) {
         print('Error linking account: $error');
+        wrongEmailMessage('Error linking account');
       }
     } else {
-      print('Invalid email or current user');
+      wrongEmailMessage('Invalid email or current user');
     }
   }
+
+  void wrongEmailMessage(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF726daf),
+          title: Center(
+            child: Text(
+              errorMessage,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {

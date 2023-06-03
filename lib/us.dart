@@ -94,18 +94,37 @@ void confirmBreakUpAccount(BuildContext context) async {
 void performBreakUpAccount(BuildContext context) async {
   if (currentUserUid != null) {
     try {
-      // Update the current user's document to remove the "LinkedAccountUID" field
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUserUid)
-          .update({'LinkedAccountUID': FieldValue.delete()});
+      // Get the current user's document
+      DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
 
-      print('Account break-up successful');
-      // Navigate to the LinkAccountPage using the provided context
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LinkAccountPage()),
-      );
+      // Check if the current user is linked to another account
+      if (currentUserSnapshot.data()?.containsKey('LinkedAccountUID') ?? false) {
+        // Get the linked user's UID
+        String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+        // Update the current user's document to remove the "LinkedAccountUID" field
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUserUid)
+            .update({'LinkedAccountUID': FieldValue.delete()});
+
+        // Update the linked user's document to remove the "LinkedAccountUID" field
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(linkedUserUid)
+            .update({'LinkedAccountUID': FieldValue.delete()});
+
+        print('Account break-up successful');
+
+        // Navigate to the LinkAccountPage using the provided context
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LinkAccountPage()),
+        );
+      } else {
+        print('No linked account found for the current user');
+      }
     } catch (error) {
       print('Error breaking up account: $error');
     }
@@ -113,6 +132,7 @@ void performBreakUpAccount(BuildContext context) async {
     print('Invalid current user');
   }
 }
+
 
 class _UsPageState extends State<UsPage> {
   bool pushNotifications = true;
