@@ -185,6 +185,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.8"
   diffutil_dart:
     dependency: transitive
     description:
@@ -281,6 +289,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      sha256: "9cfe5c4560fb83393511ca7620f8fb3f22c9a80303052f10290e732fcfb801bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.6.1"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      sha256: "7e25cb71019ccef8b1fd7b37969af79f04c467974cce4dfc291fa36974edd7ba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.1"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      sha256: "5d9840cc8126ea723b1bda901389cb542902f664f2653c16d4f8114e95f13cec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -382,6 +414,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      sha256: "57d0012730780fe137260dd180e072c18a73fbeeb924cdc029c18aaa0f338d64"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.9.1"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: b472bfc173791b59ede323661eae20f7fff0b6908fea33dd720a6ef5d576bae8
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "21bceee103a66a53b30ea9daf677f990e5b9e89b62f222e60dd241cd08d63d3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -869,6 +925,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: "57b35f6e8ef731f18529695bffc62f92c6189fac2e52c12d478dec1931afb66e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   typed_data:
     dependency: transitive
     description:
@@ -993,10 +1057,10 @@ packages:
     dependency: transitive
     description:
       name: xdg_directories
-      sha256: ee1505df1426458f7f60aac270645098d318a8b4766d85fde75f76f2e21807d1
+      sha256: bd512f03919aac5f1313eb8249f223bacf4927031bf60b02601f81f687689e86
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "0.2.0+3"
   xml:
     dependency: transitive
     description:
