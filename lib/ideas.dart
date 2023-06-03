@@ -200,12 +200,13 @@ class _IdeasState extends State<Ideas> {
                                 itemBuilder: (BuildContext context, int index) {
                                   List<String> imagePaths = [
                                     'assets/images/ideas_images/general_knowledge.png',
-                                    'assets/images/ideas_images/cooking_ideas.png',
+                                    'assets/images/ideas_images/Personality_Quiz.png',
                                     'assets/images/ideas_images/restaurant_ideas.png',
                                   ];
 
                                   List<String> routes = [
                                     '/Quiz_General_Knowledge',
+                                    '/Quiz_Personality',
 
 
                                   ];

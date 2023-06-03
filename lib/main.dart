@@ -16,6 +16,7 @@ import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 import '../Quiz/quiz_general_knowledge.dart';
+import '../Quiz/quiz_personality.dart';
 
 
 
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
           '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
           '/Quiz_General_Knowledge' : (context) => QuizGeneralKnowledge(),
           '/linkAccount': (context) => LinkAccountPage(),
+          '/Quiz_Personality' : (context) => QuizPersonality(),
         },
         home: OnBoardingPage(),
       );
