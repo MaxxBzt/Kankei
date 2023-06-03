@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
+import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
 import 'choose_page.dart';
 import 'homepage.dart';
@@ -17,17 +18,10 @@ import 'firebase_options.dart';
 import '../Quiz/quiz_general_knowledge.dart';
 
 
-import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'Calendar_Page/add_event_page.dart';
-import 'homepage.dart';
-import 'onboarding.dart';
-import 'Calendar_Page/calendar_page.dart';
-import 'chat.dart';
 import 'inspiration.dart';
 import 'us.dart';
 import 'ideas.dart';
@@ -80,6 +74,7 @@ class MyApp extends StatelessWidget {
           '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
           '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
           '/Quiz_General_Knowledge' : (context) => QuizGeneralKnowledge(),
+          '/linkAccount': (context) => LinkAccountPage(),
         },
         home: OnBoardingPage(),
       );

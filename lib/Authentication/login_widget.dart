@@ -22,6 +22,20 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  // Rest the text fields
+  void resetTextFields() {
+    emailController.clear();
+    passwordController.clear();
+  }
+
   // sign user in method
   void signUserIn() async {
     // show loading circle
@@ -167,7 +181,10 @@ class _LoginPageState extends State<LoginPage> {
 
               // sign in button
               MyButton(
-                onTap: signUserIn,
+                onTap: () {
+                  signUserIn();
+                  resetTextFields();
+                },
                 buttonText: 'Sign In',
               ),
 
@@ -187,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
                 ),
                 child: ElevatedButton(
-                  onPressed: (widget.onPressed),
+                  onPressed: widget.onPressed,
                   child: Text(
                     'Register Now',
                     textAlign: TextAlign.center,

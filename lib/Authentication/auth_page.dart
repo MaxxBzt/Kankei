@@ -1,25 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kankei/Authentication/LoginOrRegister.dart';
-
-
 import '../choose_page.dart';
-import '../main.dart';
 
-
-class AuthPage extends StatelessWidget{
-  const AuthPage({super.key});
+class AuthPage extends StatelessWidget {
+  const AuthPage({Key? key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show a loading indicator while checking the authentication state
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData) {
+            // User is logged in, navigate to ChoosePage
             return ChoosePage();
-          }
-          else{
+          } else {
+            // User is not logged in, navigate to LoginOrRegister
             return LoginOrRegister();
           }
         },
@@ -27,3 +29,4 @@ class AuthPage extends StatelessWidget{
     );
   }
 }
+
