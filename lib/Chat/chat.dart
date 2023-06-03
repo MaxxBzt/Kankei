@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
+import '../../../theme/theme_system.dart';
+import 'push_notifications.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 
 String randomString() {
@@ -21,19 +23,34 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+
+  void updateToken(String token) {
+    setState(() {
+      mtoken = token;
+      print('User token: $token');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    requestPermissions();
+    getToken(updateToken);
+    initInfo();
+  }
+
   final List<types.Message> _messages = [];
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   @override
   Widget build(BuildContext context) {
+
+    //Dark or light theme
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
-
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
-
     bool is_dark = isAppDarkMode || isSystemDarkMode;
-
 
     return Scaffold(
       body: Chat(

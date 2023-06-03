@@ -10,7 +10,7 @@ import 'choose_page.dart';
 import 'homepage.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
-import 'chat.dart';
+import 'Chat/chat.dart';
 import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
