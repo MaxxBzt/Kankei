@@ -1,31 +1,19 @@
 
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../app_colors.dart';
 import '../Calendar_Page/add_event_page.dart';
-import '../Calendar_Page/event_model.dart';
 import '../theme/theme_system.dart';
 import 'dart:io' show Platform;
 
 class CalendarScreen extends StatefulWidget {
-  final String name_of_event;
-  final String description_event;
-  final String selectedCategory;
-  final Color color_category;
-  final DateTime date_selected;
 
-
-  CalendarScreen({
-    required Key key,
-    this.name_of_event = 'default',
-    this.description_event = 'default',
-    this.selectedCategory = 'default',
-    this.color_category = Colors.purple,
-    DateTime? date_selected,
-  })  : date_selected = date_selected ?? DateTime.now(),
-        super(key: key);
 
 
   @override
@@ -34,56 +22,199 @@ class CalendarScreen extends StatefulWidget {
 
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  Map<DateTime, List<Event>> events = {};
-  List<Event> selectedEvents = [];
+  // This is the map of our events stored in firebase
+  Map<DateTime, List<Map<String, dynamic>>> events = {};
+
+  // This is a list containing all the events of the selected date by user
+  List<Map<String, dynamic>> selectedEvents = [];
   Map<String, Color> categories = {};
 
+  void updateEventsCallback() {
+    updateEvents();
+  }
 
-  // This function manages the adding of new events to the calendar
-  void addEvent(Event event) {
 
-    // Convert event.date to local time because it's in UTC when coming to the calendar widget
-    event = event.copyWith(date: event.date_of_event.toLocal());
+  Future<void> updateEvents() async {
+    // Get the events from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUid)
+        .collection('calendar_events')
+        .get();
 
-    // We create a new DateTime with only the date and not the time as the times varies and
-    // it will mess up with our usage of the date as a key
-    DateTime eventDate = DateTime(event.date_of_event.year,
-        event.date_of_event.month, event.date_of_event.day);
+    // Convert the events into the desired format
+    Map<DateTime, List<Map<String, dynamic>>> newEvents = {};
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in querySnapshot.docs) {
+      Map<String, dynamic> data = doc.data();
+      DateTime date = (data['date'] as Timestamp).toDate();
+      DateTime eventDate = DateTime(date.year, date.month, date.day);
 
-    // Check if the date of the event already exists in the events map
-    if (events[eventDate] == null) {
-      // If it doesn't, create a new list for that date
-      events[eventDate] = [];
+      if (newEvents[eventDate] == null) {
+        newEvents[eventDate] = [];
+      }
+
+      newEvents[eventDate]!.add(data);
     }
 
-    // Add the event to the list of events for that date
-    events[eventDate]!.add(event);
+    // Update the state variable
+    setState(() {
+      events = newEvents;
+    });
   }
 
 
   // Function to delete an event from calendar
-  void _deleteEvent(Event event) {
-    setState(() {
-      DateTime eventDate = DateTime(event.date_of_event.year, event.date_of_event.month, event.date_of_event.day);
-      events[eventDate]?.remove(event);
-      selectedEvents.remove(event);
-    });
+  void _deleteEvent(Map<String, dynamic> event ) async {
+
+    // We check if the event is a paired event
+    bool isPaired = event['is_shared'];
+
+    // If the event is shared
+    if (isPaired){
+
+      if (Platform.isIOS) {
+        showCupertinoModalPopup<void>(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: const Text('Deleting Linked Event'),
+            content: const Text('This Event is linked with your partner. Do you still wish to delete it ?'),
+            actions: <CupertinoDialogAction>[
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+              ),
+              CupertinoDialogAction(
+                isDefaultAction: true,
+                onPressed: () async {
+
+                  // We get the name of the event to be deleted
+                  String eventName = event['name'];
+
+                  // We delete the document from Firestore
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+
+                  // Get the UID of the paired user
+                  DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+                      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
+                  String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+                  // Delete the document from the paired user's calendar_events sub-collection
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(linkedUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showDialog<void>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Deleting Linked Event'),
+            content: const Text('This Event is linked with your partner. Do you still wish to delete it ?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () async {
+
+                  // We get the name of the event to be deleted
+                  String eventName = event['name'];
+
+                  // We delete the document from Firestore
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+
+                  // Get the UID of the paired user
+                  DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+                  await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
+                  String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+                  // Delete the document from the paired user's calendar_events sub-collection
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(linkedUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      }
+
+    }
+    else{
+      // We get the name of the event to be deleted
+      String eventName = event['name'];
+
+      // We delete the document from Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .collection('calendar_events')
+          .where('name', isEqualTo: eventName)
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+
+    }
+    // Update the state variable for the displaying of events
+    updateEvents();
   }
+
 
   late CalendarFormat _calendarFormat;
   late DateTime _focusedDay;
   late DateTime _selectedDay;
 
 
-  // Function that manages the deletion of events when a category is deleted
-  void deleteEventsByCategory(String category) {
-    setState(() {
-      events.removeWhere((date, events) {
-        events.removeWhere((event) => event.category == category);
-        return events.isEmpty;
-      });
-    });
-  }
 
 
   @override
@@ -92,11 +223,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _calendarFormat = CalendarFormat.month;
     _focusedDay = DateTime.now();
     _selectedDay = DateTime.now();
-    selectedEvents = events[_selectedDay] ?? [];
+    _retrieveCategories();
+    updateEvents();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    updateEvents();
+  }
+
+
+  Future<void> _retrieveCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? categoriesString = prefs.getString('categories');
+    if (categoriesString != null) {
+      setState(() {
+        // Decode the JSON string and convert it back to a map
+        Map<String, dynamic> categoriesMap = jsonDecode(categoriesString);
+        categories = categoriesMap.map((key, value) => MapEntry(key, Color(value)));
+      });
+    }
+  }
   // This function manages the popup window happening when we click to display an event
-  void _openDialog(Event event) {
+  void _openDialog(Map<String, dynamic> event) {
     if (Platform.isIOS) {
       // Show CupertinoAlertDialog
       showDialog(
@@ -104,31 +254,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
         builder: (context) {
 
           return CupertinoAlertDialog(
-            title: Text(event.name),
+            title: Text(event['name']),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event.description),
+                Text(event['description']),
               ],
             ),
-            /*
-            content: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: CupertinoTextField(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                onChanged: (value){
-                  newCategory = value;
-                },
-                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-              ),
-            ),*/
             actions: [
               CupertinoDialogAction(
                 child: Text(
@@ -137,8 +270,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
                 onPressed: () {
                   // Call a function to delete the event
-                  _deleteEvent(event);
                   Navigator.of(context).pop();
+                  _deleteEvent(event);
+                  updateEvents();
                 },
               ),
             ],
@@ -151,20 +285,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(event.name),
+            title: Text(event['name']),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event.description),
+                Text(event['description']),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () {
                   // Call a function to delete the event
-                  _deleteEvent(event);
                   Navigator.of(context).pop();
+                  _deleteEvent(event);
+                  updateEvents();
                 },
                 child: Text(
                   'Delete Event',
@@ -210,19 +345,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    // Pass the onDeleteCategory callback to the AddEventPage widget
-                    Event? event = await Navigator.of(context).push(
+                    Map<String, dynamic>? event = await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => AddEventPage(onDeleteCategory: deleteEventsByCategory),
+                        builder: (context) => AddEventPage(updateEventsCallback: updateEventsCallback),
                       ),
                     );
-
-                    if (event != null) {
-                      setState(() {
-                        // Widget. because variables defined as instance in the CalendarScreen class
-                        addEvent(event);
-                      });
-                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -298,10 +425,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
+                  /*
+                  eventLoader: (date) {
+                    DateTime selectedDate = DateTime(date.year, date.month, date.day);
+                    return events[selectedDate] ?? [];
+                  },*/
                   eventLoader: (date) {
                     DateTime selectedDate = DateTime(date.year, date.month, date.day);
                     return events[selectedDate] ?? [];
                   },
+                  /*
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
                       // Convert selectedDay to local time
@@ -315,6 +448,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           event.copyWith(category: event.category, color_category: event.color_category)).toList() ?? [];
 
                     });
+                  },*/
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay.toLocal();
+                      DateTime selectedDate = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
+                      _focusedDay = focusedDay;
+                      selectedEvents = events[selectedDate] ?? [];
+                    });
                   },
                   onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
@@ -323,34 +464,37 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
           ),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: selectedEvents.map(
-                  (event) => GestureDetector(
-                onTap: () => _openDialog(event),
 
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 1.0,
+          ...selectedEvents.map(
+                (event) => Column(
+              children: [
+                GestureDetector(
+                  onTap: () => _openDialog(event),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ListTile(
-                    tileColor: Colors.transparent,
-                    title: Text(event.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                    trailing: Container(
-                      color: event.color_category,
-                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      child: Text('${event.category}', style: TextStyle(color: is_dark ? Colors.white: Colors.black, fontWeight: FontWeight.bold)),
+                    child: ListTile(
+                      tileColor: Colors.transparent,
+                      title: Text(event['name'], style: TextStyle(fontWeight: FontWeight.bold)),
+                      trailing: Container(
+                        color: categories[event['category']], // Use the categories map to look up the color
+                        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        child: Text('${event['category']}', style: TextStyle(color: is_dark ? Colors.white : Colors.black, fontWeight: FontWeight.bold)),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ).toList(),
-          )
+                SizedBox(height: 10), // Add space between containers
+              ],
+            ),
+          ).toList(),
+
+
         ],
       ),
     );

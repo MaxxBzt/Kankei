@@ -2,30 +2,27 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:io' show Platform;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Calendar_Page/event_model.dart';
 import '../theme/theme_system.dart';
 
 
 
 // Stateful : means the widget can have mutable state.
 class AddEventPage extends StatefulWidget {
-
-  // Add a onDeleteCategory property to the AddEventPage widget
-  late final void Function(String)? onDeleteCategory;
-  AddEventPage({Key? key, this.onDeleteCategory}) : super(key: key);
-
+  final VoidCallback updateEventsCallback;
+  const AddEventPage({Key? key, required this.updateEventsCallback}) : super(key: key);
 
   @override
   _AddEventPageState createState() => _AddEventPageState();
 }
-class _AddEventPageState extends State<AddEventPage> {
 
+class _AddEventPageState extends State<AddEventPage> {
 
   String name_of_event = '';
   /* date_selected initialized with the current date and time so that when user
@@ -64,9 +61,178 @@ class _AddEventPageState extends State<AddEventPage> {
     }
   }
 
+  void _addCategory(BuildContext context) {
+    if (Platform.isIOS) {
+      // Show CupertinoAlertDialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String newCategory = '';
+
+          return CupertinoAlertDialog(
+            title: const Text('Add Category'),
+            content: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: CupertinoTextField(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                onChanged: (value){
+                  newCategory = value;
+                },
+                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: const Text('Add category'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (categories.containsKey(newCategory)) {
+                    // The category already exists, show an alert to the user
+                    if (Platform.isIOS) {
+                      // Show CupertinoAlertDialog
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+
+                          return CupertinoAlertDialog(
+                            title: Text('Category already exists'),
+                            content: Text(
+                                'A category with the name "$newCategory" already exists.'),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text(
+                                  'OK',
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Category already exists'),
+                            content: Text(
+                                'A category with the name "$newCategory" already exists.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  } else {
+                    // The category does not exist, add it to the categories map
+                    setState(() {
+                      if (newCategory.isNotEmpty) {
+                        categories[newCategory] =
+                            Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                                .withOpacity(0.6);
+                        selectedCategory = newCategory;
+                        _saveCategories(); // Save categories to shared preferences
+                      }
+                    });
+                  }
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Show Material AlertDialog
+      showDialog(
+          context: context,
+          builder: (BuildContext context){
+            String newCategory = '';
+
+            return AlertDialog(
+              title: Text('Add Category'),
+              content: TextField(
+                onChanged: (value) {
+                  newCategory = value;
+                },
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Add category'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (categories.containsKey(newCategory)) {
+                      // The category already exists, show an alert to the user
+                      if (Platform.isIOS) {
+                        // Show CupertinoAlertDialog
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+
+                            return CupertinoAlertDialog(
+                              title: Text('Category already exists'),
+                              content: Text(
+                                  'A category with the name "$newCategory" already exists.'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: Text(
+                                    'OK',
+                                  ),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Category already exists'),
+                              content: Text(
+                                  'A category with the name "$newCategory" already exists.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    } else {
+                      // The category does not exist, add it to the categories map
+                      setState(() {
+                        if (newCategory.isNotEmpty) {
+                          categories[newCategory] =
+                              Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                                  .withOpacity(0.6);
+                          selectedCategory = newCategory;
+                          _saveCategories(); // Save categories to shared preferences
+                        }
+                      });
+                    }
+                  },
+                ),
+              ],
+            );
+          }
+      );
+    }
+  }
 
   // Function to show date picker and update selectedDate
-
   Future<void> _selectDate(BuildContext context) async {
     if (Platform.isIOS) {
       showCupertinoModalPopup(
@@ -109,102 +275,182 @@ class _AddEventPageState extends State<AddEventPage> {
     }
   }
 
-
-  void _addCategory(BuildContext context) {
-
-    if (Platform.isIOS) {
-      // Show CupertinoAlertDialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String newCategory = '';
-
-          return CupertinoAlertDialog(
-            title: const Text('Add Category'),
-            content: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: CupertinoTextField(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                onChanged: (value){
-                  newCategory = value;
-                },
-                style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-              ),
-            ),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: const Text('Add category'),
-                onPressed: () {
-                  setState(() {
-                    if (newCategory.isNotEmpty) {
-                      categories[newCategory] =
-                          Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                              .withOpacity(0.6);
-                      selectedCategory = newCategory;
-                      _saveCategories(); // Save categories to shared preferences
-                    }
-                  });// Close alert box
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Show Material AlertDialog
-      showDialog(
-          context: context,
-          builder: (BuildContext context){
-            String newCategory = '';
-
-            return AlertDialog(
-              title: Text('Add Category'),
-              content: TextField(
-                onChanged: (value) {
-                  newCategory = value;
-                },
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Add category'),
-                  onPressed: () {
-                    setState(() {
-                      if (newCategory.isNotEmpty) {
-                        categories[newCategory] =
-                            Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                                .withOpacity(0.6);
-                        selectedCategory = newCategory;
-                        _saveCategories(); // Save categories to shared preferences
-                      }
-                    });// Close alert box
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          }
-      );
-    }
-  }
-
-// Call the onDeleteCategory callback when a category is deleted
   void _deleteCategory(String categoryName) {
     setState(() {
       categories.remove(categoryName);
       _saveCategories(); // Save categories to shared preferences
-      if (widget.onDeleteCategory != null) {
-        widget.onDeleteCategory!(categoryName);
-      }
     });
   }
 
+
+  void deleteEventsByCategory(String categoryName) async {
+    // Delete all documents from Firestore whose category field matches the deleted category
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUid)
+        .collection('calendar_events')
+        .where('category', isEqualTo: categoryName)
+        .get()
+        .then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+
+    // Update the state variable
+    widget.updateEventsCallback();
+  }
+
+
+  // Function that asks the user if he wants the event to be paired
+  Future<bool> _shouldEventBePaired(BuildContext context) async {
+    bool? result = false;
+    if (Platform.isIOS) {
+      result = await showCupertinoModalPopup<bool>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: const Text('Linked Event'),
+          content: const Text('Do you wish to share this event with your paired partner ?'),
+          actions: <CupertinoDialogAction>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text('No'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      result = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Linked Event'),
+          content: const Text('Do you wish to share this event with your paired partner ?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    }
+    return result ?? false;
+  }
+
+
+  Future<void> addEventFirebase(name,description,category,date,isShared) async {
+
+    try{
+      DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
+      String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+
+      // Create a new document in the calendar_events sub-collection for the current user
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .collection('calendar_events')
+          .add({
+        'name': name,
+        'description': description,
+        'category': category,
+        'date': date,
+        'is_shared': isShared
+      });
+
+      // If isShared is true, create a new document in the calendar_events sub-collection for the linked user
+      if (isShared) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(linkedUserUid)
+            .collection('calendar_events')
+            .add({
+          'name': name,
+          'description': description,
+          'category': category,
+          'date': date,
+          'is_shared': isShared
+        });
+      }
+    } catch (error) {
+      print('Error caught: $error');
+    }
+
+    }
+
+    // This is the function that adds the event in the firebase cloud
+  Future<void> _createEvent(date, categoryColor) async {
+    // We get the list of events from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUid)
+        .collection('calendar_events')
+        .get();
+
+    // We then heck if any of the events have the same name as the new event
+    bool does_event_exist = querySnapshot.docs.any((doc) => doc.data()['name'] == name_of_event);
+
+    if (does_event_exist) {
+      // An event with the same name already exists, show an alert to the user
+      if (Platform.isIOS) {
+        // Show CupertinoAlertDialog
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Event already exists'),
+              content: Text('An event with the name "$name_of_event" already exists.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(
+                    'OK',
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Show Material AlertDialog
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Event already exists'),
+              content: Text('An event with the name "$name_of_event" already exists.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      // No event with the same name exists, so we add the new event to Firestore
+      bool isShared = await _shouldEventBePaired(context);
+      await addEventFirebase(name_of_event, description_event, selectedCategory, date, isShared);
+      Navigator.of(context).pop();
+    }
+  }
 
 
   @override
@@ -249,7 +495,85 @@ class _AddEventPageState extends State<AddEventPage> {
               IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () {
-                  _deleteCategory(categoryName);
+
+                  if (Platform.isIOS) {
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoAlertDialog(
+                        title: const Text('Deleting Category'),
+                        content: const Text("You're about to delete all events linked to this category. Do you still wish to pursue ?"),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'),
+                          ),
+                          CupertinoDialogAction(
+                            onPressed: () async {
+                              _deleteCategory(categoryName);
+                              // Get the list of events from Firestore
+                              QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(currentUserUid)
+                                  .collection('calendar_events')
+                                  .get();
+
+                              // Check if any of the events have the given category
+                              bool hasEvents = querySnapshot.docs.any((doc) => doc.data()['category'] == categoryName);
+
+                              // Only call deleteEventsByCategory if the category has events
+                              if (hasEvents) {
+                                deleteEventsByCategory(categoryName);
+                                widget.updateEventsCallback();
+                              }
+
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Deleting Category'),
+                        content: const Text("You're about to delete all events linked to this category. Do you still wish to pursue ?"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('No'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              _deleteCategory(categoryName);
+                              // Get the list of events from Firestore
+                              QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(currentUserUid)
+                                  .collection('calendar_events')
+                                  .get();
+
+                              // Check if any of the events have the given category
+                              bool hasEvents = querySnapshot.docs.any((doc) => doc.data()['category'] == categoryName);
+
+                              // Only call deleteEventsByCategory if the category has events
+                              if (hasEvents) {
+                                deleteEventsByCategory(categoryName);
+                                widget.updateEventsCallback();
+                              }
+
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
               ),
             ],
@@ -386,6 +710,7 @@ class _AddEventPageState extends State<AddEventPage> {
             Container(
               width: 250,
               height: 50,
+
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white, backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.planning_add_event_color,
@@ -394,7 +719,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   ),
                 ),
                 // Inside the AddEventPage widget
-                onPressed: () {
+                onPressed: () async {
                   if (name_of_event.isEmpty || selectedCategory.isEmpty) {
                     if (Platform.isIOS) {
                       // Show CupertinoAlertDialog
@@ -408,7 +733,7 @@ class _AddEventPageState extends State<AddEventPage> {
                               CupertinoDialogAction(
                                 child: Text(
                                   'OK',
-                                  style: TextStyle(color: Colors.purple),
+
                                 ),
                                 onPressed: () => Navigator.pop(context),
                               ),
@@ -437,14 +762,9 @@ class _AddEventPageState extends State<AddEventPage> {
                   } else {
                     DateTime date = DateTime(date_selected.year, date_selected.month, date_selected.day);
                     Color? categoryColor = categories[selectedCategory];
-                    Event event = Event(
-                      name: name_of_event,
-                      description: description_event,
-                      category: selectedCategory,
-                      date_of_event: date,
-                      color_category: categoryColor,
-                    );
-                    Navigator.of(context).pop(event);
+                    await _createEvent(date, categoryColor);
+                    // Update the state variable
+                    widget.updateEventsCallback();
                   }
                 },
                 child: Row(
@@ -462,6 +782,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
