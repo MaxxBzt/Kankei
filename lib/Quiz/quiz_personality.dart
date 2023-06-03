@@ -252,13 +252,12 @@ class _QuizPersonalityState extends State<QuizPersonality> {
                     Color buttonColor = isSelected
                         ? (isDark
                             ? AppColors.dark_Ideas
-                            : AppColors.light_Ideas)
+                            : Colors.pink.shade100)
                         : (isDark
                             ? Colors.black
                             : AppColors.light_Ideas);
-                    Color textColor = isSelected
-                        ? (isDark ? Colors.white : Colors.black)
-                        : (isDark ? Colors.white : Colors.black);
+                    Color textColor = isDark ? Colors.white : Colors.black;
+
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
