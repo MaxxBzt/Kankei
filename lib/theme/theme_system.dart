@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../app_colors.dart';
 
@@ -56,14 +57,11 @@ class Theme_Provider extends ChangeNotifier {
 }
 class MyThemes {
 
-
   static final dark_theme = ThemeData(
     scaffoldBackgroundColor: AppColors.dark_background,
     primarySwatch: dark_primary_color,
     colorScheme: ColorScheme.dark(),
-
   );
-
 
   static final light_theme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
@@ -72,3 +70,5 @@ class MyThemes {
 
   );
 }
+
+String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;

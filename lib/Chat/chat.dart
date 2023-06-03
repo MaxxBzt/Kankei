@@ -1,126 +1,82 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'dart:convert';
+import 'dart:math';
 import '../../theme/theme_system.dart';
-import '../Chat/send_message.dart';
+import 'push_notifications.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
-import '../components/my_textfield.dart';
-import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:provider/provider.dart';
+
+String randomString() {
+  final random = Random.secure();
+  final values = List<int>.generate(16, (i) => random.nextInt(255));
+  return base64UrlEncode(values);
+}
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
 
-  String? mtoken = " ";
+  void updateToken(String token) {
+    setState(() {
+      mtoken = token;
+      print('User token: $token');
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     requestPermissions();
-    getToken();
+    getToken(updateToken);
+    initInfo();
   }
 
-  void requestPermissions() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    print('User granted permission for Firebase: ${settings.authorizationStatus}');
-
-  }
-
-  void getToken() async {
-    await FirebaseMessaging.instance.getToken().then(
-            (token) { setState(() {
-              mtoken = token;
-              print('User token: $token');
-            });
-              saveToken(token!);
-            }
-    );
-  }
-
-  void saveToken(String token) async {
-    await FirebaseFirestore.instance.collection("UserTokens").doc("UserTokens").set({
-      "token": token,
-    });
-  }
+  final List<types.Message> _messages = [];
+  final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   @override
   Widget build(BuildContext context) {
 
-    //Light or dark theme
+    //Dark or light theme
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
-    final Brightness brightnessValue = MediaQuery
-        .of(context)
-        .platformBrightness;
+    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
-    List<String> chatMessages = [];
-    TextEditingController _messageController = TextEditingController();
-
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: chatMessages.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(chatMessages[index]),
-                );
-              },
-            ),
-          ),
-
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Row(
-              children: [
-                IconButton( // Emoji button
-                  icon: Icon(CupertinoIcons.smiley),
-                  onPressed: () {
-                    // Handle emoji button press
-                  },
-                ),
-                Expanded(
-                  child: MyTextField( // Text input
-                    controller: TextEditingController(),
-                    hintText: 'Type here...',
-                    obscureText: false,
-                  ),
-                ),
-                IconButton( // Send button
-                  icon: Icon(CupertinoIcons.paperplane_fill),
-                  onPressed: () {
-                    sendMessage();
-                  },
-                ),
-              ],
-            ),
-          ),
-
-        ],
+      body: Chat(
+        theme: is_dark ? DarkChatTheme(backgroundColor: Colors.black, primaryColor: Color(0xFFb18dd7),sendButtonIcon: Icon(Icons.send, color: Color(0xFFb18dd7))) :
+        DefaultChatTheme( inputBackgroundColor: Color(0xFF726daf), primaryColor: Color(0xFFa894fc), inputTextCursorColor: Color(0xFFE1BEE7),sendButtonIcon: Icon(Icons.send, color: Color(0xFFE1BEE7))),
+        messages: _messages,
+        onSendPressed: _handleSendPressed,
+        user: _user,
       ),
     );
   }
-}
 
+  void _addMessage(types.Message message) {
+    setState(() {
+      _messages.insert(0, message);
+    });
+  }
+
+  void _handleSendPressed(types.PartialText message) {
+    final textMessage = types.TextMessage(
+      author: _user,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: randomString(),
+      text: message.text,
+    );
+
+    _addMessage(textMessage);
+  }
+}
