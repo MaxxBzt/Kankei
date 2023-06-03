@@ -18,8 +18,9 @@ class _IdeasState extends State<Ideas> {
   Future<void> _launchURL(String url) async {
     final Uri urlWeb = Uri.parse(url);
     if (await canLaunchUrl(urlWeb)) {
-      await launchUrl(urlWeb);
-    } else {
+      await launchUrl(urlWeb,mode: Platform.isAndroid ? LaunchMode.externalApplication : LaunchMode.platformDefault);
+    }
+    else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Could not launch $urlWeb'),
