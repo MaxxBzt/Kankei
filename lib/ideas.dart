@@ -119,6 +119,7 @@ class _IdeasState extends State<Ideas> {
                                 'assets/images/ideas_images/watch_movie_ideas.png',
                                 'assets/images/ideas_images/cooking_ideas.png',
                                 'assets/images/ideas_images/restaurant_ideas.png',
+
                               ];
                               List<String> routes = [
                                 '/DateDetailsShow',
@@ -219,7 +220,7 @@ class _IdeasState extends State<Ideas> {
                                   List<String> imagePaths = [
                                     'assets/images/ideas_images/general_knowledge.png',
                                     'assets/images/ideas_images/Personality_Quiz.png',
-                                    'assets/images/ideas_images/restaurant_ideas.png',
+                                    'assets/images/ideas_images/Coming_soon_quiz.jpg',
                                   ];
 
                                   List<String> routes = [
