@@ -4,10 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import '../theme/change_theme_button.dart';
-import '../theme/use_system_theme.dart';
 import 'Authentication/auth_page.dart';
 import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
@@ -240,23 +236,7 @@ class _UsPageState extends State<UsPage> {
                 ),
               ],
             ),
-            SizedBox(height: 10.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Switch Theme Mode'),
-                ChangeThemeButton(),
-              ],
-            ),
             SizedBox(height: 8.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Use Your Phone's Theme"),
-                UseSystemThemeToggle(),
-              ],
-            ),
-            SizedBox(height: 5),
             TextButton(
               onPressed: () {
                 // handle turn off notifications press
