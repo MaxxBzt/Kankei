@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import '../theme/theme_system.dart';
 
+
 class LinkAccountPage extends StatefulWidget {
   @override
   _LinkAccountPageState createState() => _LinkAccountPageState();
@@ -15,6 +16,9 @@ class _LinkAccountPageState extends State<LinkAccountPage> {
   final TextEditingController emailController = TextEditingController();
 
   void linkAccount() async {
+
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+
     String? email = emailController.text.trim();
 
     if (currentUserUid != null && email.isNotEmpty) {

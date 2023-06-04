@@ -9,6 +9,8 @@ import 'app_colors.dart';
 import 'components/adaptative_switch.dart';
 import 'dart:io' show Platform;
 
+
+
 class UsSettingsPage extends StatefulWidget {
   @override
   _UsSettingsPageState createState() => _UsSettingsPageState();
@@ -48,6 +50,7 @@ void confirmBreakUpAccount(BuildContext context) async {
 }
 
 void performBreakUpAccount(BuildContext context) async {
+  String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
   if (currentUserUid != null) {
     try {
       // Get the current user's document
@@ -175,6 +178,7 @@ void performBreakUpAccount(BuildContext context) async {
 }
 
 class _UsSettingsPageState extends State<UsSettingsPage> {
+
   bool pushNotifications = true;
   bool emailNotifications = true;
   final GlobalKey _switchKey = GlobalKey();

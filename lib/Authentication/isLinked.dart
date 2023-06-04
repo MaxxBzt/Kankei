@@ -11,8 +11,12 @@ import 'linkAccount_Page.dart';
 class isLinked extends StatelessWidget {
   const isLinked({Key? key});
 
+
   @override
   Widget build(BuildContext context) {
+
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {

@@ -206,7 +206,7 @@ class _DateIdeasState extends State<DateIdeas> {
                   ),
                 ),
               ),
-                  
+
               onEditingComplete: () {
                 String enteredText2 = textController.text;
                 print(enteredText2);

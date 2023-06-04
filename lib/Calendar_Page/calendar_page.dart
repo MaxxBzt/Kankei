@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,6 +13,9 @@ import '../app_colors.dart';
 import '../Calendar_Page/add_event_page.dart';
 import '../theme/theme_system.dart';
 import 'dart:io' show Platform;
+
+
+
 
 class CalendarScreen extends StatefulWidget {
 
@@ -40,6 +44,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 
   Future<void> updateEvents() async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     // Get the events from Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -70,7 +75,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   // Function to delete an event from calendar
   void _deleteEvent(Map<String, dynamic> event ) async {
-
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     // We check if the event is a paired event
     bool isPaired = event['is_shared'];
 

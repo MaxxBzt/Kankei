@@ -13,6 +13,8 @@ import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
 
 
+
+
 class UsProfilePage extends StatefulWidget {
   @override
   _UsProfilePageState createState() => _UsProfilePageState();
@@ -105,6 +107,7 @@ class _UsProfilePageState extends State<UsProfilePage> {
     }
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -112,6 +115,7 @@ class _UsProfilePageState extends State<UsProfilePage> {
   }
 
   Future<void> fetchUserEmails() async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     DocumentSnapshot currentUserSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUserUid)
@@ -152,6 +156,49 @@ class _UsProfilePageState extends State<UsProfilePage> {
       }
     }
   }
+
+  void confirmLogout(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // User cancels the action
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // User confirms the action
+                Navigator.of(context).pop(true);
+                await signUserOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthPage()),
+                );
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> signUserOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      // Handle sign-out error if necessary
+      print('Sign out error: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -288,9 +335,126 @@ class _UsProfilePageState extends State<UsProfilePage> {
                   ],
                 ),
               ],
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              // Main body content
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: is_dark
+                          ? AppColors.dark_Ideas
+                          : Colors.purple.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'You',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            CircleAvatar(
+                              radius: 30.0,
+                              backgroundColor: Colors.grey, // Placeholder color
+                              // You can add a profile picture here later
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              currentUserEmail,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16.0),
+                        Text(
+                          '&',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        Column(
+                          children: [
+                            Text(
+                              'Your partner',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            CircleAvatar(
+                              radius: 30.0,
+                              backgroundColor: Colors.grey, // Placeholder color
+                              // You can add a profile picture here later
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              linkedUserEmail,
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Positioned(
+              top: 16.0,
+              right: 16.0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UsSettingsPage()),
+                  );
+                },
+                child: Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: is_dark
+                        ? AppColors.dark_appbar_header
+                        : AppColors.light_appbar_header,
+                  ),
+                  child: Icon(
+                    Icons.settings,
+                    color: is_dark ? Colors.white : Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -328,3 +492,4 @@ class _UsProfilePageState extends State<UsProfilePage> {
     );
   }
 }
+
