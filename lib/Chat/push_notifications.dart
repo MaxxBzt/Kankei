@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kankei/theme/theme_system.dart';
+
 
 String? mtoken = " ";
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -31,6 +33,8 @@ void getToken(TokenUpdateCallback updateCallback) async {
 }
 
 void saveToken(String token) async {
+
+  String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
   await FirebaseFirestore.instance.collection("users").doc(currentUserUid).update({
     "token": token,
   });

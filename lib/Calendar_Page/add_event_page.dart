@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:io' show Platform;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,6 +14,7 @@ import '../Notifications/notification_api.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/theme_system.dart';
+
 
 
 
@@ -291,6 +293,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
 
   void deleteEventsByCategory(String categoryName) async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     // Delete all documents from Firestore whose category field matches the deleted category
     await FirebaseFirestore.instance
         .collection('users')
@@ -366,6 +369,7 @@ class _AddEventPageState extends State<AddEventPage> {
   }
 
   Future<void> addEventFirebase(name, description, category, date, isShared) async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     try {
 
       // We get a notification ID
@@ -450,6 +454,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   // This is the function that adds the event in the firebase cloud
   Future<void> _createEvent(date, categoryColor) async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     // We get the list of events from Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -513,6 +518,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
 

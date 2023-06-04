@@ -85,9 +85,8 @@ class MyThemes {
   );
 }
 
-String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
-
 class EventsOnCountdown{
+  String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
 
   void fetchNearestEvent(List<DateTime> targetDates, List<String> eventNames) async {
     // Clear the existing event data
