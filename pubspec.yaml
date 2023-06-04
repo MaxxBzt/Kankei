@@ -49,6 +49,7 @@ dependencies:
   provider: ^6.0.5
   share_plus: ^7.0.2
   firebase_storage: ^11.2.2
+  image_picker: ^0.8.5+1
 
 
 
@@ -62,6 +63,7 @@ dependencies:
   firebase_messaging: ^14.6.1
   flutter_local_notifications: ^9.9.1
   flutter_chat_ui: ^1.6.8
+
 
 
 flutter_native_splash:

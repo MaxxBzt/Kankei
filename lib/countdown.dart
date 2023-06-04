@@ -72,7 +72,7 @@ class _CountdownState extends State<Countdown> {
                   : Colors.purple.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(10),
             child: PageView.builder(
               itemCount: _targetDates.length,
               onPageChanged: (page) {
@@ -195,7 +195,7 @@ class _CountdownState extends State<Countdown> {
               color: is_dark ? AppColors.dark_Ideas : Colors.purple.withOpacity(0.2),
               borderRadius: BorderRadius.circular(10),
             ),
-            height: 55,
+            height: 40,
             width: 320,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

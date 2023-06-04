@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:kankei/us_settings.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
+
 
 class UsProfilePage extends StatefulWidget {
   @override
   _UsProfilePageState createState() => _UsProfilePageState();
 }
-
 
 void signUserOut() {
   FirebaseAuth.instance.signOut();
@@ -55,10 +58,52 @@ void confirmLogout(BuildContext context) {
   });
 }
 
-
 class _UsProfilePageState extends State<UsProfilePage> {
   String currentUserEmail = '';
   String linkedUserEmail = '';
+  String profilePictureUrl = '';
+  String linkedPictureUrl = '';
+
+  Future<String?> uploadProfilePicture() async {
+    try {
+      // Use image_picker to allow the user to choose a picture from their gallery
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile == null) {
+        // User canceled image selection
+        return null;
+      }
+
+      // Create a reference to the location where you want to upload the file in Firebase Storage
+      final Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('profile_pictures')
+          .child('${DateTime.now().millisecondsSinceEpoch}');
+
+      // Upload the file to Firebase Storage
+      final File file = File(pickedFile.path);
+      final UploadTask uploadTask = storageReference.putFile(file);
+
+      // Get the download URL of the uploaded file
+      final TaskSnapshot taskSnapshot = await uploadTask;
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+      // Update the Firestore document with the download URL
+      String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .update({'profilePictureUrl': downloadUrl});
+
+
+
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading profile picture: $e');
+      return null;
+    }
+  }
 
   @override
   void initState() {
@@ -73,11 +118,15 @@ class _UsProfilePageState extends State<UsProfilePage> {
         .get();
 
     if (currentUserSnapshot.exists) {
-      Map<String, dynamic> data = currentUserSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data =
+          currentUserSnapshot.data() as Map<String, dynamic>;
       String currentUserEmail = data['email'] as String;
+      String? currentUserProfilePictureUrl =
+          data['profilePictureUrl'] as String?;
 
       setState(() {
         this.currentUserEmail = currentUserEmail;
+        this.profilePictureUrl = currentUserProfilePictureUrl ?? '';
       });
 
       String linkedUserUID = data['LinkedAccountUID'] as String;
@@ -88,11 +137,17 @@ class _UsProfilePageState extends State<UsProfilePage> {
           .get();
 
       if (linkedUserSnapshot.exists) {
-        Map<String, dynamic> linkedUserData = linkedUserSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> linkedUserData =
+            linkedUserSnapshot.data() as Map<String, dynamic>;
         String linkedUserEmail = linkedUserData['email'] as String;
+        String? linkedUserProfilePictureUrl =
+            linkedUserData['profilePictureUrl'] as String?;
 
         setState(() {
           this.linkedUserEmail = linkedUserEmail;
+          this.linkedPictureUrl = linkedUserProfilePictureUrl != null
+              ? linkedUserProfilePictureUrl
+              : ''; // Use a conditional expression to check for null
         });
       }
     }
@@ -113,8 +168,8 @@ class _UsProfilePageState extends State<UsProfilePage> {
       body: Stack(
         children: [
           Container(
-            // Main body content
-          ),
+              // Main body content
+              ),
           Positioned(
             top: 16.0,
             right: 16.0,
@@ -174,10 +229,22 @@ class _UsProfilePageState extends State<UsProfilePage> {
                           ),
                         ),
                         SizedBox(height: 8.0),
-                        CircleAvatar(
-                          radius: 30.0,
-                          backgroundColor: Colors.grey, // Placeholder color
-                          // You can add a profile picture here later
+                        GestureDetector(
+                          onTap: () async {
+                            String? imageUrl = await uploadProfilePicture();
+                            if (imageUrl != null) {
+                              setState(() {
+                                profilePictureUrl = imageUrl;
+                              });
+                              fetchUserEmails(); // Reload user information after changing the picture
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 30.0,
+                            foregroundImage: profilePictureUrl.isNotEmpty
+                                ? NetworkImage(profilePictureUrl)
+                                : null,
+                          ),
                         ),
                         SizedBox(height: 8.0),
                         Text(
