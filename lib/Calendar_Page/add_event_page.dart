@@ -5,8 +5,11 @@ import 'dart:io' show Platform;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../Notifications/notification_api.dart';
 import '../app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/theme_system.dart';
@@ -33,6 +36,10 @@ class _AddEventPageState extends State<AddEventPage> {
   // We use map to associate each category name with its corresponding color
   Map<String, Color> categories = {};
   String selectedCategory = '';
+
+  // To update the countdown widget when an event is added
+  List<DateTime> targetDates = [];
+  List<String> eventNames = [];
 
   @override
   void initState() {
@@ -291,8 +298,16 @@ class _AddEventPageState extends State<AddEventPage> {
         .collection('calendar_events')
         .where('category', isEqualTo: categoryName)
         .get()
-        .then((snapshot) {
+        .then((snapshot) async {
       for (DocumentSnapshot doc in snapshot.docs) {
+        // We get the id of the notification associated to the deleted event
+        int notificationId = doc.get('notification_id');
+
+        // Cancel the scheduled notification
+        final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+        await flutterLocalNotificationsPlugin.cancel(notificationId);
+
+        // Delete the document from Firestore
         doc.reference.delete();
       }
     });
@@ -300,7 +315,6 @@ class _AddEventPageState extends State<AddEventPage> {
     // Update the state variable
     widget.updateEventsCallback();
   }
-
 
   // Function that asks the user if he wants the event to be paired
   Future<bool> _shouldEventBePaired(BuildContext context) async {
@@ -351,14 +365,17 @@ class _AddEventPageState extends State<AddEventPage> {
     return result ?? false;
   }
 
+  Future<void> addEventFirebase(name, description, category, date, isShared) async {
+    try {
 
-  Future<void> addEventFirebase(name,description,category,date,isShared) async {
+      // We get a notification ID
+      final _random = Random();
+      int notificationId = _random.nextInt(2147483647);
 
-    try{
+
       DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
       await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
       String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
-
 
       // Create a new document in the calendar_events sub-collection for the current user
       await FirebaseFirestore.instance
@@ -370,7 +387,8 @@ class _AddEventPageState extends State<AddEventPage> {
         'description': description,
         'category': category,
         'date': date,
-        'is_shared': isShared
+        'is_shared': isShared,
+        'notification_id': notificationId,
       });
 
       // If isShared is true, create a new document in the calendar_events sub-collection for the linked user
@@ -384,16 +402,53 @@ class _AddEventPageState extends State<AddEventPage> {
           'description': description,
           'category': category,
           'date': date,
-          'is_shared': isShared
+          'is_shared': isShared,
+          'notification_id': notificationId,
         });
       }
+
+      // Schedule notification for the event at 12:10 on the event date
+      DateTime eventDateTime = date;
+      DateTime notificationDateTime = DateTime(
+          eventDateTime.year,
+          eventDateTime.month,
+          eventDateTime.day,
+          0,
+          0,
+          0,0
+      );
+
+      // Format the notification date for display
+      String formattedNotificationDate = DateFormat('yyyy-MM-dd HH:mm').format(notificationDateTime);
+
+      // Schedule the notification using flutter_local_notifications package
+      final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'com.example.kankei.notifications',
+        'Kankei Notifications',
+        importance: Importance.max,
+      );
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.schedule(
+        notificationId,
+        'Event Notification',
+        "Hey, today's event is: $name. Celebrate it with your partner!",
+        notificationDateTime,
+        platformChannelSpecifics,
+        payload: 'event.notification',
+      );
+
+
+
+
     } catch (error) {
       print('Error caught: $error');
     }
+  }
 
-    }
 
-    // This is the function that adds the event in the firebase cloud
+
+  // This is the function that adds the event in the firebase cloud
   Future<void> _createEvent(date, categoryColor) async {
     // We get the list of events from Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
@@ -448,6 +503,9 @@ class _AddEventPageState extends State<AddEventPage> {
       // No event with the same name exists, so we add the new event to Firestore
       bool isShared = await _shouldEventBePaired(context);
       await addEventFirebase(name_of_event, description_event, selectedCategory, date, isShared);
+      EventsOnCountdown countdown = EventsOnCountdown();
+      countdown.fetchNearestEvent(targetDates, eventNames);
+
       Navigator.of(context).pop();
     }
   }
@@ -527,6 +585,8 @@ class _AddEventPageState extends State<AddEventPage> {
                               if (hasEvents) {
                                 deleteEventsByCategory(categoryName);
                                 widget.updateEventsCallback();
+                                EventsOnCountdown countdown = EventsOnCountdown();
+                                countdown.fetchNearestEvent(targetDates, eventNames);
                               }
 
                               Navigator.pop(context);
@@ -564,6 +624,8 @@ class _AddEventPageState extends State<AddEventPage> {
                               if (hasEvents) {
                                 deleteEventsByCategory(categoryName);
                                 widget.updateEventsCallback();
+                                EventsOnCountdown countdown = EventsOnCountdown();
+                                countdown.fetchNearestEvent(targetDates, eventNames);
                               }
 
                               Navigator.pop(context);

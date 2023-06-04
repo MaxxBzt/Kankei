@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,6 +29,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   // This is a list containing all the events of the selected date by user
   List<Map<String, dynamic>> selectedEvents = [];
   Map<String, Color> categories = {};
+
+  // To update the countdown widget when an event is delete
+  List<DateTime> targetDates = [];
+  List<String> eventNames = [];
 
   void updateEventsCallback() {
     updateEvents();
@@ -89,59 +94,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 isDefaultAction: true,
                 onPressed: () async {
 
-                  // We get the name of the event to be deleted
-                  String eventName = event['name'];
+                  // We et the id of the notification associated with this event
+                  int notificationId = event['notification_id'];
 
-                  // We delete the document from Firestore
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(currentUserUid)
-                      .collection('calendar_events')
-                      .where('name', isEqualTo: eventName)
-                      .get()
-                      .then((snapshot) {
-                    for (DocumentSnapshot doc in snapshot.docs) {
-                      doc.reference.delete();
-                    }
-                  });
-
-                  // Get the UID of the paired user
-                  DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
-                      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
-                  String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
-
-                  // Delete the document from the paired user's calendar_events sub-collection
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(linkedUserUid)
-                      .collection('calendar_events')
-                      .where('name', isEqualTo: eventName)
-                      .get()
-                      .then((snapshot) {
-                    for (DocumentSnapshot doc in snapshot.docs) {
-                      doc.reference.delete();
-                    }
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text('Yes'),
-              ),
-            ],
-          ),
-        );
-      } else {
-        showDialog<void>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Deleting Linked Event'),
-            content: const Text('This Event is linked with your partner. Do you still wish to delete it ?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('No'),
-              ),
-              TextButton(
-                onPressed: () async {
+                  // Cancel the scheduled notification
+                  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+                  await flutterLocalNotificationsPlugin.cancel(notificationId);
 
                   // We get the name of the event to be deleted
                   String eventName = event['name'];
@@ -176,6 +134,70 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       doc.reference.delete();
                     }
                   });
+                  updateEvents();
+
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showDialog<void>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Deleting Linked Event'),
+            content: const Text('This Event is linked with your partner. Do you still wish to delete it ?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () async {
+
+                  // We et the id of the notification associated with this event
+                  int notificationId = event['notification_id'];
+
+                  // Cancel the scheduled notification
+                  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+                  await flutterLocalNotificationsPlugin.cancel(notificationId);
+
+                  // We get the name of the event to be deleted
+                  String eventName = event['name'];
+
+                  // We delete the document from Firestore
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(currentUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+
+                  // Get the UID of the paired user
+                  DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+                  await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
+                  String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+                  // Delete the document from the paired user's calendar_events sub-collection
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(linkedUserUid)
+                      .collection('calendar_events')
+                      .where('name', isEqualTo: eventName)
+                      .get()
+                      .then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.docs) {
+                      doc.reference.delete();
+                    }
+                  });
+                  updateEvents();
                   Navigator.pop(context);
                 },
 
@@ -188,6 +210,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     }
     else{
+
+      // We et the id of the notification associated with this event
+      int notificationId = event['notification_id'];
+
+      // Cancel the scheduled notification
+      final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      await flutterLocalNotificationsPlugin.cancel(notificationId);
+
       // We get the name of the event to be deleted
       String eventName = event['name'];
 
@@ -273,6 +303,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   Navigator.of(context).pop();
                   _deleteEvent(event);
                   updateEvents();
+                  EventsOnCountdown countdown = EventsOnCountdown();
+                  countdown.fetchNearestEvent(targetDates, eventNames);
                 },
               ),
             ],
@@ -300,6 +332,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   Navigator.of(context).pop();
                   _deleteEvent(event);
                   updateEvents();
+                  EventsOnCountdown countdown = EventsOnCountdown();
+                  countdown.fetchNearestEvent(targetDates, eventNames);
                 },
                 child: Text(
                   'Delete Event',
@@ -425,30 +459,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   selectedDayPredicate: (day) {
                     return isSameDay(_selectedDay, day);
                   },
-                  /*
-                  eventLoader: (date) {
-                    DateTime selectedDate = DateTime(date.year, date.month, date.day);
-                    return events[selectedDate] ?? [];
-                  },*/
                   eventLoader: (date) {
                     DateTime selectedDate = DateTime(date.year, date.month, date.day);
                     return events[selectedDate] ?? [];
                   },
-                  /*
-                  onDaySelected: (selectedDay, focusedDay) {
-                    setState(() {
-                      // Convert selectedDay to local time
-                      _selectedDay = selectedDay.toLocal();
 
-                      // Create a new DateTime object with only the date part
-                      DateTime selectedDate = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
-
-                      _focusedDay = focusedDay;
-                      selectedEvents = events[selectedDate]?.map((event) =>
-                          event.copyWith(category: event.category, color_category: event.color_category)).toList() ?? [];
-
-                    });
-                  },*/
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
                       _selectedDay = selectedDay.toLocal();
@@ -456,6 +471,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       _focusedDay = focusedDay;
                       selectedEvents = events[selectedDate] ?? [];
                     });
+
+
                   },
                   onPageChanged: (focusedDay) {
                     _focusedDay = focusedDay;
