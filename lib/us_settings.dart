@@ -4,56 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Authentication/auth_page.dart';
 import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
 import 'components/adaptative_switch.dart';
 import 'dart:io' show Platform;
 
-class UsPage extends StatefulWidget {
+class UsSettingsPage extends StatefulWidget {
   @override
-  _UsPageState createState() => _UsPageState();
+  _UsSettingsPageState createState() => _UsSettingsPageState();
 }
 
-void signUserOut() {
-  FirebaseAuth.instance.signOut();
-}
-
-void confirmLogout(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Confirmation'),
-        content: Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // User cancels the action
-              Navigator.of(context).pop(false);
-            },
-            child: Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // User confirms the action
-              Navigator.of(context).pop(true);
-            },
-            child: Text('Logout'),
-          ),
-        ],
-      );
-    },
-  ).then((confirmed) {
-    if (confirmed == true) {
-      signUserOut();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AuthPage()),
-      );
-    }
-  });
-}
 
 void confirmBreakUpAccount(BuildContext context) async {
   bool confirmBreakUp = await showDialog(
@@ -61,7 +21,7 @@ void confirmBreakUpAccount(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Confirmation'),
-        content: Text('Are you sure you want to break up?'),
+        content: Text('Are you sure you want to break up ?\n\nIt will unlink your account with your partner\n\nThis will result in all the data you have being deleted'),
         actions: [
           TextButton(
             onPressed: () {
@@ -102,6 +62,54 @@ void performBreakUpAccount(BuildContext context) async {
           false) {
         // Get the linked user's UID
         String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
+
+        //Delete the events from the currentUser
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUserUid)
+            .collection('calendar_events')
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((document) {
+            document.reference.delete();
+          });
+        });
+
+        //Delete the quiz from the currentUser
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUserUid)
+            .collection('quiz')
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((document) {
+            document.reference.delete();
+          });
+        });
+
+        //Delete the events from the linkedUser
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(linkedUserUid)
+            .collection('calendar_events')
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((document) {
+            document.reference.delete();
+          });
+        });
+
+        //Delete the quizzes from the linkedUser
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(linkedUserUid)
+            .collection('quiz')
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((document) {
+            document.reference.delete();
+          });
+        });
 
         // Update the current user's document to remove the "LinkedAccountUID" field
         await FirebaseFirestore.instance
@@ -166,7 +174,7 @@ void performBreakUpAccount(BuildContext context) async {
   }
 }
 
-class _UsPageState extends State<UsPage> {
+class _UsSettingsPageState extends State<UsSettingsPage> {
   bool pushNotifications = true;
   bool emailNotifications = true;
   final GlobalKey _switchKey = GlobalKey();
@@ -309,28 +317,6 @@ class _UsPageState extends State<UsPage> {
                     ),
             ),
             SizedBox(height: 10.0),
-            GestureDetector(
-              onTap: () {
-                confirmLogout(context);
-              },
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.logout, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: is_dark ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),

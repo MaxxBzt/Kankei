@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
 import 'package:kankei/theme/theme_system.dart';
-import 'package:kankei/us.dart';
+import 'package:kankei/us_profile.dart';
+import 'package:kankei/us_settings.dart';
 import 'package:provider/provider.dart';
 import 'app_colors.dart';
 import 'date_details.dart';
@@ -197,7 +198,7 @@ class _DateIdeasState extends State<DateIdeas> {
                   onEditingComplete: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => UsPage()),
+                      MaterialPageRoute(builder: (context) => UsProfilePage()),
                     );
                   },
                 ),

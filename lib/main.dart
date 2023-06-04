@@ -3,17 +3,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kankei/us_profile.dart';
+import 'package:kankei/us_settings.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
-import 'choose_page.dart';
 import 'homepage.dart';
 import 'Notifications/notification_api.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
 import 'Chat/chat.dart';
-import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
@@ -26,8 +26,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'inspiration.dart';
-import 'us.dart';
-import 'ideas.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
 import 'date_details.dart';
@@ -117,7 +115,7 @@ class _MainpageState extends State<MainPage> {
     CalendarScreen(),
     ChatPage(),
     Ideas(),
-    UsPage(),
+    UsProfilePage(),
     QuizGeneralKnowledge(),
 
   ];
