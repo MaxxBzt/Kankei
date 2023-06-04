@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../theme/change_theme_button.dart';
 import '../theme/use_system_theme.dart';
-import 'Authentication/LoginOrRegister.dart';
+import 'Authentication/auth_page.dart';
 import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
 import 'components/adaptative_switch.dart';
@@ -53,7 +53,7 @@ void confirmLogout(BuildContext context) {
       signUserOut();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LoginOrRegister()),
+        MaterialPageRoute(builder: (context) => AuthPage()),
       );
     }
   });
