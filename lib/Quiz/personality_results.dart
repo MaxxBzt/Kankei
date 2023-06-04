@@ -198,7 +198,7 @@ class PersonalityResultsPage extends StatelessWidget {
               elevation: 0,
               backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
               title: Text(
-                'General Knowledge Quiz',
+                'Personality Test',
                 style: GoogleFonts.pacifico(
                   textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
                 ),
@@ -216,7 +216,7 @@ class PersonalityResultsPage extends StatelessWidget {
               elevation: 0,
               backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
               title: Text(
-                'General Knowledge Quiz',
+                'Personality Test',
                 style: GoogleFonts.pacifico(
                   textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
                 ),
@@ -245,7 +245,7 @@ class PersonalityResultsPage extends StatelessWidget {
                 elevation: 0,
                 backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
                 title: Text(
-                  'General Knowledge Quiz',
+                  'Personality Test',
                   style: GoogleFonts.pacifico(
                     textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
                   ),
@@ -380,7 +380,7 @@ class PersonalityResultsPage extends StatelessWidget {
                 elevation: 0,
                 backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
                 title: Text(
-                  'General Knowledge Quiz',
+                  'Personality Test',
                   style: GoogleFonts.pacifico(
                     textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
                   ),

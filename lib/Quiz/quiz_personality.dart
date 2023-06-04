@@ -212,7 +212,7 @@ class _QuizPersonalityState extends State<QuizPersonality> {
             ? AppColors.dark_appbar_header
             : AppColors.light_appbar_header,
         title: Text(
-          'General Knowledge Quiz',
+          'Personality Test',
           style: GoogleFonts.pacifico(
             textStyle: TextStyle(
               color: isDark ? Colors.white : Colors.black,
