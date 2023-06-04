@@ -122,6 +122,7 @@ class _MainpageState extends State<MainPage> {
 
 
   Future<void> fetchPicture() async {
+    String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
     DocumentSnapshot currentUserSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUserUid)

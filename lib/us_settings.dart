@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -196,6 +197,22 @@ class _UsSettingsPageState extends State<UsSettingsPage> {
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
+      appBar: AppBar(
+        leading:
+        Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
+        elevation: 0,
+        backgroundColor: is_dark
+            ? AppColors.dark_appbar_header
+            : AppColors.light_appbar_header,
+        title: Text(
+          'Kankei',
+          style: GoogleFonts.pacifico(
+            textStyle: TextStyle(
+                color: is_dark ? Colors.white : Colors.black,
+                letterSpacing: .5),
+          ),
+        ),
+      ),
       //backgroundColor: Color(0xFFF4F4F4),
       body: Container(
         padding: EdgeInsets.all(16.0),
