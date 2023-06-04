@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter/material.dart';
+import 'package:kankei/Inspirations/aiPage.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
 import 'package:kankei/theme/theme_system.dart';
@@ -11,6 +12,7 @@ import 'package:kankei/us_settings.dart';
 import 'package:provider/provider.dart';
 import 'app_colors.dart';
 import 'date_details.dart';
+import 'package:kankei/Inspirations/aiPage.dart';
 
 import 'package:animations/animations.dart';
 
@@ -143,14 +145,22 @@ class DateIdeas extends StatefulWidget {
 }
 
 class _DateIdeasState extends State<DateIdeas> {
+  TextEditingController textController = TextEditingController();
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
 
-  // Add other activities with their images and descriptions here
 
   @override
   Widget build(BuildContext context) {
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
+
+
 
     final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
@@ -172,37 +182,41 @@ class _DateIdeasState extends State<DateIdeas> {
       body: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Get inspiration',
-                    hintText: 'Let us find you new ideas',
-                    prefixIcon: Icon(
-                      Icons.search,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                        width: 2.0,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                      borderSide: BorderSide(
-                        color: Colors.purple,
-                        width: 2.0,
-                      ),
-                    ),
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: textController, // Add this line to link the textController to the TextField
+              decoration: const InputDecoration(
+                labelText: 'Get inspiration',
+                hintText: 'Let us find you new ideas',
+                prefixIcon: Icon(
+                  Icons.search,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  borderSide: BorderSide(
+                    color: Colors.purple,
+                    width: 2.0,
                   ),
-                  onEditingComplete: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => UsProfilePage()),
-                    );
-                  },
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  borderSide: BorderSide(
+                    color: Colors.purple,
+                    width: 2.0,
+                  ),
                 ),
               ),
+                  
+              onEditingComplete: () {
+                String enteredText2 = textController.text;
+                print(enteredText2);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DetailScreen(prompt: enteredText2)),
+                );
+              },
+            ),
+          ),
           Expanded(
             child: GridView.builder(
               itemCount: activities.length,

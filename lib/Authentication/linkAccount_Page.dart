@@ -113,118 +113,120 @@ class _LinkAccountPageState extends State<LinkAccountPage> {
       backgroundColor: is_dark ? Color(0xFF524e85) : Color(0xFFEAE7FA),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 90),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Pair your account',
-                  style: TextStyle(
-                    color: is_dark ? Colors.white : Colors.black,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(16.0),
-                child: Text(
-                  'Enter the email address of the account you want to pair with',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: is_dark ? Colors.white : Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 50),
-
-              // Email text field
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Link Account button
-              ElevatedButton.icon(
-                onPressed: linkAccount,
-                icon: Icon(Icons.link),
-                label: Text("Link Account"),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  foregroundColor: is_dark ? Colors.black : Colors.white,
-                  backgroundColor: is_dark ? Color(0xFFf0d4ec) : Color(0xFFb087bf),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32.0),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                        title: Text("Why linking?"),
-                        content: Text(
-                          'By linking your account with your partner, you will be able to see your partner\'s score for quiz, chat with them and many more.',
-                          style: TextStyle(
-                            color: is_dark ? Colors.white : Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: Text('Close'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.help_outline,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 90),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Pair your account',
+                    style: TextStyle(
                       color: is_dark ? Colors.white : Colors.black,
-                      size: 30,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      "Why do I need to link my account?",
-                      style: TextStyle(
-                        color: is_dark ? Colors.white : Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Container(
+                  margin: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Enter the email address of the account you want to pair with',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: is_dark ? Colors.white : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 50),
+
+                // Email text field
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Link Account button
+                ElevatedButton.icon(
+                  onPressed: linkAccount,
+                  icon: Icon(Icons.link),
+                  label: Text("Link Account"),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    foregroundColor: is_dark ? Colors.black : Colors.white,
+                    backgroundColor: is_dark ? Color(0xFFf0d4ec) : Color(0xFFb087bf),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text("Why linking?"),
+                          content: Text(
+                            'By linking your account with your partner, you will be able to see your partner\'s score for quiz, chat with them and many more.',
+                            style: TextStyle(
+                              color: is_dark ? Colors.white : Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.help_outline,
+                        color: is_dark ? Colors.white : Colors.black,
+                        size: 30,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        "Why do I need to link my account?",
+                        style: TextStyle(
+                          color: is_dark ? Colors.white : Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
 
-            ],
+              ],
+            ),
           ),
         ),
       ),
