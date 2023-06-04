@@ -25,6 +25,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+import 'package:kankei/Chat/chat.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -37,7 +40,7 @@ class PersonalityResultsPage extends StatelessWidget {
   Future<Map<String, dynamic>> getUserData() async {
     // Get the current user's UID
     if (_auth.currentUser == null) {
-      return {'score': null, 'paragraph': null,};
+      return {'score': null, 'paragraph': null, };
     }
 
     String currentUserUID = _auth.currentUser!.uid;
@@ -96,16 +99,19 @@ class PersonalityResultsPage extends StatelessWidget {
       int partnerScore = latestQuizDoc['score'];
       String partnerParagraph = latestQuizDoc['paragraph'];
 
+
       // Return the score and paragraph as a Map
       return {
         'score': partnerScore,
         'paragraph': partnerParagraph,
+
       };
     } else {
       // Return null if the partner's quiz document doesn't exist yet
       return {
         'score': "waiting...",
         'paragraph': "waiting...",
+
       };
     }
   }
@@ -120,10 +126,10 @@ class PersonalityResultsPage extends StatelessWidget {
         "There is a sense of emptiness and a lack of enthusiasm for life. It's important for you to explore the "
         "factors that contribute to your happiness and take steps to improve your overall well-being.",
 
-  "You might experience occasional moments of contentment but still feel a general sense of dissatisfaction. "
-      "You may have some areas of your life that bring you joy, but overall, there is room for improvement. "
-      "It's essential for you to focus on identifying the aspects of life that truly make youhappy and actively incorporate more "
-      "of those elements into yout daily routine.",
+    "You might experience occasional moments of contentment but still feel a general sense of dissatisfaction. "
+        "You may have some areas of your life that bring you joy, but overall, there is room for improvement. "
+        "It's essential for you to focus on identifying the aspects of life that truly make youhappy and actively incorporate more "
+        "of those elements into yout daily routine.",
 
     "You have a moderate sense of well-being. You feel reasonably content and satisfied with your life, "
         "finding joy in various aspects of your daily activities. While there may be room for improvement in certain areas, "
@@ -223,9 +229,16 @@ class PersonalityResultsPage extends StatelessWidget {
         } else {
           // Data has been fetched successfully
           if (snapshot.data != null) {
-            String partnerScore = snapshot.data!['score'].toString();
+            int partnerScore = snapshot.data!['score'];
             String partnerParagraph = snapshot.data!['paragraph'];
-
+            String happinessMessage = '';
+            if (score > partnerScore) {
+              happinessMessage = 'You are happier than your partner!';
+            } else if (score < partnerScore) {
+              happinessMessage = 'Your partner is happier than you!';
+            } else {
+              happinessMessage = 'You and your partner are equally happy!';
+            }
             return Scaffold(
               appBar: AppBar(
                 leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
@@ -322,6 +335,35 @@ class PersonalityResultsPage extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+
+                      Text(
+                        '$happinessMessage',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Gill Sans',
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ChatPage()),
+                          );                        },
+
+                        style: ElevatedButton.styleFrom(
+                          primary: is_dark ? AppColors.light_Ideas : AppColors.dark_Ideas,
+                        ),
+                        child: Text(
+                          'Tell them',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: is_dark ? Colors.black : Colors.white,
+                          ),
                         ),
                       ),
                       SizedBox(height: 32),
