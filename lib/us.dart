@@ -96,10 +96,14 @@ void performBreakUpAccount(BuildContext context) async {
     try {
       // Get the current user's document
       DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
-      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).get();
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUserUid)
+              .get();
 
       // Check if the current user is linked to another account
-      if (currentUserSnapshot.data()?.containsKey('LinkedAccountUID') ?? false) {
+      if (currentUserSnapshot.data()?.containsKey('LinkedAccountUID') ??
+          false) {
         // Get the linked user's UID
         String linkedUserUid = currentUserSnapshot.get('LinkedAccountUID');
 
@@ -118,21 +122,53 @@ void performBreakUpAccount(BuildContext context) async {
         print('Account break-up successful');
 
         // Navigate to the LinkAccountPage using the provided context
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LinkAccountPage()),
         );
       } else {
-        print('No linked account found for the current user');
+        AlertDialog(
+          title: Text('Error'),
+          content: Text('You are not linked to another account'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
       }
     } catch (error) {
-      print('Error breaking up account: $error');
+      AlertDialog(
+        title: Text('Error'),
+        content: Text('Error breaking up account: $error'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
     }
   } else {
-    print('Invalid current user');
+    AlertDialog(
+      title: Text('Error'),
+      content: Text('Invalid current user'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('OK'),
+        ),
+      ],
+    );
   }
 }
-
 
 class _UsPageState extends State<UsPage> {
   bool pushNotifications = true;
@@ -145,7 +181,8 @@ class _UsPageState extends State<UsPage> {
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
 
-    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
@@ -178,7 +215,9 @@ class _UsPageState extends State<UsPage> {
                       pushNotifications = value;
                     });
                   },
-                  activeColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
+                  activeColor: is_dark
+                      ? AppColors.dark_appbar_header
+                      : AppColors.light_sign_in,
                 ),
               ],
             ),
@@ -195,7 +234,9 @@ class _UsPageState extends State<UsPage> {
                       emailNotifications = value;
                     });
                   },
-                  activeColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
+                  activeColor: is_dark
+                      ? AppColors.dark_appbar_header
+                      : AppColors.light_sign_in,
                 ),
               ],
             ),
@@ -254,34 +295,38 @@ class _UsPageState extends State<UsPage> {
               width: double.infinity,
               child: Platform.isIOS
                   ? CupertinoButton(
-                onPressed: () {
-                  confirmBreakUpAccount(context);
-                },
-                color: is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in,
-                child: Text(
-                  "Break-up",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
-              )
+                      onPressed: () {
+                        confirmBreakUpAccount(context);
+                      },
+                      color: is_dark
+                          ? AppColors.dark_appbar_header
+                          : AppColors.light_sign_in,
+                      child: Text(
+                        "Break-up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    )
                   : ElevatedButton(
-                onPressed: () {
-                  confirmBreakUpAccount(context);
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      is_dark ? AppColors.dark_appbar_header : AppColors.light_sign_in),
-                ),
-                child: Text(
-                  "Break-up",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
-              ),
+                      onPressed: () {
+                        confirmBreakUpAccount(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            is_dark
+                                ? AppColors.dark_appbar_header
+                                : AppColors.light_sign_in),
+                      ),
+                      child: Text(
+                        "Break-up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
             ),
             SizedBox(height: 10.0),
             GestureDetector(
@@ -312,5 +357,3 @@ class _UsPageState extends State<UsPage> {
     );
   }
 }
-
-

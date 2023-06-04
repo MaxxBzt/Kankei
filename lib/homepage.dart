@@ -69,9 +69,7 @@ class _HomePageState extends State<HomePage> {
         "I feel like this is something you might want to check out. Get it from here: https://app.getkankei.com...";
     Share.share(share_message);
 
-    // To share via email
-    Share.share(share_message, subject: "Download this new app : Kankei!");
-
+    // To share vi
     // The apps available for the user to share will depend on which apps he has on their phone!
   }
 }
