@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,17 @@ class _IdeasState extends State<Ideas> {
         ),
       );
     }
+  }
+
+  // Declare any ongoing asynchronous operations here
+  late StreamSubscription _subscription;
+
+  @override
+  void dispose() {
+    // Cancel any ongoing operations in the dispose() method
+    _subscription.cancel();
+
+    super.dispose();
   }
 
   @override

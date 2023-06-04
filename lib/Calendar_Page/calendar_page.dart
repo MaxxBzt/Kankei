@@ -9,13 +9,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../Notifications/notification_api.dart';
 import '../app_colors.dart';
 import '../Calendar_Page/add_event_page.dart';
 import '../theme/theme_system.dart';
 import 'dart:io' show Platform;
-
-
-
 
 class CalendarScreen extends StatefulWidget {
 
@@ -45,6 +43,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future<void> updateEvents() async {
     String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+
     // Get the events from Firestore
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -75,7 +74,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   // Function to delete an event from calendar
   void _deleteEvent(Map<String, dynamic> event ) async {
+
     String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+
     // We check if the event is a paired event
     bool isPaired = event['is_shared'];
 
@@ -248,9 +249,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late CalendarFormat _calendarFormat;
   late DateTime _focusedDay;
   late DateTime _selectedDay;
-
-
-
 
   @override
   void initState() {

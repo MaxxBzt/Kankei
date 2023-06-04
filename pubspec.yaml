@@ -95,6 +95,7 @@ flutter:
     - assets/images/ideas_images/
     - assets/images/on_boarding_images/
     - assets/images/products_images/
+    - assets/images/freepik_memory_cards/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
