@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'app_colors.dart';
 import 'countdown.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -44,11 +45,34 @@ class _HomePageState extends State<HomePage> {
             ),
             Countdown(),
             Image(image: AssetImage("assets/images/kankei_title.png"), height: 200, width: 200),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'You like Kankei? Why don\'t you let your friends also enjoy it by sharing.',
+                ),
+                ElevatedButton(
+                  onPressed: Share_App,
+                  child: Text('Share with a friend'),
+                ),
+              ],
+            ),
 
           ],
         ),
       ),
     );
+  }
+
+  void Share_App(){
+    String share_message = "I've discovered this great app that allows you to manage your relationships. "
+        "I feel like this is something you might want to check out. Get it from here: https://app.getkankei.com...";
+    Share.share(share_message);
+
+    // To share via email
+    Share.share(share_message, subject: "Download this new app : Kankei!");
+
+    // The apps available for the user to share will depend on which apps he has on their phone!
   }
 }
 
