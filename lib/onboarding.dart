@@ -8,7 +8,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
 
-/* TOOLS */
 
 class OnBoardingPage extends StatefulWidget{
   const OnBoardingPage({Key? key}): super(key: key);

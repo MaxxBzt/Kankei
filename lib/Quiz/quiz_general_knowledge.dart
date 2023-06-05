@@ -37,8 +37,6 @@ class QuizGeneralKnowledge extends StatefulWidget {
 class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
   int currentQuestionIndex = 0;
   int score = 0;
-<<<<<<< Updated upstream
-=======
   bool quizCompleted = false;
   int partnerScore = -1;
   String partnerScoreString = "";
@@ -117,7 +115,6 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
     }
   }
 
->>>>>>> Stashed changes
 
   List<Map<String, dynamic>> questions = [
 
@@ -126,11 +123,13 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
       'options': ['Paris', 'London', 'Madrid', 'Rome'],
       'correctAnswer': 'Paris',
     },
+
     {
       'question': 'Which planet is known as the Red Planet?',
       'options': ['Jupiter', 'Venus', 'Mars', 'Mercury'],
       'correctAnswer': 'Mars',
     },
+
     {
       'question': 'Who painted the Mona Lisa?',
       'options': [
@@ -201,7 +200,6 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
     // Add more questions here...
   ];
 
-
   void checkAnswer(String selectedOption) {
     String correctAnswer = questions[currentQuestionIndex]['correctAnswer'];
     if (selectedOption == correctAnswer) {
@@ -214,7 +212,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
         showCorrectAnswerFeedback(selectedOption, false);
       });
     }
-    Future.delayed(Duration(seconds: 2), goToNextQuestion);
+    Future.delayed(Duration(seconds: 1), goToNextQuestion);
   }
 
   void showCorrectAnswerFeedback(String selectedOption, bool isCorrect) {
@@ -234,69 +232,9 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
         currentQuestionIndex++;
       } else {
         // Quiz completed, show the result
-        showResult();
+        quizCompleted = true;
       }
     });
-  }
-
-  void showResult() {
-    if (Platform.isIOS) {
-      // Show CupertinoAlertDialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-
-          return CupertinoAlertDialog(
-            title: const Text('Quiz Completed'),
-            content: Text('Your score: $score / ${questions.length}'),
-            actions: [
-              CupertinoDialogAction(
-                child: const Text('Close'),
-                onPressed: () {
-                  Navigator.pop(context, 'result');
-                  MaterialPageRoute(builder: (context) => Ideas());
-                },
-              ),
-            ],
-          );
-        },
-        ).then((result) {
-        if (result == 'result') {
-          setState(() {
-            score = 0;
-          });
-          Navigator.pop(context);
-        }
-      });;
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Quiz Completed'),
-            content: Text('Your score: $score / ${questions.length}'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'result');
-                  MaterialPageRoute(builder: (context) => Ideas());
-
-                },
-                child: Text('Close'),
-
-              ),
-            ],
-          );
-        },
-      ).then((result) {
-        if (result == 'result') {
-          setState(() {
-            score = 0;
-          });
-          Navigator.pop(context);
-        }
-      });
-    }
   }
 
   @override
@@ -633,79 +571,74 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 80),
-            Center(
-              child: Text(
-                questions[currentQuestionIndex]['question'],
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Cursive',
+      body: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 80),
+              Center(
+                child: Text(
+                  questions[currentQuestionIndex]['question'],
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Gill Sans',
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 50),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: questions[currentQuestionIndex]['options'].length,
-                  itemBuilder: (context, index) {
-                    String option =
-                    questions[currentQuestionIndex]['options'][index];
-                    bool isCorrect =
-                        option == questions[currentQuestionIndex]['correctAnswer'];
-                    bool isSelected =
-                        option == questions[currentQuestionIndex]['answerStatus'];
-                    bool isWrong = isSelected && !isCorrect;
-                    Color buttonColor = isWrong
-                        ? Colors.red
-                        : (isSelected ? Colors.green : (is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas));
+              SizedBox(height: 50),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: questions[currentQuestionIndex]['options'].length,
+                    itemBuilder: (context, index) {
+                      String option = questions[currentQuestionIndex]['options'][index];
+                      bool isCorrect = option == questions[currentQuestionIndex]['correctAnswer'];
+                      bool isSelected = option == questions[currentQuestionIndex]['answerStatus'];
+                      bool isWrong = isSelected && !isCorrect;
+                      Color buttonColor = isWrong
+                          ? Colors.red
+                          : (isSelected ? Colors.green : (is_dark ? AppColors.dark_Ideas : AppColors.light_Ideas));
 
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Platform.isIOS
-                          ? CupertinoButton(
-                        onPressed: () {
-                          checkAnswer(option);
-                        },
-                        color: buttonColor,
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Platform.isIOS
+                            ? CupertinoButton(
+                          onPressed: () {
+                            checkAnswer(option);
+                          },
+                          color: buttonColor,
                           child: Text(
                             option,
                             style: TextStyle(
                               color: isWrong ? Colors.white : (is_dark ? Colors.white : Colors.black),
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'Cursive',
+                              fontFamily: 'Gill Sans',
                             ),
                           ),
-                      )
-                      // For ANDROID
-                          : ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: buttonColor,
-                          minimumSize: Size(200, 50),
-                        ),
-                        onPressed: () {
-                          checkAnswer(option);
-                        },
+                        )
+                            : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: buttonColor,
+                            minimumSize: Size(200, 50),
+                          ),
+                          onPressed: () {
+                            checkAnswer(option);
+                          },
                           child: Text(
                             option,
                             style: TextStyle(
                               color: isWrong ? Colors.white : (is_dark ? Colors.white : Colors.black),
-                              fontSize: 32,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'Cursive',
+                              fontFamily: 'Gill Sans',
                             ),
                           ),
-<<<<<<< Updated upstream
-=======
                         ),
                       );
                     },
@@ -743,15 +676,39 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
                     child: Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10), // Adjust the border radius as needed
->>>>>>> Stashed changes
                       ),
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ),
+                  SizedBox(height: 32),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      setState(() {
+                        currentQuestionIndex = 0;
+                        score = 0;
+                        quizCompleted = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: is_dark? AppColors.dark_Ideas : AppColors.light_Ideas, // Set the desired button color here
+                    ),
+                    child: Text(
+                      'Leave the Quiz',
+                      style: TextStyle(
+                        color: is_dark? Colors.white : Colors.black,
+                        fontSize: 32,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 32),
+
+                ],
+              ),
             ),
-          ],
-        ),
+
+
+        ],
       ),
     );
   }

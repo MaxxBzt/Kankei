@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,7 +7,7 @@ import 'package:kankei/us_profile.dart';
 import 'package:kankei/us_settings.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
-import 'Authentication/auth_page.dart';
+import 'Authentication/linkAccount_Page.dart';
 import 'app_colors.dart';
 import 'homepage.dart';
 import 'Notifications/notification_api.dart';
@@ -19,24 +18,11 @@ import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 import '../Quiz/quiz_general_knowledge.dart';
-<<<<<<< Updated upstream
-
-
-import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-=======
 import '../Quiz/quiz_personality.dart';
 
->>>>>>> Stashed changes
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'Calendar_Page/add_event_page.dart';
-import 'homepage.dart';
-import 'onboarding.dart';
-import 'Calendar_Page/calendar_page.dart';
-import 'Chat/chat.dart';
 import 'inspiration.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
@@ -47,8 +33,6 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseMessaging.instance.getInitialMessage();
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -103,6 +87,8 @@ class MyApp extends StatelessWidget {
           '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
           '/DateDetailsRecipe' : (context) => DateDetails(activity: activities[1]),
           '/Quiz_General_Knowledge' : (context) => QuizGeneralKnowledge(),
+          '/linkAccount': (context) => LinkAccountPage(),
+          '/Quiz_Personality' : (context) => QuizPersonality(),
         },
         home: OnBoardingPage(),
       );
@@ -143,7 +129,6 @@ class _MainpageState extends State<MainPage> {
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
-
 
     return Scaffold(
       backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 
+import 'Authentication/isLinked.dart';
 import 'app_colors.dart';
 import 'main.dart';
 /* TOOLS */
@@ -95,7 +96,7 @@ class _ChoosePageState extends State<ChoosePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context){
-                                  return MainPage();
+                                  return isLinked();
                                 },
                               ),
                             );

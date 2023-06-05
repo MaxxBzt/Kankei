@@ -1,13 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-<<<<<<< Updated upstream
-import '../../theme/theme_system.dart';
-=======
 
 import 'package:flutter/foundation.dart';
 
 import '../../../theme/theme_system.dart';
->>>>>>> Stashed changes
 import 'push_notifications.dart';
 import 'use_cloud_firestore.dart';
 
@@ -17,9 +13,6 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-// ALL OLD CODE UNDER HERE, THIS IS TEMP!!!
-
 
 int messageCount = 0;
 

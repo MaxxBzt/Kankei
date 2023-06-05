@@ -20,8 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-<<<<<<< Updated upstream
-=======
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -35,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     emailController.clear();
     passwordController.clear();
   }
->>>>>>> Stashed changes
 
   // sign user in method
   void signUserIn() async {
@@ -136,93 +133,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 40),
 
-<<<<<<< Updated upstream
-              // email textfield
-              MyTextField(
-                controller: emailController,
-                hintText: 'Email',
-                obscureText: false,
-              ),
-
-              const SizedBox(height: 10),
-
-              // password textfield
-              MyTextField(
-                controller: passwordController,
-                hintText: 'Password',
-                obscureText: true,
-              ),
-
-              const SizedBox(height: 10),
-
-              // forgot password?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: is_dark ? Colors.white : Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // sign in button
-              MyButton(
-                onTap: signUserIn,
-                buttonText: 'Sign In',
-              ),
-
-              const SizedBox(height: 50),
-
-              const SizedBox(height: 160),
-
-              // not a member? register now
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Container(
-                width: 350.0,
-                height: 50.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(55.0),
-                  color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
-                ),
-                child: ElevatedButton(
-                  onPressed: (widget.onPressed),
-                  child: Text(
-                    'Register Now',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                    ),
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-                    overlayColor: MaterialStateProperty.all<Color>(Colors.purple[100]!),
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.symmetric(vertical: 12.0),
-                    ),
-=======
                 Text(
                   'Welcome back to Kankei',
                   style: TextStyle(
                     color: is_dark ? Colors.white : Colors.black,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
->>>>>>> Stashed changes
                   ),
                 ),
 

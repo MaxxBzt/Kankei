@@ -787,20 +787,6 @@ class _AddEventPageState extends State<AddEventPage> {
                   ),
                 ),
                 // Inside the AddEventPage widget
-<<<<<<< Updated upstream
-                onPressed: () {
-                  DateTime date = DateTime(date_selected.year, date_selected.month, date_selected.day);
-                  Color? categoryColor = categories[selectedCategory];
-                  Event event = Event(
-                    name: name_of_event,
-                    description: description_event,
-                    category: selectedCategory,
-                    date_of_event: date,
-                    color_category: categoryColor,
-                  );
-                  Navigator.of(context).pop(event);
-
-=======
                 onPressed: () async {
                   if (name_of_event.isEmpty || selectedCategory.isEmpty) {
                     if (Platform.isIOS) {
@@ -848,10 +834,7 @@ class _AddEventPageState extends State<AddEventPage> {
                     // Update the state variable
                     widget.updateEventsCallback();
                   }
->>>>>>> Stashed changes
                 },
-
-
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -874,5 +857,3 @@ class _AddEventPageState extends State<AddEventPage> {
     );
   }
 }
-
-

@@ -4,14 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:async';
-import 'package:flutter/material.dart';
-=======
 import 'package:image_picker/image_picker.dart';
->>>>>>> Stashed changes
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import '../Game/MatchingCards.dart';
@@ -248,29 +241,6 @@ class _HomePageState extends State<HomePage> {
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
-<<<<<<< Updated upstream
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            ColorizeAnimatedTextKit(
-              repeatForever: true,
-              text: ["Kankei"],
-              textStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, fontFamily: "Cursive"),
-              colors: [
-                is_dark ? AppColors.dark_appbar_header : Colors.purple.shade100,
-                Colors.pinkAccent,
-                Colors.blue,
-                Colors.yellow,
-                Colors.purple.shade100,
-              ],
-              textAlign: TextAlign.center,
-              isRepeatingAnimation: false,
-            ),
-            Countdown(),
-
-=======
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -581,7 +551,6 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
->>>>>>> Stashed changes
 
               SizedBox(height: 20.0),
               Container(

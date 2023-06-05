@@ -12,11 +12,7 @@ class Countdown extends StatefulWidget {
 }
 
 class _CountdownState extends State<Countdown> {
-<<<<<<< Updated upstream
-  DateTime _targetDate = DateTime(2024, 2, 14, 0, 0, 0); // Valentine's Day
-=======
 
->>>>>>> Stashed changes
   late Timer _timer;
   List<DateTime> _targetDates = [];
   List<String> _eventNames = [];
@@ -42,15 +38,11 @@ class _CountdownState extends State<Countdown> {
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
-<<<<<<< Updated upstream
-        _remainingTime = _targetDate.difference(DateTime.now());
-=======
         if (_targetDates.isNotEmpty) {
           _remainingTime = _targetDates[_currentPage].difference(DateTime.now());
         } else {
           _remainingTime = Duration.zero;
         }
->>>>>>> Stashed changes
       });
     });
   }
@@ -65,113 +57,6 @@ class _CountdownState extends State<Countdown> {
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
-<<<<<<< Updated upstream
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-          decoration: BoxDecoration(
-            color: is_dark ? AppColors.dark_appbar_header : Colors.purple.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Valentine\'s Day',
-                style: TextStyle(
-                  color: is_dark ? Colors.white : Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        _remainingTime.inDays.toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'days',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        (_remainingTime.inHours % 24).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'hours',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        (_remainingTime.inMinutes % 60).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'minutes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        (_remainingTime.inSeconds % 60).toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: is_dark ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'seconds',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: is_dark ? Colors.purple.shade100 : Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-=======
     if (_targetDates.isNotEmpty) {
       // Display the countdown
       return Column(
@@ -297,7 +182,6 @@ class _CountdownState extends State<Countdown> {
                 );
               },
             ),
->>>>>>> Stashed changes
           ),
         ],
       );
@@ -334,7 +218,3 @@ class _CountdownState extends State<Countdown> {
 
   }
 }
-
-
-
-

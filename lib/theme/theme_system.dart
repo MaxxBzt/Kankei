@@ -68,11 +68,14 @@ class Theme_Provider extends ChangeNotifier {
 
 class MyThemes {
 
+
   static final dark_theme = ThemeData(
     scaffoldBackgroundColor: AppColors.dark_background,
     primarySwatch: dark_primary_color,
     colorScheme: ColorScheme.dark(),
+
   );
+
 
   static final light_theme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
@@ -82,9 +85,6 @@ class MyThemes {
   );
 }
 
-<<<<<<< Updated upstream
-String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
-=======
 class EventsOnCountdown{
   String? currentUserUid = FirebaseAuth.instance.currentUser?.uid;
 
@@ -164,4 +164,3 @@ class EventsOnCountdown{
 
 
 }
->>>>>>> Stashed changes
