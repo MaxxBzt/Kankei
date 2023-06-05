@@ -359,10 +359,22 @@ class _UsProfilePageState extends State<UsProfilePage> {
                               ),
                             ),
                             SizedBox(height: 8.0),
-                            CircleAvatar(
-                              radius: 30.0,
-                              backgroundColor: Colors.grey, // Placeholder color
-                              // You can add a profile picture here later
+                            GestureDetector(
+                              onTap: () async {
+                                String? imageUrl = await uploadProfilePicture();
+                                if (imageUrl != null) {
+                                  setState(() {
+                                    linkedPictureUrl = imageUrl;
+                                  });
+                                  fetchUserEmails(); // Reload user information after changing the picture
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 30.0,
+                                foregroundImage: linkedPictureUrl.isNotEmpty
+                                    ? NetworkImage(linkedPictureUrl)
+                                    : null,
+                              ),
                             ),
                             SizedBox(height: 8.0),
                             FutureBuilder<DocumentSnapshot>(

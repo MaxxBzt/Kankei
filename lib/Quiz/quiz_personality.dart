@@ -64,7 +64,7 @@ class _QuizPersonalityState extends State<QuizPersonality> {
         {'option': 'Melancholic and introspective', 'happiness': 1},
         {'option': 'Experimental and unique', 'happiness': 2},
       ],
-    },
+    },/*
     {
       'question': 'Which type of vacation do you prefer?',
       'options': [
@@ -127,7 +127,7 @@ class _QuizPersonalityState extends State<QuizPersonality> {
         {'option': 'Occasional gratitude when something significant happens', 'happiness': 2},
         {'option': 'Not actively practicing gratitude', 'happiness': 1},
       ],
-    },
+    },*/
   ];
 
 

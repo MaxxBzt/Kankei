@@ -140,6 +140,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
       ],
       'correctAnswer': 'Leonardo da Vinci',
     },
+    /*
     {
       'question': 'What is the largest ocean in the world?',
       'options': [
@@ -194,7 +195,7 @@ class _QuizGeneralKnowledgeState extends State<QuizGeneralKnowledge> {
       'question': 'who is depressed',
       'options': ['All the above', 'Yoke', 'Max', 'Quentin'],
       'correctAnswer': 'All the above',
-    },
+    },*/
 
 
     // Add more questions here...
