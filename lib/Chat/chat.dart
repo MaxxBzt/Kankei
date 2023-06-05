@@ -1,13 +1,27 @@
 import 'dart:convert';
 import 'dart:math';
+<<<<<<< Updated upstream
 import '../../theme/theme_system.dart';
+=======
+
+import 'package:flutter/foundation.dart';
+
+import '../../../theme/theme_system.dart';
+>>>>>>> Stashed changes
 import 'push_notifications.dart';
-import 'package:flutter/cupertino.dart';
+import 'use_cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// ALL OLD CODE UNDER HERE, THIS IS TEMP!!!
+
+
+int messageCount = 0;
 
 String randomString() {
   final random = Random.secure();
@@ -22,7 +36,8 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
+  AppLifecycleState _lifecycleState = AppLifecycleState.resumed;
 
   void updateToken(String token) {
     setState(() {
@@ -31,16 +46,37 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  void _addMessage(types.Message message) {
+    setState(() {
+      _messages.insert(0, message);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+
     requestPermissions();
     getToken(updateToken);
-    initInfo();
+    //setupMessageListener();
+    initInfo(_lifecycleState);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _lifecycleState = state;
+    });
   }
 
   final List<types.Message> _messages = [];
-  final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 
   @override
   Widget build(BuildContext context) {
@@ -58,25 +94,71 @@ class _ChatPageState extends State<ChatPage> {
         DefaultChatTheme( inputBackgroundColor: Color(0xFF726daf), primaryColor: Color(0xFFa894fc), inputTextCursorColor: Color(0xFFE1BEE7),sendButtonIcon: Icon(Icons.send, color: Color(0xFFE1BEE7))),
         messages: _messages,
         onSendPressed: _handleSendPressed,
-        user: _user,
+        user: types.User( id: FirebaseAuth.instance.currentUser?.uid??'Anonymous' )
       ),
     );
   }
 
-  void _addMessage(types.Message message) {
-    setState(() {
-      _messages.insert(0, message);
-    });
-  }
+  void _handleSendPressed(types.PartialText message) async {
 
-  void _handleSendPressed(types.PartialText message) {
+    String currentUserUid = FirebaseAuth.instance.currentUser?.uid??'Anonymous';
+    String? email = await fetchInFireStore('users', currentUserUid??'', 'email').then( (fieldData){return fieldData;});
+
+    types.User user = types.User(id: currentUserUid, firstName: email??'Anonymous');
+
+    print('\n\n\n\n $messageCount\n');
+
     final textMessage = types.TextMessage(
-      author: _user,
+      author: user,
       createdAt: DateTime.now().millisecondsSinceEpoch,
-      id: randomString(),
+      id: (messageCount++).toString(),
       text: message.text,
     );
 
+    sendMessage(textMessage);
+
     _addMessage(textMessage);
   }
+
+
+  Future<String> fetchInFireStore(String collection, String document, String field) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection(collection).doc(document).get();
+
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    String fieldData = data[field];
+
+    return fieldData;
+  }
+
+
+  void setupMessageListener() async {
+    print('setupMessageListener');
+    FirebaseFirestore.instance
+        .collection('chats')
+        .doc( await getChatID() )
+        .collection('messages')
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+      for (DocumentChange change in snapshot.docChanges) {
+        print('change: $change');
+        if (change.type == DocumentChangeType.added) {
+          Map<String, dynamic> messageData = change.doc.data() as Map<String, dynamic>;
+
+          print('messageData: $messageData');
+
+          final message = types.TextMessage(
+            author: types.User(id: messageData['author']),
+            createdAt: messageData['timeStamp'],
+            id: change.doc.id,
+            text: messageData['text'],
+          );
+
+          print('\n\nmessage: $message');
+          _addMessage(message);
+        }
+      }
+    });
+  }
+
+
 }

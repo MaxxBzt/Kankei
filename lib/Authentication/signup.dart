@@ -78,29 +78,19 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // logo
-              const Icon(
-                Icons.favorite,
-                size: 50,
-              ),
-
-              const SizedBox(height: 30),
-
-              // Ready to deepen your relationships ?
-              Text(
-                'Ready to deepen your relationships ?',
-                style: TextStyle(
-                  color: is_dark ? Colors.white : Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // logo
+                const Icon(
+                  Icons.favorite,
+                  size: 50,
                 ),
-              ),
 
-              const SizedBox(height: 25),
+                const SizedBox(height: 30),
 
+<<<<<<< Updated upstream
               // email textfield
               MyTextField(
                 controller: emailController,
@@ -147,38 +137,102 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(55.0),
                     color: is_dark ? AppColors.light_register_now : AppColors.light_register_now,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: (widget.onPressed),
-                    child: Text(
-                      'Already have an account?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.transparent),
-                      overlayColor:
-                          MaterialStateProperty.all<Color>(Colors.purple[100]!),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(vertical: 12.0),
-                      ),
-                    ),
+=======
+                // Ready to deepen your relationships ?
+                Text(
+                  'Ready to deepen your relationships ?',
+                  style: TextStyle(
+                    color: is_dark ? Colors.white : Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+>>>>>>> Stashed changes
                   ),
                 ),
-              ])
-            ],
+
+                const SizedBox(height: 25),
+
+                // email textfield
+                MyTextField(
+                  controller: emailController,
+                  hintText: 'Email',
+                  obscureText: false,
+                ),
+
+                const SizedBox(height: 10),
+
+                // password textfield
+                MyTextField(
+                  controller: passwordController,
+                  hintText: 'Password',
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 10),
+
+                // confirm password textfield
+                MyTextField(
+                  controller: confirmPasswordController,
+                  hintText: ' Confirm Password',
+                  obscureText: true,
+                ),
+
+                const SizedBox(height: 10),
+
+                // sign in button
+                MyButton(
+                  onTap: () {
+                    signUserUp();
+                  },
+                  buttonText: 'Register',
+                ),
+
+                const SizedBox(height: 50),
+
+                const SizedBox(height: 100),
+
+                // not a member? register now
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    width: 350.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(55.0),
+                      color: is_dark
+                          ? AppColors.light_register_now
+                          : AppColors.light_register_now,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: (widget.onPressed),
+                      child: Text(
+                        'Already have an account?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all<Color>(Colors.purple[100]!),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(vertical: 12.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ])
+              ],
+            ),
           ),
         ),
       ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kankei/theme/theme_system.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,35 @@ class Ideas extends StatefulWidget {
 
 
 class _IdeasState extends State<Ideas> {
+<<<<<<< Updated upstream
+=======
+
+  Future<void> _launchURL(String url) async {
+    final Uri urlWeb = Uri.parse(url);
+    if (await canLaunchUrl(urlWeb)) {
+      await launchUrl(urlWeb,mode: Platform.isAndroid ? LaunchMode.externalApplication : LaunchMode.platformDefault);
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not launch $urlWeb'),
+        ),
+      );
+    }
+  }
+
+  // Declare any ongoing asynchronous operations here
+  late StreamSubscription _subscription;
+
+  @override
+  void dispose() {
+    // Cancel any ongoing operations in the dispose() method
+    _subscription.cancel();
+
+    super.dispose();
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     final theme_provider = Provider.of<Theme_Provider>(context);
@@ -103,6 +134,7 @@ class _IdeasState extends State<Ideas> {
                                 'assets/images/ideas_images/watch_movie_ideas.png',
                                 'assets/images/ideas_images/cooking_ideas.png',
                                 'assets/images/ideas_images/restaurant_ideas.png',
+
                               ];
                               List<String> routes = [
                                 '/DateDetailsShow',
@@ -200,8 +232,13 @@ class _IdeasState extends State<Ideas> {
                                 itemBuilder: (BuildContext context, int index) {
                                   List<String> imagePaths = [
                                     'assets/images/ideas_images/general_knowledge.png',
+<<<<<<< Updated upstream
                                     'assets/images/ideas_images/cooking_ideas.png',
                                     'assets/images/ideas_images/restaurant_ideas.png',
+=======
+                                    'assets/images/ideas_images/Personality_Quiz.png',
+                                    'assets/images/ideas_images/Coming_soon_quiz.jpg',
+>>>>>>> Stashed changes
                                   ];
 
                                   List<String> routes = [

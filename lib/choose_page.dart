@@ -16,6 +16,17 @@ class ChoosePage extends StatefulWidget{
 }
 
 class _ChoosePageState extends State<ChoosePage> {
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme_provider = Provider.of<Theme_Provider>(context);
@@ -27,6 +38,7 @@ class _ChoosePageState extends State<ChoosePage> {
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
+
       body: Stack(
         children:
         [

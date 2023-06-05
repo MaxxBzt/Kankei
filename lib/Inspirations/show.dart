@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' show Platform;
 
 import '../app_colors.dart';
 import '../theme/theme_system.dart';
@@ -38,7 +39,7 @@ class _PopularMoviesAndShowsState extends State<PopularMoviesAndShows> {
   Future<void> _launchURL(String url) async {
     final Uri url_movie = Uri.parse(url);
     if (await canLaunchUrl(url_movie)) {
-      await launchUrl(url_movie);
+      await launchUrl(url_movie,mode: Platform.isAndroid ? LaunchMode.externalApplication : LaunchMode.platformDefault);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

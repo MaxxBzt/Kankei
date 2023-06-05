@@ -1,27 +1,34 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kankei/us_profile.dart';
+import 'package:kankei/us_settings.dart';
 import '../theme/theme_system.dart';
 import 'package:provider/provider.dart';
 import 'Authentication/auth_page.dart';
 import 'app_colors.dart';
-import 'choose_page.dart';
 import 'homepage.dart';
+import 'Notifications/notification_api.dart';
 import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
 import 'Chat/chat.dart';
-import 'us.dart';
 import 'ideas.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 import '../Quiz/quiz_general_knowledge.dart';
+<<<<<<< Updated upstream
 
 
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+=======
+import '../Quiz/quiz_personality.dart';
+
+>>>>>>> Stashed changes
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -31,8 +38,6 @@ import 'onboarding.dart';
 import 'Calendar_Page/calendar_page.dart';
 import 'Chat/chat.dart';
 import 'inspiration.dart';
-import 'us.dart';
-import 'ideas.dart';
 import 'package:kankei/Inspirations/show.dart';
 import 'package:kankei/Inspirations/recipes.dart';
 import 'date_details.dart';
@@ -49,6 +54,20 @@ Future main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    iOS: IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    ),
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   runApp(MyApp());
 }
 
@@ -78,7 +97,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/home': (context) => HomePage(),
           '/DateIdeas': (context) => DateIdeas(),
-          '/chat': (context) => ChatPage(),
+          //'/chat': (context) => ChatPage(),
           '/show': (context) => PopularMoviesAndShows(),
           '/Recipe': (context) => Recipe(),
           '/DateDetailsShow' : (context) => DateDetails(activity: activities[0]),
@@ -105,13 +124,10 @@ class _MainpageState extends State<MainPage> {
   static final List<Widget> _widgetOptions = <Widget>
   [
     HomePage(),
-    CalendarScreen(
-      key: UniqueKey(),
-      color_category: Colors.red,
-    ),
+    CalendarScreen(),
     ChatPage(),
     Ideas(),
-    UsPage(),
+    UsProfilePage(),
     QuizGeneralKnowledge(),
 
   ];
