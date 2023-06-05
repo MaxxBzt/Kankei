@@ -12,10 +12,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DetailScreen extends StatefulWidget {
-  // In the constructor, require a prompt.
+// In the constructor, require a prompt.
   const DetailScreen({Key? key, required this.prompt}) : super(key: key);
 
-  // Declare a field that holds the prompt.
+// Declare a field that holds the prompt.
   final String prompt;
 
   @override
@@ -23,7 +23,6 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-
   String responseText = '';
 
   @override
@@ -36,10 +35,11 @@ class _DetailScreenState extends State<DetailScreen> {
     try {
       final String response = await getGpt3Response();
       setState(() {
+        print(response);
         responseText = response;
       });
     } catch (e) {
-      // Handle error
+// Handle error
       print(e.toString());
     }
   }
@@ -49,12 +49,14 @@ class _DetailScreenState extends State<DetailScreen> {
 
     final Map<String, String> headers = {
       "Content-Type": "application/json",
-      "Authorization": "Bearer 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"
+      "Authorization":
+          "Bearer API-KEY"
     };
 
     final Map<String, dynamic> body = {
       "model": "text-davinci-003",
-      "prompt": " Give me some innovative date ideas for me and my partner. Maybe based on our interests? \n\nInterests: ${widget.prompt} \n\nDate ideas:",
+      "prompt":
+          " Give me some innovative date ideas for me and my partner. Maybe based on our interests? \n\nInterests: ${widget.prompt} \n\nDate ideas:",
       "temperature": 0.5,
       "max_tokens": 60,
       "top_p": 0.3,
@@ -77,52 +79,64 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme_provider = Provider.of<Theme_Provider>(context);
     bool isAppDarkMode = theme_provider.is_DarkMode;
 
-    final Brightness brightnessValue = MediaQuery.of(context).platformBrightness;
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
     bool isSystemDarkMode = brightnessValue == Brightness.dark;
 
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
-        elevation: 0,
-        backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
-        title: Text(
-          'Kankei',
-          style: GoogleFonts.pacifico(
-            textStyle: TextStyle(color: is_dark ? Colors.white : Colors.black, letterSpacing: .5),
+        appBar: AppBar(
+          leading: Icon(Icons.favorite,
+              color: is_dark ? Colors.white : Colors.black),
+          elevation: 0,
+          backgroundColor: is_dark
+              ? AppColors.dark_appbar_header
+              : AppColors.light_appbar_header,
+          title: Text(
+            'Kankei',
+            style: GoogleFonts.pacifico(
+              textStyle: TextStyle(
+                  color: is_dark ? Colors.white : Colors.black,
+                  letterSpacing: .5),
+            ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(50.0),
-        child: Column(
-          children: [
-            Image(image: AssetImage('assets/images/bot.png'), height: 50, width: 50),
-            Column(
-              children: responseText.split('\n').map((item) =>
-                  Column(
-                    children: [
-                      Text(
-                        item.trim(),
-                        style: TextStyle(fontSize: 20, color: is_dark ? Colors.white : Colors.black),
+        body: Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: Column(
+            children: [
+              Image(
+                  image: AssetImage('assets/images/bot.png'),
+                  height: 50,
+                  width: 50),
+              Column(
+                children: responseText
+                    .split('\n')
+                    .map(
+                      (item) => Column(
+                        children: [
+                          Text(
+                            item.trim(),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: is_dark ? Colors.white : Colors.black),
+                          ),
+                          SizedBox(
+                              height:
+                                  20), // Adjust the height as per your requirement
+                        ],
                       ),
-                      SizedBox(height: 20), // Adjust the height as per your requirement
-                    ],
-                  ),
-              ).toList(),
-            ),
-          ],
-        ),
-      )
-
-
-    );
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ));
   }
 }

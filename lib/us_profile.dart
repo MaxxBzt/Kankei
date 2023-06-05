@@ -13,7 +13,6 @@ import 'Authentication/auth_page.dart';
 import 'Calendar_Page/add_event_page.dart';
 import 'app_colors.dart';
 
-
 class UsProfilePage extends StatefulWidget {
   @override
   _UsProfilePageState createState() => _UsProfilePageState();
@@ -96,8 +95,6 @@ class _UsProfilePageState extends State<UsProfilePage> {
           .collection('users')
           .doc(currentUserUid)
           .update({'profilePictureUrl': downloadUrl});
-
-
 
       return downloadUrl;
     } catch (e) {
@@ -247,9 +244,10 @@ class _UsProfilePageState extends State<UsProfilePage> {
     bool is_dark = isAppDarkMode || isSystemDarkMode;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
               // Main body content
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -264,139 +262,153 @@ class _UsProfilePageState extends State<UsProfilePage> {
                     ),
                   ),
                   SizedBox(height: 20.0),
-              Container(
-                decoration: BoxDecoration(
-                  color: is_dark
-                      ? AppColors.dark_Ideas
-                      : Colors.purple.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
+                  Container(
+                    decoration: BoxDecoration(
+                      color: is_dark
+                          ? AppColors.dark_Ideas
+                          : Colors.purple.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'You',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8.0),
-                        GestureDetector(
-                          onTap: () async {
-                            String? imageUrl = await uploadProfilePicture();
-                            if (imageUrl != null) {
-                              setState(() {
-                                profilePictureUrl = imageUrl;
-                              });
-                              fetchUserEmails(); // Reload user information after changing the picture
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: 30.0,
-                            foregroundImage: profilePictureUrl.isNotEmpty
-                                ? NetworkImage(profilePictureUrl)
-                                : null,
-                          ),
-                        ),
-                        SizedBox(height: 8.0),
-                        FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance.collection('users').doc(currentUserUid).get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasData && snapshot.data?.exists == true) {
-                              Map<String, dynamic>? userData = snapshot.data?.data() as Map<String, dynamic>?;
+                        Column(
+                          children: [
+                            Text(
+                              'You',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            GestureDetector(
+                              onTap: () async {
+                                String? imageUrl = await uploadProfilePicture();
+                                if (imageUrl != null) {
+                                  setState(() {
+                                    profilePictureUrl = imageUrl;
+                                  });
+                                  fetchUserEmails(); // Reload user information after changing the picture
+                                }
+                              },
+                              child: CircleAvatar(
+                                radius: 30.0,
+                                foregroundImage: profilePictureUrl.isNotEmpty
+                                    ? NetworkImage(profilePictureUrl)
+                                    : null,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            FutureBuilder<DocumentSnapshot>(
+                              future: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(currentUserUid)
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasData &&
+                                    snapshot.data?.exists == true) {
+                                  Map<String, dynamic>? userData = snapshot.data
+                                      ?.data() as Map<String, dynamic>?;
 
-                              if (userData != null && userData.containsKey('name')) {
-                                String name = userData['name'];
-                                String displayText = name.isNotEmpty ? name : currentUserEmail;
+                                  if (userData != null &&
+                                      userData.containsKey('name')) {
+                                    String name = userData['name'];
+                                    String displayText =
+                                        name.isNotEmpty ? name : currentUserEmail;
+
+                                    return Text(
+                                      displayText,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    );
+                                  }
+                                }
 
                                 return Text(
-                                  displayText,
+                                  currentUserEmail,
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
                                 );
-                              }
-                            }
-
-                            return Text(
-                              currentUserEmail,
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            );
-                          },
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      '&',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    Column(
-                      children: [
+                        SizedBox(height: 16.0),
                         Text(
-                          'Your partner',
+                          '&',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8.0),
-                        CircleAvatar(
-                          radius: 30.0,
-                          backgroundColor: Colors.grey, // Placeholder color
-                          // You can add a profile picture here later
-                        ),
-                        SizedBox(height: 8.0),
-                        FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance.collection('users').doc(currentUserUid).get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasData && snapshot.data?.exists == true) {
-                              Map<String, dynamic>? userData = snapshot.data?.data() as Map<String, dynamic>?;
+                        SizedBox(height: 16.0),
+                        Column(
+                          children: [
+                            Text(
+                              'Your partner',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            CircleAvatar(
+                              radius: 30.0,
+                              backgroundColor: Colors.grey, // Placeholder color
+                              // You can add a profile picture here later
+                            ),
+                            SizedBox(height: 8.0),
+                            FutureBuilder<DocumentSnapshot>(
+                              future: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(currentUserUid)
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasData &&
+                                    snapshot.data?.exists == true) {
+                                  Map<String, dynamic>? userData = snapshot.data
+                                      ?.data() as Map<String, dynamic>?;
 
-                              if (userData != null && userData.containsKey('nameOfPartner')) {
-                                String name = userData['nameOfPartner'];
-                                String displayText = name.isNotEmpty ? name : currentUserEmail;
+                                  if (userData != null &&
+                                      userData.containsKey('nameOfPartner')) {
+                                    String name = userData['nameOfPartner'];
+                                    String displayText =
+                                        name.isNotEmpty ? name : currentUserEmail;
+
+                                    return Text(
+                                      displayText,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    );
+                                  }
+                                }
 
                                 return Text(
-                                  displayText,
+                                  linkedUserEmail,
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
                                 );
-                              }
-                            }
-
-                            return Text(
-                              linkedUserEmail,
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            );
-                          },
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-
-                  SizedBox(
-                      height: 25.0), // Add space between the two containers
+                  SizedBox(height: 25.0), // Add space between the two containers
                   Center(
                     child: Container(
                       decoration: BoxDecoration(
@@ -492,9 +504,8 @@ class _UsProfilePageState extends State<UsProfilePage> {
                                     ConnectionState.waiting) {
                                   return CircularProgressIndicator();
                                 } else if (snapshot.hasData) {
-                                  Map<String, dynamic>? userData =
-                                      (snapshot.data?.data()
-                                          as Map<String, dynamic>?);
+                                  Map<String, dynamic>? userData = (snapshot.data
+                                      ?.data() as Map<String, dynamic>?);
                                   bool hasName = userData != null &&
                                       userData.containsKey('name') &&
                                       userData['name']!.isNotEmpty;
@@ -513,8 +524,7 @@ class _UsProfilePageState extends State<UsProfilePage> {
                     ),
                   ),
 
-                  SizedBox(
-                      height: 25.0), // Add space between the two containers
+                  SizedBox(height: 25.0), // Add space between the two containers
                   Center(
                     child: Container(
                       decoration: BoxDecoration(
@@ -613,9 +623,8 @@ class _UsProfilePageState extends State<UsProfilePage> {
                                     ConnectionState.waiting) {
                                   return CircularProgressIndicator();
                                 } else if (snapshot.hasData) {
-                                  Map<String, dynamic>? userData =
-                                      (snapshot.data?.data()
-                                          as Map<String, dynamic>?);
+                                  Map<String, dynamic>? userData = (snapshot.data
+                                      ?.data() as Map<String, dynamic>?);
                                   bool hasName = userData != null &&
                                       userData.containsKey('nameOfPartner') &&
                                       userData['nameOfPartner']!.isNotEmpty;
@@ -634,8 +643,7 @@ class _UsProfilePageState extends State<UsProfilePage> {
                     ),
                   ),
 
-                  SizedBox(
-                      height: 25.0), // Add space between the two containers
+                  SizedBox(height: 25.0), // Add space between the two containers
                   Center(
                     child: Container(
                       decoration: BoxDecoration(
@@ -670,8 +678,7 @@ class _UsProfilePageState extends State<UsProfilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => AddEventPage(
-                                      updateEventsCallback:
-                                          updateEventsCallback),
+                                      updateEventsCallback: updateEventsCallback),
                                 ),
                               );
                             },
@@ -684,34 +691,35 @@ class _UsProfilePageState extends State<UsProfilePage> {
                   ),
                 ],
               ),
-          ),
-          Positioned(
-            top: 16.0,
-            right: 16.0,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UsSettingsPage()),
-                );
-              },
-              child: Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: is_dark
-                      ? AppColors.dark_appbar_header
-                      : AppColors.light_appbar_header,
-                ),
-                child: Icon(
-                  Icons.settings,
-                  color: is_dark ? Colors.white : Colors.black,
+            ),
+            Positioned(
+              top: 16.0,
+              right: 16.0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UsSettingsPage()),
+                  );
+                },
+                child: Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: is_dark
+                        ? AppColors.dark_appbar_header
+                        : AppColors.light_appbar_header,
+                  ),
+                  child: Icon(
+                    Icons.settings,
+                    color: is_dark ? Colors.white : Colors.black,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(

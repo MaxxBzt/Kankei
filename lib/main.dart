@@ -189,7 +189,7 @@ class _MainpageState extends State<MainPage> {
                   )
                 : Icon(Icons.person),
             onPressed: () {
-              theme_provider.toggleTheme(!isAppDarkMode);
+              print("pressed !");
             },
           ),
         ],
