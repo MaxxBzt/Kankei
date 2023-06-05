@@ -40,7 +40,7 @@ class PersonalityResultsPage extends StatelessWidget {
   Future<Map<String, dynamic>> getUserData() async {
     // Get the current user's UID
     if (_auth.currentUser == null) {
-      return {'score': null, 'paragraph': null, };
+      return {'score': -1, 'paragraph': "waiting...", };
     }
 
     String currentUserUID = _auth.currentUser!.uid;
@@ -109,7 +109,7 @@ class PersonalityResultsPage extends StatelessWidget {
     } else {
       // Return null if the partner's quiz document doesn't exist yet
       return {
-        'score': "waiting...",
+        'score': -1,
         'paragraph': "waiting...",
 
       };
@@ -230,14 +230,19 @@ class PersonalityResultsPage extends StatelessWidget {
           // Data has been fetched successfully
           if (snapshot.data != null) {
             int partnerScore = snapshot.data!['score'];
+            String partnerScoreString = partnerScore.toString();
             String partnerParagraph = snapshot.data!['paragraph'];
             String happinessMessage = '';
-            if (score > partnerScore) {
+            if (score > partnerScore && partnerScore != -1) {
               happinessMessage = 'You are happier than your partner!';
-            } else if (score < partnerScore) {
+            } else if (score < partnerScore && partnerScore != -1 ) {
               happinessMessage = 'Your partner is happier than you!';
-            } else {
+            } else if (score == partnerScore && partnerScore != -1){
               happinessMessage = 'You and your partner are equally happy!';
+            }else{
+              happinessMessage = 'Waiting...';
+              partnerScoreString = "Waiting...";
+
             }
             return Scaffold(
               appBar: AppBar(
@@ -304,7 +309,7 @@ class PersonalityResultsPage extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Your partner got $partnerScore % happiness! ',
+                        'Your partner got $partnerScoreString % happiness! ',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 25,

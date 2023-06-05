@@ -154,6 +154,7 @@ class _MainpageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final theme_provider = Provider.of<Theme_Provider>(context);
+    bool isIconClicked = false;
     bool isAppDarkMode = theme_provider.is_DarkMode;
 
     final Brightness brightnessValue =
@@ -168,8 +169,25 @@ class _MainpageState extends State<MainPage> {
           : AppColors.light_appbar_header,
       appBar: AppBar(
         leading:
-            Icon(Icons.favorite, color: is_dark ? Colors.white : Colors.black),
-        elevation: 0,
+        IconButton(
+          icon: Icon(
+            Icons.favorite,
+            color: is_dark ? Colors.white : Colors.black ,
+          ),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      'We love you! Thank you for your support :)',
+                          style: TextStyle(
+                            color: is_dark ? Colors.white : Colors.black
+                          ),
+                  ),
+                  backgroundColor: is_dark ? AppColors.dark_appbar_header : AppColors.light_appbar_header,
+                ),
+            );
+          },
+        ),        elevation: 0,
         backgroundColor: is_dark
             ? AppColors.dark_appbar_header
             : AppColors.light_appbar_header,
@@ -189,7 +207,9 @@ class _MainpageState extends State<MainPage> {
                   )
                 : Icon(Icons.person),
             onPressed: () {
-              print("pressed !");
+              setState(() {
+                _selectedIndex = 4;
+              });
             },
           ),
         ],
