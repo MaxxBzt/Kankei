@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -212,6 +213,7 @@ class _HomePageState extends State<HomePage> {
           .limit(1)
           .get();
 
+
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot<Map<String, dynamic>> userSnapshot = querySnapshot.docs.first;
         String documentId = userSnapshot.id;
@@ -246,9 +248,135 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 2),
+              SizedBox(height: 20),
+
+              ColorizeAnimatedTextKit(
+                repeatForever: true,
+                text: ["Welcome !"],
+                textStyle: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                colors: [
+                  is_dark ? AppColors.dark_appbar_header : Colors.purple.shade100,
+
+                  Colors.pinkAccent,
+                  Colors.deepPurple,
+                  Colors.purpleAccent,
+                  Colors.purple.shade100,
+                ],
+                textAlign: TextAlign.center,
+                isRepeatingAnimation: false,
+              ),
+
+
+
               Countdown(),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Your shared picture',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: is_dark ? AppColors.dark_titles_home : Colors.purple.withOpacity(0.5),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height:20),
+
+
+              GestureDetector(
+                onTap: () async {
+                  print(SharedPhotoUrl);
+                  String? imageUrl = await uploadSharePic();
+                  if (imageUrl != null) {
+                    setState(() {
+                      SharedPhotoUrl = imageUrl;
+                    });
+                    fetchPicture(); // Reload user information after changing the picture
+                  }
+                },
+                child: Stack(
+                  children: [
+                    if (SharedPhotoUrl.isNotEmpty)
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            SharedPhotoUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    Container(
+                      padding: EdgeInsets.all(16.0),
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      height: SharedPhotoUrl.isNotEmpty ? 300.0 : 80.0,
+                      child: Opacity(
+                        opacity: SharedPhotoUrl.isNotEmpty ? 0.0 : 1.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFb087bf),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.cloud_upload),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  'Upload your picture here!',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 // If both user didn't play the daily game
+              SizedBox(height:20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Play a game with your partner',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: is_dark ? AppColors.dark_titles_home : Colors.purple.withOpacity(0.5),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height:20),
               if (!_hasPlayedFromFirestore)
                 Container(
                   decoration: BoxDecoration(
@@ -264,7 +392,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   height: 90,
-                  width: 200,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -358,7 +487,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   height: 130,
-                  width: 280,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -403,7 +533,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   height: 200,
-                  width: 280,
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -493,73 +624,39 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  print(SharedPhotoUrl);
-                  String? imageUrl = await uploadSharePic();
-                  if (imageUrl != null) {
-                    setState(() {
-                      SharedPhotoUrl = imageUrl;
-                    });
-                    fetchPicture(); // Reload user information after changing the picture
-                  }
-                },
-                child: Stack(
-                  children: [
-                    if (SharedPhotoUrl.isNotEmpty)
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            SharedPhotoUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16.0),
-                      padding: EdgeInsets.all(16.0),
-                      width: double.infinity,
-                      height: SharedPhotoUrl.isNotEmpty ? 300.0 : 80.0,
-                      child: Opacity(
-                        opacity: SharedPhotoUrl.isNotEmpty ? 0.0 : 1.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFb087bf),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.cloud_upload),
-                                SizedBox(width: 8.0),
-                                Text(
-                                  'Upload your picture here!',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: 20),
 
-              SizedBox(height: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'At a loss of inspiration ?',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: is_dark ? AppColors.dark_titles_home : Colors.purple.withOpacity(0.5),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height:20),
               Container(
                 decoration: BoxDecoration(
                   color: is_dark ? AppColors.dark_Ideas : Colors.purple.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 height: 110,
-                width: 320,
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -592,13 +689,37 @@ class _HomePageState extends State<HomePage> {
               ),
 
               SizedBox(height : 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Share Kankei with your friends',
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                            color: is_dark ? AppColors.dark_titles_home : Colors.purple.withOpacity(0.5),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height:20),
               Container(
                 decoration: BoxDecoration(
                   color: is_dark ? AppColors.dark_Ideas : Colors.purple.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 height: 110,
-                width: 320,
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

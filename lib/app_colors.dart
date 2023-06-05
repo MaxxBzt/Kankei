@@ -12,6 +12,8 @@ class AppColors {
   static const Color Gifts = Color(0xFFe0dcfc);
   static const Color light_Ideas= Color(0xFFf0d4ec);
   static const Color dark_Ideas = Color(0xFF524e85);
+  static const Color dark_titles_home = Color(0xFF7f7bbd);
+
 
   // LIGHT MODE COLORS
   static const Color light_primary_color = Color(0xFFb087bf);

@@ -64,8 +64,8 @@ class _CountdownState extends State<Countdown> {
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * .2,
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+            height: MediaQuery.of(context).size.height * .17,
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             decoration: BoxDecoration(
               color: is_dark
                   ? AppColors.dark_appbar_header
